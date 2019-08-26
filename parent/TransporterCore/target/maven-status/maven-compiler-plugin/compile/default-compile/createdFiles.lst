@@ -1,0 +1,10 @@
+com\transporter\service\VehicleService.class
+com\transporter\service\impl\CustomerDetailsServiceImpl.class
+com\transporter\service\impl\UserRoleServiceImpl.class
+com\transporter\service\UserRoleService.class
+com\transporter\service\impl\UserServiceImpl.class
+com\transporter\service\TestService.class
+com\transporter\service\UserService.class
+com\transporter\service\impl\TestServiceImpl.class
+com\transporter\service\impl\VehicleServiceImpl.class
+com\transporter\service\CustomerDetailsService.class
