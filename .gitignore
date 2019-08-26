@@ -2,3 +2,6 @@ transporter/.classpath
 transporter/transporter-server.log
 transporter/.settings/
 /target/
+parent/TransporterCommon/.classpath
+parent/TransporterCore/.classpath
+parent/TransporterWeb/.classpath
