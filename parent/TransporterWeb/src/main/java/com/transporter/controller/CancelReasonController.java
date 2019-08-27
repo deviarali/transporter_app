@@ -18,25 +18,24 @@ import com.transporter.utils.RestUtils;
 @RestController
 public class CancelReasonController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(CancelReasonController.class);
 
-	private static final Logger LOG = LoggerFactory
-	        .getLogger(CancelReasonController.class);
-	
 	@Autowired
 	private CancelReasonService cancelReasonService;
-	
+
 	@RequestMapping(value = "customer/cancelReasons", method = RequestMethod.GET)
 	public CommonResponse getAllCancelReasons() {
 		LOG.debug("cancel reason called");
 		CommonResponse response = null;
 		List<CancelReasons> listOfCancelReasons = cancelReasonService.cancelReasons();
-		if(listOfCancelReasons != null && listOfCancelReasons.size() > 0) {
-		response = RestUtils.wrapObjectForSuccess(cancelReasonService.cancelReasons());	
-		}else {
-			response = RestUtils.wrapObjectForFailure("No cancel reasons found", "error", WebConstants.WEB_RESPONSE_ERORR);
+		if (listOfCancelReasons != null && listOfCancelReasons.size() > 0) {
+			response = RestUtils.wrapObjectForSuccess(cancelReasonService.cancelReasons());
+		} else {
+			response = RestUtils.wrapObjectForFailure("No cancel reasons found", "error",
+					WebConstants.WEB_RESPONSE_ERORR);
 
 		}
 		return response;
 	}
-	
+
 }

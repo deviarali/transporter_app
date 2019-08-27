@@ -18,18 +18,18 @@ public class GoodsTypeController {
 
 	@Autowired
 	GoodsTypeService goodsTypeService;
-	
+
 	@RequestMapping(value = "customer/goodsypes", method = RequestMethod.GET)
 	public CommonResponse getGoodsType() {
 		CommonResponse response = null;
 		List<GoodsType> goodsTypeList = goodsTypeService.getAllGoodsType();
-		if(goodsTypeList != null && goodsTypeList.size() > 0) {
+		if (goodsTypeList != null && goodsTypeList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(goodsTypeList);
-		}else {
+		} else {
 			response = RestUtils.wrapObjectForFailure("Goods type not found", "error", WebConstants.WEB_RESPONSE_ERORR);
 		}
-				
+
 		return response;
 	}
-	
+
 }
