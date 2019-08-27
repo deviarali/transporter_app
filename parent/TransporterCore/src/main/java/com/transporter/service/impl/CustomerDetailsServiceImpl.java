@@ -38,6 +38,17 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		return userService.isUserExists(customerDetailsVo.getUserVo().getMobileNumber());
 	}
 
+	@Override
+	@Transactional
+	public CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo) {
+		User user = userService.updateUser(customerDetailsVo.getUserVo());
+
+		CustomerDetails customerDetails = new CustomerDetails();
+		customerDetails.setUser(user);
+		customerDetailsDao.saveOrUpdate(customerDetails);		
+		return CustomerDetails.convertModelToVO(customerDetails);
+	}
+
 	/*@Override
 	public CustomerVO login(UserVO userVO) {
 		userVO.setPassword(PasswordUtils.generateSecurePassword(userVO.getPassword()));

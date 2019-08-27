@@ -8,6 +8,8 @@ public interface CustomerDetailsService {
 	CustomerDetailsVo registerCustomer(CustomerDetailsVo customerDetailsVo);
 
 	UserVo isUserExists(CustomerDetailsVo customerDetailsVo);
+	
+	CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo);
 
 	/*CustomerDetailsVo login(UserVo userVo);
 

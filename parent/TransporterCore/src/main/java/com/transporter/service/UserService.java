@@ -10,6 +10,8 @@ public interface UserService {
 
 	public UserVo isUserExists(String mobileNumber);
 
+	public User updateUser(UserVo userVo);
+
 	/*public CustomerDetails customerLogin(UserVo userVo);
 
 	public int generateOtp(String mobile);

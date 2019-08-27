@@ -15,12 +15,10 @@ import com.transporter.utils.PasswordUtils;
 import com.transporter.vo.UserVo;
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
-	
 
 	@Override
 	public User registerUser(UserVo userVo) {
@@ -45,31 +43,38 @@ public class UserServiceImpl implements UserService {
 		return User.convertModelToVo(user);
 	}
 
-	/*@Override
-	public CustomerModel customerLogin(UserVO userVO) {
-		UserModel userModel = userDao.login(userVO);
-		if(null != userModel)
-		{
-			return userModel.getCustomers().get(0);
-		}
-		return null;
-	}
-
 	@Override
-	public int generateOtp(String mobile) {
-		return userDao.generateOtp(mobile, generateOtp());
+	public User updateUser(UserVo userVo) {
+		User user = new User();
+		user.setCreatedOn(new Date());
+		user.setFirstName(userVo.getFirstName());
+		user.setLastName(userVo.getLastName());
+		user.setEmailId(userVo.getEmailId());
+		user.setId(userVo.getId());
+		user.setMobileNumber(userVo.getMobileNumber());
+		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
+		user.setStatus(0);
+		UserRole userRole = new UserRole();
+		userRole.setId(UserRoleEnum.CUSTOMER.getId());
+		user.setUserRole(userRole);
+		userDao.saveOrUpdate(user);
+		return user;
 	}
 
-	public String generateOtp()
-	{
-		return "55555";
-	}
-
-	@Override
-	public UserVO validateOtp(String mobile, String otp) {
-		
-		UserModel userModel = userDao.validateOtp(mobile, otp);
-		return UserModel.convertModelToVO(userModel);
-	}*/
+	/*
+	 * @Override public CustomerModel customerLogin(UserVO userVO) { UserModel
+	 * userModel = userDao.login(userVO); if(null != userModel) { return
+	 * userModel.getCustomers().get(0); } return null; }
+	 * 
+	 * @Override public int generateOtp(String mobile) { return
+	 * userDao.generateOtp(mobile, generateOtp()); }
+	 * 
+	 * public String generateOtp() { return "55555"; }
+	 * 
+	 * @Override public UserVO validateOtp(String mobile, String otp) {
+	 * 
+	 * UserModel userModel = userDao.validateOtp(mobile, otp); return
+	 * UserModel.convertModelToVO(userModel); }
+	 */
 
 }

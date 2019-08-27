@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.CommonConstants;
 import com.transporter.constants.WebConstants;
+import com.transporter.model.User;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.utils.RestUtils;
@@ -30,6 +31,7 @@ public class CustomerDetailsController {
 	
 	private static final Logger LOG = LoggerFactory
 	        .getLogger(CustomerDetailsController.class);
+	
 	@Autowired
 	private CustomerDetailsService customerDetailsService;
 	
@@ -67,6 +69,39 @@ public class CustomerDetailsController {
 					.getUserVo().getFirstName());
 		}
 		
+		return response;
+	}
+	
+	@RequestMapping(value = "customer/updateCustomer", method = RequestMethod.PATCH)
+	public CommonResponse updateCustomer(@RequestBody CustomerDetailsVo customerDetailsVo) {
+		CommonResponse response = null;
+
+		Map<String, Object> map = validateCustomer(customerDetailsVo);
+
+		if (!map.isEmpty()) {
+			response = RestUtils.wrapObjectForFailure(map, "validation error", WebConstants.WEB_RESPONSE_ERORR);
+			LOG.error("Validation missing");
+			return response;
+		}
+
+		UserVo userVo = null;
+		if (null == userVo) {
+
+			CustomerDetailsVo updatedCustomerDetailsVo = customerDetailsService.updateCustomer(customerDetailsVo);
+
+			if (updatedCustomerDetailsVo != null) {
+				response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
+				LOG.info("Customer details updated successfully " + customerDetailsVo.getUserVo().getFirstName());
+			} else {
+				response = RestUtils.wrapObjectForFailure("customer not found", "error",
+						WebConstants.WEB_RESPONSE_ERORR);
+				LOG.error("customer not found " + customerDetailsVo.getUserVo().getFirstName());
+			}
+		} else {
+			response = RestUtils.wrapObjectForFailure("Customer not found", "error", WebConstants.WEB_RESPONSE_ERORR);
+			LOG.error("customer not found " + customerDetailsVo.getUserVo().getFirstName());
+		}
+
 		return response;
 	}
 	
