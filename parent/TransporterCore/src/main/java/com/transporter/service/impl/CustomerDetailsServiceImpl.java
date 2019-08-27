@@ -37,25 +37,7 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	public UserVo isUserExists(CustomerDetailsVo customerDetailsVo) {
 		return userService.isUserExists(customerDetailsVo.getUserVo().getMobileNumber());
 	}
-
-	/*@Override
-	public CustomerVO login(UserVO userVO) {
-		userVO.setPassword(PasswordUtils.generateSecurePassword(userVO.getPassword()));
-		CustomerModel customerModel = userService.customerLogin(userVO);
-		CustomerVO customerVO = null;
-		if(null != customerModel)
-		{
-			customerVO = CustomerModel.convertModelToVO(customerModel);
-		}
-		return customerVO;
-	}
-
-	@Override
-	public int updateCustomer(CustomerVO customerVO) {
-		int result = customerDao.updateCustomer(CustomerVO.convertVOToModel(customerVO));
-		return result;
-	}*/
-
+	
 	@Override
 	public int generateOtp(String mobile) {
 		return userService.generateOtp(mobile);
@@ -70,6 +52,17 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 			customerDetailsVo = findCustomerByUserId(userVo.getId());
 		}
 		return customerDetailsVo;
+	}
+	
+	@Override
+	@Transactional
+	public CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo) {
+		User user = userService.updateUser(customerDetailsVo.getUserVo());
+
+		CustomerDetails customerDetails = new CustomerDetails();
+		customerDetails.setUser(user);
+		customerDetailsDao.saveOrUpdate(customerDetails);		
+		return CustomerDetails.convertModelToVO(customerDetails);
 	}
 
 	private CustomerDetailsVo findCustomerByUserId(int id) {

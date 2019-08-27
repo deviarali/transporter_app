@@ -9,10 +9,10 @@ public interface UserService {
 
 	public UserVo isUserExists(String mobileNumber);
 
-	/*public CustomerDetails customerLogin(UserVo userVo);*/
-
 	public int generateOtp(String mobile);
 
 	public UserVo validateOtp(String mobile, String otp);
+	
+	public User updateUser(UserVo userVo);
 	
 }
