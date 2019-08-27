@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: TransporterCore
 Implementation-Version: 0.0.1
-Built-By: Devappa.Arali
+Built-By: basavaraj
 Implementation-Vendor-Id: com.transporter
-Build-Jdk: 1.8.0_144
+Build-Jdk: 1.8.0_222
 Implementation-URL: http://projects.spring.io/spring-boot/parent/Trans
  porterCore/
 Created-By: Maven Integration for Eclipse
