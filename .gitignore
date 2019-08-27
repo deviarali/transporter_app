@@ -9,3 +9,4 @@ parent/.project
 parent/TransporterCommon/.project
 parent/TransporterCore/.project
 parent/TransporterWeb/.project
+*.class
