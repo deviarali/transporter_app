@@ -30,7 +30,6 @@ public class CustomerDetailsController {
 	
 	private static final Logger LOG = LoggerFactory
 	        .getLogger(CustomerDetailsController.class);
-	
 	@Autowired
 	private CustomerDetailsService customerDetailsService;
 	
