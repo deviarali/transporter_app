@@ -37,7 +37,7 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 	public int generateOtp(String mobile, String otp) {
 		Session session = sessionFactory.getCurrentSession();
 		int rows = 0;
-		String sqlQuery = "Update User usr set usr.loginOtp= :otp where usr.userName= :mobileNumber";
+		String sqlQuery = "Update User usr set usr.loginOtp= :otp where usr.mobileNumber= :mobileNumber";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("mobileNumber", mobile);
 		query.setParameter("otp", otp);
@@ -48,7 +48,7 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 	@Override
 	public User validateOtp(String mobile, String otp) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "From User usr where usr.userName= :mobileNumber and usr.loginOtp= :otp";
+		String sqlQuery = "From User usr where usr.mobileNumber= :mobileNumber and usr.loginOtp= :otp";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("mobileNumber", mobile);
 		query.setParameter("otp", otp);

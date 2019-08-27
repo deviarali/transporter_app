@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 			return userModel.getCustomers().get(0);
 		}
 		return null;
-	}
+	} */
 
 	@Override
 	public int generateOtp(String mobile) {
@@ -66,10 +66,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserVO validateOtp(String mobile, String otp) {
+	public UserVo validateOtp(String mobile, String otp) {
 		
-		UserModel userModel = userDao.validateOtp(mobile, otp);
-		return UserModel.convertModelToVO(userModel);
-	}*/
+		User user = userDao.validateOtp(mobile, otp);
+		return User.convertModelToVo(user);
+	}
 
 }

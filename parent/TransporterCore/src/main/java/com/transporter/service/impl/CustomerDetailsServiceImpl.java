@@ -54,7 +54,7 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	public int updateCustomer(CustomerVO customerVO) {
 		int result = customerDao.updateCustomer(CustomerVO.convertVOToModel(customerVO));
 		return result;
-	}
+	}*/
 
 	@Override
 	public int generateOtp(String mobile) {
@@ -62,18 +62,18 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	}
 
 	@Override
-	public CustomerVO validateOtp(String mobile, String otp) {
-		UserVO userVO = userService.validateOtp(mobile, otp); 
-		CustomerVO customerVO = null;
-		if(userVO != null)
+	public CustomerDetailsVo validateOtp(String mobile, String otp) {
+		UserVo userVo = userService.validateOtp(mobile, otp); 
+		CustomerDetailsVo customerDetailsVo = null;
+		if(userVo != null)
 		{
-			customerVO = findCustomerByUserId(userVO.getId());
+			customerDetailsVo = findCustomerByUserId(userVo.getId());
 		}
-		return customerVO;
-	}*/
+		return customerDetailsVo;
+	}
 
-	/*private CustomerVO findCustomerByUserId(Long id) {
-		return CustomerModel.convertModelToVO(customerDao.findCustomerByUserId(id));
-	}*/
+	private CustomerDetailsVo findCustomerByUserId(int id) {
+		return CustomerDetails.convertModelToVO(customerDetailsDao.findCustomerByUserId(id));
+	}
 
 }

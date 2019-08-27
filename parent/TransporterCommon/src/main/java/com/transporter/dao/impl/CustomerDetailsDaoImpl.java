@@ -1,8 +1,11 @@
 package com.transporter.dao.impl;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.CustomerDetailsDao;
+import com.transporter.model.CustomerDetails;
 
 @Repository
 public class CustomerDetailsDaoImpl extends GenericDaoImpl implements CustomerDetailsDao {
@@ -17,14 +20,15 @@ public class CustomerDetailsDaoImpl extends GenericDaoImpl implements CustomerDe
 		query.setParameter("id", customerModel.getId());
 		int result = query.executeUpdate();
 		return result;
-	}
+	}*/
 
 	@Override
-	public CustomerDetails findCustomerByUserId(Long id) {
+	public CustomerDetails findCustomerByUserId(int id) {
+		Session session = sessionFactory.getCurrentSession();
 		String sqlQuery = "From CustomerModel cm where cm.user.id= :id";
-		Query query = getSession().createQuery(sqlQuery);
+		Query query = session.createQuery(sqlQuery);
 		query.setParameter("id", id);
-		return (CustomerModel) query.uniqueResult();
-	}*/
+		return (CustomerDetails) query.uniqueResult();
+	}
 
 }

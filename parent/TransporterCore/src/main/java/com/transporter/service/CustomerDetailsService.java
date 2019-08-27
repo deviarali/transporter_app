@@ -11,10 +11,10 @@ public interface CustomerDetailsService {
 
 	/*CustomerDetailsVo login(UserVo userVo);
 
-	int updateCustomer(CustomerDetailsVo customerDetailsVo);
+	int updateCustomer(CustomerDetailsVo customerDetailsVo);*/
 
 	int generateOtp(String mobile);
 
 	CustomerDetailsVo validateOtp(String mobile, String otp);
-*/
+
 }

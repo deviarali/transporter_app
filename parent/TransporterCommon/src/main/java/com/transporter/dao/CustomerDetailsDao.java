@@ -4,8 +4,8 @@ import com.transporter.model.CustomerDetails;
 
 public interface CustomerDetailsDao extends GenericDao {
 
-	/*int updateCustomer(CustomerDetails customerDetails);
+	/*int updateCustomer(CustomerDetails customerDetails);*/
 
-	CustomerDetails findCustomerByUserId(Long id);*/
+	CustomerDetails findCustomerByUserId(int id);
 
 }

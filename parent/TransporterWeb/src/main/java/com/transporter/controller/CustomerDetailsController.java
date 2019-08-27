@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.jdbc.StringUtils;
@@ -121,7 +122,7 @@ public class CustomerDetailsController {
 		}
 		
 		return response;
-	}
+	}*/
 	
 	@RequestMapping(value = "customer/generateOtp", method = RequestMethod.POST)
 	public CommonResponse generateOtp(@RequestParam String mobile)
@@ -139,13 +140,13 @@ public class CustomerDetailsController {
 	public CommonResponse validateOtp(@RequestParam String mobile, @RequestParam String otp)
 	{
 		CommonResponse response = null;
-		CustomerVO customerVO = customerDetailsService.validateOtp(mobile, otp);
-		if(customerVO != null)
-			response = RestUtils.wrapObjectForSuccess(customerVO);
+		CustomerDetailsVo customerDetailsVo = customerDetailsService.validateOtp(mobile, otp);
+		if(customerDetailsVo != null)
+			response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
 		else
 			response = RestUtils.wrapObjectForFailure("invalid otp", "error", WebConstants.WEB_RESPONSE_ERORR);
 		return response;
-	}*/
+	}
 
 	/*private Map<String, Object> validateLogin(UserVO userVO) {
 		Map<String, Object> map = new HashMap<>();
