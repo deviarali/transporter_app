@@ -53,5 +53,21 @@ public class DisplayVehicleController {
 		}
 		return response;
 	}
+	
+	
+	@RequestMapping(value = "display/updateisplayVehicle",method = RequestMethod.PUT)
+	public CommonResponse updateDisplayVehicle(@RequestBody DisplayVehicleVo displayVehicleVo) {
+
+		CommonResponse response = null;
+		DisplayVehicle displayVehicle = displayVehicleService.updateDisplayVehicle(displayVehicleVo);
+		if (displayVehicle != null) {
+			response = RestUtils.wrapObjectForSuccess(displayVehicle);
+		} else {
+			response = RestUtils.wrapObjectForFailure("Failed to add display ", "error",
+					WebConstants.WEB_RESPONSE_ERORR);
+
+		}
+		return response;
+	}
 
 }

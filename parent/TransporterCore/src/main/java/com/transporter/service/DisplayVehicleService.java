@@ -9,7 +9,7 @@ public interface DisplayVehicleService {
 
 	List<DisplayVehicle> getAllDisplayVehicle();
 
-	DisplayVehicle updateDisplayVehicle(DisplayVehicle displayVehicle);
+	DisplayVehicle updateDisplayVehicle(DisplayVehicleVo displayVehicleVo);
 
 	DisplayVehicle addDisplayVehicle(DisplayVehicleVo displayVehicleVo);
 

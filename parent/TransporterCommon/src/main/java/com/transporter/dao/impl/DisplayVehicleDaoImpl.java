@@ -28,12 +28,6 @@ public class DisplayVehicleDaoImpl extends GenericDaoImpl implements DisplayVehc
 	}
 
 	@Override
-	public DisplayVehicle updateDisplayVehicle(DisplayVehicle displayVehicle) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public DisplayVehicle deleteDisplayVehicle(DisplayVehicle displayVehicle) {
 		return null;
 	}

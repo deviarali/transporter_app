@@ -10,8 +10,6 @@ public interface DisplayVehcileDao extends GenericDao {
 
 	List<DisplayVehicle> getAllDisplayVehicle();
 
-	DisplayVehicle updateDisplayVehicle(DisplayVehicle displayVehicle);
-
 	DisplayVehicle deleteDisplayVehicle(DisplayVehicle displayVehicle);
 
 }
