@@ -23,7 +23,7 @@ public class DisplayVehicleController {
 	@Autowired
 	DisplayVehicleService displayVehicleService;
 
-	@RequestMapping(value = "display/vehicle")
+	@RequestMapping(value = "display/getAllDisplayVehicle")
 	public CommonResponse getAllDisplayVehicle() {
 
 		CommonResponse response = null;
