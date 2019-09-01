@@ -17,4 +17,6 @@ public interface DriverService {
 
 	String updateDriverDocuments(int userId, MultipartFile adharMultiPart, MultipartFile dlMultiPart);
 
+	DriverDetailsVo updateDriverOnRoadAndOffRoad(int driverId, DriverDetailsVo detailsVo);
+
 }

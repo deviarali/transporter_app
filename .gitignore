@@ -14,3 +14,4 @@ parent/TransporterWeb/.project
 *.component
 .settings/
 *.log
+/.metadata/

@@ -92,4 +92,22 @@ public class DriverController {
 		}
 		return response;
 	}
+
+	@PutMapping(value = "/driver/onAndOffRoad/{driverId}")
+	public CommonResponse updateDriverOnRoadAndOffRoad(@PathVariable("driverId") int driverId,
+			@RequestBody DriverDetailsVo detailsVo) {
+		CommonResponse response = null;
+		try {
+			DriverDetailsVo details = driverService.updateDriverOnRoadAndOffRoad(driverId, detailsVo);
+			if (details != null) {
+				response = RestUtils.wrapObjectForSuccess(details);
+			} else {
+				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.NOT_UPDATED);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+		}
+		return response;
+	}
 }

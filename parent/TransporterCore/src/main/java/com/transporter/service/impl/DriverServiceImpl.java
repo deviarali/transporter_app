@@ -101,4 +101,15 @@ public class DriverServiceImpl implements DriverService{
 		return null;
 	}
 
+	@Override
+	@Transactional
+	public DriverDetailsVo updateDriverOnRoadAndOffRoad(int driverId, DriverDetailsVo detailsVo) {
+		DriverDetails findById = driverDao.findById(driverId);
+		if (findById == null) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
+		}
+		findById.setOnRoad(detailsVo.getOnRoad());
+		driverDao.saveOrUpdate(findById);
+		return DriverDetails.convertModelToVo(findById);
+	}
 }

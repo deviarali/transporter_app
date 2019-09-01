@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.DriverDao;
+import com.transporter.model.DriverDetails;
 
 /**
  * @author Devappa.Arali
@@ -33,5 +34,14 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 				+ "' , dd.drivingLicencePictureUrl = '" + generateFilePathAndStoreForDl + "' where dd.user = " + userId;
 		Query query = session.createQuery(sqlQuery);
 		return query.executeUpdate();
+	}
+
+	@Override
+	public DriverDetails findById(int driverId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "FROM DriverDetails dd where dd.id= :driverId";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("driverId", driverId);
+		return (DriverDetails) query.uniqueResult();
 	}
 }

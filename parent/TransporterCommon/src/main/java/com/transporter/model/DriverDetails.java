@@ -98,10 +98,10 @@ public class DriverDetails implements Serializable {
 	private Double currentLongitude;
 	
 	@Column(name = "adharcard_picture_url")
-	private Double adharcardPictureUrl;
+	private String adharcardPictureUrl;
 	
 	@Column(name = "driving_licence_picture_url")
-	private Double drivingLicencePictureUrl;
+	private String drivingLicencePictureUrl;
 
 	public DriverDetails() {
 	}
@@ -259,19 +259,19 @@ public class DriverDetails implements Serializable {
 		this.currentLongitude = currentLongitude;
 	}
 	
-	public Double getAdharcardPictureUrl() {
+	public String getAdharcardPictureUrl() {
 		return adharcardPictureUrl;
 	}
 
-	public void setAdharcardPictureUrl(Double adharcardPictureUrl) {
+	public void setAdharcardPictureUrl(String adharcardPictureUrl) {
 		this.adharcardPictureUrl = adharcardPictureUrl;
 	}
 
-	public Double getDrivingLicencePictureUrl() {
+	public String getDrivingLicencePictureUrl() {
 		return drivingLicencePictureUrl;
 	}
 
-	public void setDrivingLicencePictureUrl(Double drivingLicencePictureUrl) {
+	public void setDrivingLicencePictureUrl(String drivingLicencePictureUrl) {
 		this.drivingLicencePictureUrl = drivingLicencePictureUrl;
 	}
 
