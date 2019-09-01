@@ -1,5 +1,7 @@
 package com.transporter.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.transporter.vo.DriverDetailsVo;
 
 /**
@@ -12,5 +14,7 @@ public interface DriverService {
 	String registerDriver(DriverDetailsVo driverDetailsVo);
 
 	String updateLattitudeAndLongitude(int id, String lattitude, String longitude);
+
+	String updateDriverDocuments(int userId, MultipartFile adharMultiPart, MultipartFile dlMultiPart);
 
 }

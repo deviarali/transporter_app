@@ -1,14 +1,22 @@
 package com.transporter.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.transporter.vo.DriverDetailsVo;
-import com.transporter.vo.UserVo;
-
-import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -88,6 +96,12 @@ public class DriverDetails implements Serializable {
 	
 	@Column(name = "current_longitude")
 	private Double currentLongitude;
+	
+	@Column(name = "adharcard_picture_url")
+	private Double adharcardPictureUrl;
+	
+	@Column(name = "driving_licence_picture_url")
+	private Double drivingLicencePictureUrl;
 
 	public DriverDetails() {
 	}
@@ -244,6 +258,22 @@ public class DriverDetails implements Serializable {
 	public void setCurrentLongitude(Double currentLongitude) {
 		this.currentLongitude = currentLongitude;
 	}
+	
+	public Double getAdharcardPictureUrl() {
+		return adharcardPictureUrl;
+	}
+
+	public void setAdharcardPictureUrl(Double adharcardPictureUrl) {
+		this.adharcardPictureUrl = adharcardPictureUrl;
+	}
+
+	public Double getDrivingLicencePictureUrl() {
+		return drivingLicencePictureUrl;
+	}
+
+	public void setDrivingLicencePictureUrl(Double drivingLicencePictureUrl) {
+		this.drivingLicencePictureUrl = drivingLicencePictureUrl;
+	}
 
 	public static DriverDetailsVo convertModelToVo(DriverDetails driverDetails) {
 		if(driverDetails == null)
@@ -267,6 +297,8 @@ public class DriverDetails implements Serializable {
 		driverDetailsVo.setUser();*/
 		driverDetailsVo.setCurrentLattitude(driverDetails.getCurrentLattitude());
 		driverDetailsVo.setCurrentLongitude(driverDetails.getCurrentLongitude());
+		driverDetailsVo.setAdharcardPictureUrl(driverDetails.getAdharcardPictureUrl());
+		driverDetailsVo.setDrivingLicencePictureUrl(driverDetails.getDrivingLicencePictureUrl());
 		return driverDetailsVo;
 	}
 

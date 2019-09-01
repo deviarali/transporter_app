@@ -25,4 +25,13 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 		return query.executeUpdate();
 	}
 
+	@Override
+	public int updateDriverDocuments(int userId, String generateFilePathAndStoreForAdhar,
+			String generateFilePathAndStoreForDl) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "Update DriverDetails dd set dd.adharcardPictureUrl = '" + generateFilePathAndStoreForAdhar
+				+ "' , dd.drivingLicencePictureUrl = '" + generateFilePathAndStoreForDl + "' where dd.user = " + userId;
+		Query query = session.createQuery(sqlQuery);
+		return query.executeUpdate();
+	}
 }

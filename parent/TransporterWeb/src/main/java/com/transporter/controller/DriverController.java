@@ -3,11 +3,14 @@ package com.transporter.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
@@ -65,5 +68,28 @@ public class DriverController {
 		}
 		return response;
 	}
-	
+
+	@PutMapping(value = "/driver/updateDocuments/{userId}")
+	public CommonResponse updateDriverDocuments(@PathVariable("userId") int userId,
+			@RequestParam(name = "adhar") MultipartFile adharMultiPart,
+			@RequestParam(name = "dl") MultipartFile dlMultiPart) {
+		CommonResponse response = null;
+		try {
+			String updated = driverService.updateDriverDocuments(userId, adharMultiPart, dlMultiPart);
+			if (!StringUtils.isNullOrEmpty(updated)) {
+				response = RestUtils.wrapObjectForSuccess(updated);
+			} else {
+				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.NOT_UPDATED);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			LOGGER.error(
+					"Update Driver documents error, User id : " + userId + " exception is : " + e.getMessage());
+		}
+		return response;
+	}
 }

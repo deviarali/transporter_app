@@ -52,6 +52,10 @@ public class DriverDetailsVo implements Serializable {
 	private Double currentLattitude;
 
 	private Double currentLongitude;
+	
+	private Double adharcardPictureUrl;
+	
+	private Double drivingLicencePictureUrl;
 
 	public DriverDetailsVo() {
 	}
@@ -224,4 +228,20 @@ public class DriverDetailsVo implements Serializable {
 		this.currentLongitude = currentLongitude;
 	}
 
+	public Double getAdharcardPictureUrl() {
+		return adharcardPictureUrl;
+	}
+
+	public void setAdharcardPictureUrl(Double adharcardPictureUrl) {
+		this.adharcardPictureUrl = adharcardPictureUrl;
+	}
+
+	public Double getDrivingLicencePictureUrl() {
+		return drivingLicencePictureUrl;
+	}
+
+	public void setDrivingLicencePictureUrl(Double drivingLicencePictureUrl) {
+		this.drivingLicencePictureUrl = drivingLicencePictureUrl;
+	}
+	
 }

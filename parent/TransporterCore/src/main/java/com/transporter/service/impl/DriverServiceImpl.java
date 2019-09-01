@@ -5,7 +5,9 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.DriverDao;
 import com.transporter.enums.UserRoleEnum;
@@ -15,6 +17,7 @@ import com.transporter.model.DriverDetails;
 import com.transporter.model.User;
 import com.transporter.service.DriverService;
 import com.transporter.service.UserService;
+import com.transporter.utility.TransporterUtility;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
@@ -32,6 +35,9 @@ public class DriverServiceImpl implements DriverService{
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private TransporterUtility transporterUtility;
 	
 	@Override
 	@Transactional
@@ -73,6 +79,26 @@ public class DriverServiceImpl implements DriverService{
 			response = WebConstants.SUCCESS;
 		}
 		return response;
+	}
+
+	@Override
+	@Transactional
+	public String updateDriverDocuments(int userId, MultipartFile adharMultiPart, MultipartFile dlMultiPart) {
+		User userExists = userService.findById(userId);
+		if (null == userExists) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
+		}
+		String generateFilePathAndStoreForAdhar = transporterUtility.generateFilePathAndStore(adharMultiPart, "driver");
+		String generateFilePathAndStoreForDl = transporterUtility.generateFilePathAndStore(dlMultiPart, "driver");
+		if (!(StringUtils.isNullOrEmpty(generateFilePathAndStoreForAdhar))
+				|| !(StringUtils.isNullOrEmpty(generateFilePathAndStoreForDl))) {
+			int updated = driverDao.updateDriverDocuments(userId, generateFilePathAndStoreForAdhar,
+					generateFilePathAndStoreForDl);
+			if (updated != 0) {
+				return "Documents Updated..";
+			}
+		}
+		return null;
 	}
 
 }
