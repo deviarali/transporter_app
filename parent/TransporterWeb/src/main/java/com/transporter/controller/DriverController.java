@@ -111,7 +111,7 @@ public class DriverController {
 		return response;
 	}
 	
-	@PutMapping(value = "/driver/updateDriverAddress")
+	@PutMapping(value = "/driver/updateDriverDetails")
 	public CommonResponse updateDriverAddress(@RequestBody DriverDetailsVo driverDetailsVo) {
 		CommonResponse response = null;
 		DriverDetailsVo detailsVo = driverService.updateDriverAddress(driverDetailsVo);
