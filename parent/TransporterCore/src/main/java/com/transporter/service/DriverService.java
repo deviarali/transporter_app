@@ -19,4 +19,6 @@ public interface DriverService {
 
 	DriverDetailsVo updateDriverOnRoadAndOffRoad(int driverId, DriverDetailsVo detailsVo);
 
+	DriverDetailsVo updateDriverAddress(DriverDetailsVo driverDetailsVo);
+
 }

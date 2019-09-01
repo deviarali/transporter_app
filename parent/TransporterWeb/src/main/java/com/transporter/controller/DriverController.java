@@ -110,4 +110,17 @@ public class DriverController {
 		}
 		return response;
 	}
+	
+	@PutMapping(value = "/driver/updateDriverAddress")
+	public CommonResponse updateDriverAddress(@RequestBody DriverDetailsVo driverDetailsVo) {
+		CommonResponse response = null;
+		DriverDetailsVo detailsVo = driverService.updateDriverAddress(driverDetailsVo);
+		if (detailsVo == null) {
+			response = RestUtils.wrapObjectForFailure("user not found", WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
+		} else {
+			response = RestUtils.wrapObjectForSuccess(detailsVo);
+		}
+		return response;
+	}
 }

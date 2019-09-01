@@ -104,12 +104,29 @@ public class DriverServiceImpl implements DriverService{
 	@Override
 	@Transactional
 	public DriverDetailsVo updateDriverOnRoadAndOffRoad(int driverId, DriverDetailsVo detailsVo) {
-		DriverDetails findById = driverDao.findById(driverId);
-		if (findById == null) {
+		DriverDetails driverDetails = driverDao.findById(driverId);
+		if (driverDetails == null) {
 			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
 		}
-		findById.setOnRoad(detailsVo.getOnRoad());
-		driverDao.saveOrUpdate(findById);
-		return DriverDetails.convertModelToVo(findById);
+		driverDetails.setOnRoad(detailsVo.getOnRoad());
+		driverDao.saveOrUpdate(driverDetails);
+		return DriverDetails.convertModelToVo(driverDetails);
+	}
+
+	@Override
+	@Transactional
+	public DriverDetailsVo updateDriverAddress(DriverDetailsVo driverDetailsVo) {
+		DriverDetails driverDetails = driverDao.findById(driverDetailsVo.getId());
+		if (driverDetails == null) {
+			return null;
+		}
+		driverDetails.setDrivername(driverDetailsVo.getDrivername());
+		driverDetails.setAddressCity(driverDetailsVo.getAddressCity());
+		driverDetails.setAddressState(driverDetailsVo.getAddressState());
+		driverDetails.setAddressStreet(driverDetailsVo.getAddressStreet());
+		driverDetails.setAddressZipcode(driverDetailsVo.getAddressZipcode());
+		driverDetails.setDateOfBirth(driverDetailsVo.getDateofbirth());
+		driverDao.saveOrUpdate(driverDetails);
+		return DriverDetails.convertModelToVo(driverDetails);
 	}
 }
