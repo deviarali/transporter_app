@@ -8,6 +8,7 @@ public class WebConstants {
 
 	public static final String WEB_RESPONSE_SUCCESS = "SUCCESS";
 	public static final String WEB_RESPONSE_FAILURE = "FAILURE";
-	public static final String WEB_RESPONSE_ERORR = "ERROR";
+	public static final String WEB_RESPONSE_ERROR = "ERROR";
 	public static final String WEB_RESPONSE_NO_RECORD_FOUND = "DATA_DOES_NOT_EXIST";
+	public static final String SUCCESS = "success";
 }

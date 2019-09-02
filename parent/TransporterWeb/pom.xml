@@ -5,7 +5,7 @@
     <artifactId>parent</artifactId>
     <version>0.0.1</version>
   </parent>
-  <artifactId>TransporterWeb</artifactId>
+  <artifactId>transporter</artifactId>
   <packaging>war</packaging>
   
   <dependencies>

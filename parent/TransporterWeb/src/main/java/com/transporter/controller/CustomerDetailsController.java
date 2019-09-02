@@ -41,7 +41,7 @@ public class CustomerDetailsController {
 		Map<String, Object> map = validateCustomer(customerDetailsVo);
 
 		if (!map.isEmpty()) {
-			response = RestUtils.wrapObjectForFailure(map, "validation error", WebConstants.WEB_RESPONSE_ERORR);
+			response = RestUtils.wrapObjectForFailure(map, "validation error", WebConstants.WEB_RESPONSE_ERROR);
 			LOG.error("Validation missing");
 			return response;
 		}
@@ -51,7 +51,7 @@ public class CustomerDetailsController {
 			response = RestUtils.wrapObjectForFailure(
 					"user already exists with role : "
 							+ customerDetailsVo.getUserVo().getUserroleVo().getRoleDecription(),
-					"error", WebConstants.WEB_RESPONSE_ERORR);
+					"error", WebConstants.WEB_RESPONSE_ERROR);
 			return response;
 		}
 
@@ -60,7 +60,7 @@ public class CustomerDetailsController {
 			response = RestUtils.wrapObjectForSuccess(customerDetailsVo2);
 			LOG.info("Owner registed successfully " + customerDetailsVo.getUserVo().getFirstName());
 		} else {
-			response = RestUtils.wrapObjectForFailure("Not registered", "error", WebConstants.WEB_RESPONSE_ERORR);
+			response = RestUtils.wrapObjectForFailure("Not registered", "error", WebConstants.WEB_RESPONSE_ERROR);
 			LOG.error("Owner not registed " + customerDetailsVo.getUserVo().getFirstName());
 		}
 
@@ -74,7 +74,7 @@ public class CustomerDetailsController {
 		Map<String, Object> map = validateCustomer(customerDetailsVo);
 
 		if (!map.isEmpty()) {
-			response = RestUtils.wrapObjectForFailure(map, "validation error", WebConstants.WEB_RESPONSE_ERORR);
+			response = RestUtils.wrapObjectForFailure(map, "validation error", WebConstants.WEB_RESPONSE_ERROR);
 			LOG.error("Validation missing");
 			return response;
 		}
@@ -89,11 +89,11 @@ public class CustomerDetailsController {
 				LOG.info("Customer details updated successfully " + customerDetailsVo.getUserVo().getFirstName());
 			} else {
 				response = RestUtils.wrapObjectForFailure("customer not found", "error",
-						WebConstants.WEB_RESPONSE_ERORR);
+						WebConstants.WEB_RESPONSE_ERROR);
 				LOG.error("customer not found " + customerDetailsVo.getUserVo().getFirstName());
 			}
 		} else {
-			response = RestUtils.wrapObjectForFailure("Customer not found", "error", WebConstants.WEB_RESPONSE_ERORR);
+			response = RestUtils.wrapObjectForFailure("Customer not found", "error", WebConstants.WEB_RESPONSE_ERROR);
 			LOG.error("customer not found " + customerDetailsVo.getUserVo().getFirstName());
 		}
 
@@ -108,7 +108,7 @@ public class CustomerDetailsController {
 			response = RestUtils.wrapObjectForSuccess("success");
 		else
 			response = RestUtils.wrapObjectForFailure("Otp not generated, invalid user", "error",
-					WebConstants.WEB_RESPONSE_ERORR);
+					WebConstants.WEB_RESPONSE_ERROR);
 		return response;
 	}
 
@@ -119,7 +119,7 @@ public class CustomerDetailsController {
 		if (customerDetailsVo != null)
 			response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
 		else
-			response = RestUtils.wrapObjectForFailure("invalid otp", "error", WebConstants.WEB_RESPONSE_ERORR);
+			response = RestUtils.wrapObjectForFailure("invalid otp", "error", WebConstants.WEB_RESPONSE_ERROR);
 		return response;
 	}
 
