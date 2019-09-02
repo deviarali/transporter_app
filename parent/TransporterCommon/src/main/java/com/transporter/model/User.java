@@ -318,7 +318,7 @@ public class User implements Serializable {
 		userVo.setCreatedOn(user.getCreatedOn());
 		userVo.setCustomerDetails(CustomerDetails.convertModelToVO(user.getCustomerDetails()));
 		userVo.setDriverDetailsCreatedByVo(DriverDetails.convertModelToVo(user.getDriverDetailsCreatedBy()));
-		
+		userVo.setProfilePictureUrl(user.getProfilePictureUrl());
 		return userVo;
 	}
 	
