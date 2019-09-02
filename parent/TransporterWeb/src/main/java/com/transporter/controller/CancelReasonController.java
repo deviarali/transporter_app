@@ -32,7 +32,7 @@ public class CancelReasonController {
 			response = RestUtils.wrapObjectForSuccess(cancelReasonService.cancelReasons());
 		} else {
 			response = RestUtils.wrapObjectForFailure("No cancel reasons found", "error",
-					WebConstants.WEB_RESPONSE_ERORR);
+					WebConstants.WEB_RESPONSE_ERROR);
 
 		}
 		return response;

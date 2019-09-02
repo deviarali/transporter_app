@@ -104,6 +104,9 @@ public class User implements Serializable {
 	@OneToOne
 	@JoinColumn(name="internal_user_detail")
 	private InternalUserDetails internalUserDetails;
+	
+	@Column(name = "profile_picture_url")
+	private String profilePictureUrl;
 
 	public User() {
 	}
@@ -283,6 +286,14 @@ public class User implements Serializable {
 	public void setInternalUserDetails(InternalUserDetails internalUserDetails) {
 		this.internalUserDetails = internalUserDetails;
 	}
+	
+	public String getProfilePictureUrl() {
+		return profilePictureUrl;
+	}
+
+	public void setProfilePictureUrl(String profilePictureUrl) {
+		this.profilePictureUrl = profilePictureUrl;
+	}
 
 	public static UserVo convertModelToVo(User user) {
 		if(user == null)
@@ -307,7 +318,7 @@ public class User implements Serializable {
 		userVo.setCreatedOn(user.getCreatedOn());
 		userVo.setCustomerDetails(CustomerDetails.convertModelToVO(user.getCustomerDetails()));
 		userVo.setDriverDetailsCreatedByVo(DriverDetails.convertModelToVo(user.getDriverDetailsCreatedBy()));
-		
+		userVo.setProfilePictureUrl(user.getProfilePictureUrl());
 		return userVo;
 	}
 	

@@ -55,6 +55,8 @@ public class UserVo implements Serializable {
 
 	private InternalUserDetailsVo internalUserDetailsVo;
 
+	private String profilePictureUrl;
+
 	public UserVo() {
 	}
 
@@ -233,6 +235,12 @@ public class UserVo implements Serializable {
 	public void setInternalUserDetailsVo(InternalUserDetailsVo internalUserDetailsVo) {
 		this.internalUserDetailsVo = internalUserDetailsVo;
 	}
-	
+	public String getProfilePictureUrl() {
+		return profilePictureUrl;
+	}
+
+	public void setProfilePictureUrl(String profilePictureUrl) {
+		this.profilePictureUrl = profilePictureUrl;
+	}
 
 }

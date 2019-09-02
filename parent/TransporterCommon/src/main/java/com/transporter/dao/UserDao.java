@@ -13,4 +13,6 @@ public interface UserDao extends GenericDao {
 
 	User validateOtp(String mobile, String otp);
 
+	int updateProfilePicture(String mobileNumber, String generateFilePathAndStore);
+
 }

@@ -5,12 +5,16 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.mysql.jdbc.StringUtils;
+import com.transporter.constants.WebConstants;
 import com.transporter.dao.UserDao;
 import com.transporter.enums.UserRoleEnum;
 import com.transporter.model.User;
 import com.transporter.model.UserRole;
 import com.transporter.service.UserService;
+import com.transporter.utility.TransporterUtility;
 import com.transporter.utils.PasswordUtils;
 import com.transporter.vo.UserVo;
 
@@ -20,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private TransporterUtility transporterUtility;
 	
 
 	@Override
@@ -78,6 +85,19 @@ public class UserServiceImpl implements UserService {
 	public String generateOtp()
 	{
 		return "55555";
+	}
+
+	@Override
+	@Transactional
+	public String updateProfilePicture(MultipartFile multipart, String mobileNumber) {
+		String generateFilePathAndStore = transporterUtility.generateFilePathAndStore(multipart, "user");
+		if(!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
+			int updated = userDao.updateProfilePicture(mobileNumber, generateFilePathAndStore);
+			if(updated != 0) {
+				return WebConstants.SUCCESS;
+			}
+		}
+		return null;
 	}
 
 }
