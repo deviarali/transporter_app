@@ -56,4 +56,16 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 		
 	}
 
+	@Override
+	public int updateProfilePicture(String mobileNumber, String generateFilePathAndStore) {
+		Session session = sessionFactory.getCurrentSession();
+		int rows = 0;
+		String sqlQuery = "Update User usr set usr.profilePictureUrl= :profilePictureUrl where usr.mobileNumber= :mobileNumber";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("mobileNumber", mobileNumber);
+		query.setParameter("profilePictureUrl", generateFilePathAndStore);
+		rows = query.executeUpdate();
+		return rows;
+	}
+
 }

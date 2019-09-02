@@ -27,7 +27,7 @@ public class TransporterUtility {
 	private static final Logger LOGGER = LoggerFactory
 	        .getLogger(TransporterUtility.class);
 	
-	public String genearteFilePathAndStore(MultipartFile multipart, String typeOfUser) {
+	public String generateFilePathAndStore(MultipartFile multipart, String typeOfUser) {
 		String uniqueId = uuidString();
 		LOGGER.info("UploadFile "+ multipart.getOriginalFilename());
 		Date date = new Date();
