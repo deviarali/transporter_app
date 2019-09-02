@@ -42,7 +42,7 @@ public class TransporterUtility {
 		try {
 			multipart.transferTo(new File(fileLocation));
 		} catch (IllegalStateException | IOException e) {
-			LOGGER.error("File not saved "+e.getMessage());
+			LOGGER.error("File not saved and exception is "+e.getMessage());
 			return null;
 		}
 		return fileLocation;
