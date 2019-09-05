@@ -50,7 +50,7 @@ public class CustomerDetailsController {
 		if (null != userVo) {
 			response = RestUtils.wrapObjectForFailure(
 					"user already exists with role : "
-							+ customerDetailsVo.getUserVo().getUserroleVo().getRoleDecription(),
+							+ customerDetailsVo.getUserVo().getUserRoleVo().getRoleDecription(),
 					"error", WebConstants.WEB_RESPONSE_ERROR);
 			return response;
 		}

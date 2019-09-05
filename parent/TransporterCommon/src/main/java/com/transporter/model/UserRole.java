@@ -90,5 +90,18 @@ public class UserRole implements Serializable {
 		userRoleVo.setRoleDecription(userRole.getRoleDecription());
 		return userRoleVo;
 	}
+	
+	public static UserRole convertVoToModel(UserRoleVo userRoleVo) {
+		if(userRoleVo == null)
+			return null;
+		UserRole userRole = new UserRole();
+		userRole.setId(userRoleVo.getId());
+		userRole.setLabel(userRoleVo.getLabel());
+		userRole.setModifiedBy(userRoleVo.getModifiedBy());
+		userRole.setRoleCd(userRoleVo.getRoleCd());
+		userRole.setRoleDecription(userRoleVo.getRoleDecription());
+		return userRole;
+	}
+
 
 }

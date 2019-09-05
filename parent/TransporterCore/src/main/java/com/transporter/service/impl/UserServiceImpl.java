@@ -39,9 +39,7 @@ public class UserServiceImpl implements UserService {
 		user.setMobileNumber(userVo.getMobileNumber());
 		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
 		user.setStatus(0);
-		UserRole userRole = new UserRole();
-		userRole.setId(UserRoleEnum.CUSTOMER.getId());
-		user.setUserRole(userRole);
+		user.setUserRole(UserRole.convertVoToModel(userVo.getUserRoleVo()));
 		userDao.save(user);
 		return user;
 	}
@@ -94,7 +92,7 @@ public class UserServiceImpl implements UserService {
 		if(!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
 			int updated = userDao.updateProfilePicture(mobileNumber, generateFilePathAndStore);
 			if(updated != 0) {
-				return WebConstants.SUCCESS;
+				return generateFilePathAndStore;
 			}
 		}
 		return null;

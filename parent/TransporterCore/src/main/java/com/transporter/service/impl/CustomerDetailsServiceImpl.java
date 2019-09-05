@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.transporter.dao.CustomerDetailsDao;
+import com.transporter.enums.UserRoleEnum;
 import com.transporter.model.CustomerDetails;
 import com.transporter.model.User;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.service.UserService;
 import com.transporter.vo.CustomerDetailsVo;
+import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
 
 @Service
@@ -24,8 +26,11 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	@Override
 	@Transactional
 	public CustomerDetailsVo registerCustomer(CustomerDetailsVo customerDetailsVo) {
-		
-		User user = userService.registerUser(customerDetailsVo.getUserVo());
+		UserVo userVo = customerDetailsVo.getUserVo();
+		UserRoleVo userRoleVo = new UserRoleVo();
+		userRoleVo.setId(UserRoleEnum.CUSTOMER.getId());
+		userVo.setUserRoleVo(userRoleVo);
+		User user = userService.registerUser(userVo);
 
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setUser(user);

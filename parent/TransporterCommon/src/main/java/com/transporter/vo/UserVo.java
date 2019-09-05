@@ -220,7 +220,7 @@ public class UserVo implements Serializable {
 		this.driverDetailsVerifedByVo = driverDetailsVerifedByVo;
 	}
 
-	public UserRoleVo getUserroleVo() {
+	public UserRoleVo getUserRoleVo() {
 		return userRoleVo;
 	}
 

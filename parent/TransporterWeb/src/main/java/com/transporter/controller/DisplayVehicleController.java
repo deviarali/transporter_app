@@ -32,7 +32,7 @@ public class DisplayVehicleController {
 			response = RestUtils.wrapObjectForSuccess(displayVehicleList);
 		} else {
 			response = RestUtils.wrapObjectForFailure("Display vehicle not found", "error",
-					WebConstants.WEB_RESPONSE_ERORR);
+					WebConstants.WEB_RESPONSE_ERROR);
 
 		}
 		return response;
@@ -48,7 +48,7 @@ public class DisplayVehicleController {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
 			response = RestUtils.wrapObjectForFailure("Failed to add display ", "error",
-					WebConstants.WEB_RESPONSE_ERORR);
+					WebConstants.WEB_RESPONSE_ERROR);
 
 		}
 		return response;
@@ -64,7 +64,7 @@ public class DisplayVehicleController {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
 			response = RestUtils.wrapObjectForFailure("Failed to add display ", "error",
-					WebConstants.WEB_RESPONSE_ERORR);
+					WebConstants.WEB_RESPONSE_ERROR);
 
 		}
 		return response;
