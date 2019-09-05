@@ -1,7 +1,7 @@
 package com.transporter.enums;
 
 public enum UserRoleEnum {
-	CUSTOMER(1);
+	CUSTOMER(1), DRIVER(2);
 	
 	private int userRoleId;
 

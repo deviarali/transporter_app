@@ -41,7 +41,7 @@ public class DriverDetails implements Serializable {
 	private Date createdOn;
 
 	@Temporal(TemporalType.DATE)
-	private Date dateofbirth;
+	private Date dateOfBirth;
 
 	@Lob
 	@Column(name="driver_documents")
@@ -58,7 +58,7 @@ public class DriverDetails implements Serializable {
 	private String drivername;
 
 	@Column(name="on_road")
-	private byte onRoad;
+	private int onRoad;
 
 	@Column(name="ratings")
 	private String ratings;
@@ -139,12 +139,12 @@ public class DriverDetails implements Serializable {
 		this.createdOn = createdOn;
 	}
 
-	public Date getDateofbirth() {
-		return dateofbirth;
+	public Date getDateOfBirth() {
+		return dateOfBirth;
 	}
 
-	public void setDateofbirth(Date dateofbirth) {
-		this.dateofbirth = dateofbirth;
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 
 	public String getDriverDocuments() {
@@ -179,11 +179,11 @@ public class DriverDetails implements Serializable {
 		this.drivername = drivername;
 	}
 
-	public byte getOnRoad() {
+	public int getOnRoad() {
 		return onRoad;
 	}
 
-	public void setOnRoad(byte onRoad) {
+	public void setOnRoad(int onRoad) {
 		this.onRoad = onRoad;
 	}
 
@@ -243,24 +243,24 @@ public class DriverDetails implements Serializable {
 		this.tripDetailsList = tripDetailsList;
 	}
 
-	public static DriverDetailsVo convertModelToVo(DriverDetails driverDetailsCreatedBy) {
-		if(driverDetailsCreatedBy == null)
+	public static DriverDetailsVo convertModelToVo(DriverDetails driverDetails) {
+		if(driverDetails == null)
 		return null;
 		DriverDetailsVo driverDetailsVo = new DriverDetailsVo();
-		driverDetailsVo.setAddressCity(driverDetailsCreatedBy.getAddressCity());
-		driverDetailsVo.setAddressState(driverDetailsCreatedBy.getAddressState());
-		driverDetailsVo.setAddressStreet(driverDetailsCreatedBy.getAddressStreet());
-		driverDetailsVo.setAddressZipcode(driverDetailsCreatedBy.getAddressZipcode());
-		driverDetailsVo.setCreatedOn(driverDetailsCreatedBy.createdOn);
-		driverDetailsVo.setDateofbirth(driverDetailsCreatedBy.getDateofbirth());
-		driverDetailsVo.setDriverDocuments(driverDetailsCreatedBy.getDriverDocuments());
-		driverDetailsVo.setDrivername(driverDetailsCreatedBy.getDrivername());
-		driverDetailsVo.setDriverVerificationPendingReason(driverDetailsCreatedBy.getDriverVerificationPendingReason());
-		driverDetailsVo.setDriverVerificationStatus(driverDetailsCreatedBy.getDriverVerificationStatus());
-		driverDetailsVo.setId(driverDetailsCreatedBy.getId());
-		driverDetailsVo.setOnRoad(driverDetailsCreatedBy.getOnRoad());
-		driverDetailsVo.setRatings(driverDetailsCreatedBy.getRatings());
-		driverDetailsVo.setTransportType(driverDetailsCreatedBy.getTransportType());
+		driverDetailsVo.setAddressCity(driverDetails.getAddressCity());
+		driverDetailsVo.setAddressState(driverDetails.getAddressState());
+		driverDetailsVo.setAddressStreet(driverDetails.getAddressStreet());
+		driverDetailsVo.setAddressZipcode(driverDetails.getAddressZipcode());
+		driverDetailsVo.setCreatedOn(driverDetails.createdOn);
+		driverDetailsVo.setDateofbirth(driverDetails.getDateOfBirth());
+		driverDetailsVo.setDriverDocuments(driverDetails.getDriverDocuments());
+		driverDetailsVo.setDrivername(driverDetails.getDrivername());
+		driverDetailsVo.setDriverVerificationPendingReason(driverDetails.getDriverVerificationPendingReason());
+		driverDetailsVo.setDriverVerificationStatus(driverDetails.getDriverVerificationStatus());
+		driverDetailsVo.setId(driverDetails.getId());
+		driverDetailsVo.setOnRoad(driverDetails.getOnRoad());
+		driverDetailsVo.setRatings(driverDetails.getRatings());
+		driverDetailsVo.setTransportType(driverDetails.getTransportType());
 		/*driverDetailsVo.setTripDetailsVoList(driverDetailsCreatedBy.getTripDetailsList());
 		driverDetailsVo.setUser();*/
 		return driverDetailsVo;

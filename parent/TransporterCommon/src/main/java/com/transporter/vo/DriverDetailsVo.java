@@ -33,7 +33,7 @@ public class DriverDetailsVo implements Serializable {
 
 	private String drivername;
 
-	private byte onRoad;
+	private int onRoad;
 
 	private String ratings;
 
@@ -140,11 +140,11 @@ public class DriverDetailsVo implements Serializable {
 		this.drivername = drivername;
 	}
 
-	public byte getOnRoad() {
+	public int getOnRoad() {
 		return onRoad;
 	}
 
-	public void setOnRoad(byte onRoad) {
+	public void setOnRoad(int onRoad) {
 		this.onRoad = onRoad;
 	}
 
