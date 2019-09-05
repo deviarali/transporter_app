@@ -10,3 +10,7 @@ parent/TransporterCommon/.project
 parent/TransporterCore/.project
 parent/TransporterWeb/.project
 *.class
+*.prefs
+*.component
+.settings/
+*.log
