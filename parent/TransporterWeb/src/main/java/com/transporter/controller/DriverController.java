@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mysql.jdbc.StringUtils;
@@ -49,4 +50,20 @@ public class DriverController {
 		
 		return response;
 	}
+	
+	@RequestMapping(value = "driver/updateLattitudeAndLongitude", method = RequestMethod.POST)
+	public CommonResponse updateLattitudeAndLongitude(
+			@RequestParam(value = "id", required = true) int id, 
+			@RequestParam(value = "lattitude", required = true) String lattitude,
+			@RequestParam(value = "longitude", required = true) String longitude) {
+		CommonResponse response = null;
+		try {
+			String updated = driverService.updateLattitudeAndLongitude(id, lattitude, longitude);
+			response = RestUtils.wrapObjectForSuccess(updated);
+		} catch (BusinessException be) {
+			LOGGER.error("not updated");
+		}
+		return response;
+	}
+	
 }

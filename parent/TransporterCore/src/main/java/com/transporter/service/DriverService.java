@@ -11,4 +11,6 @@ public interface DriverService {
 
 	String registerDriver(DriverDetailsVo driverDetailsVo);
 
+	String updateLattitudeAndLongitude(int id, String lattitude, String longitude);
+
 }

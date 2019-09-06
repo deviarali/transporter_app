@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.CommonConstants;
 import com.transporter.constants.WebConstants;
+import com.transporter.exceptions.ErrorCodes;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.utils.RestUtils;
@@ -48,10 +49,7 @@ public class CustomerDetailsController {
 
 		UserVo userVo = customerDetailsService.isUserExists(customerDetailsVo);
 		if (null != userVo) {
-			response = RestUtils.wrapObjectForFailure(
-					"user already exists with role : "
-							+ customerDetailsVo.getUserVo().getUserRoleVo().getRoleDecription(),
-					"error", WebConstants.WEB_RESPONSE_ERROR);
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, ErrorCodes.MOEXISTS.value());
 			return response;
 		}
 

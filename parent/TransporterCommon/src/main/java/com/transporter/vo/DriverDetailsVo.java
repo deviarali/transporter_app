@@ -49,6 +49,10 @@ public class DriverDetailsVo implements Serializable {
 
 	private List<TripDetailsVo> tripDetailsVoList;
 
+	private Double currentLattitude;
+
+	private Double currentLongitude;
+
 	public DriverDetailsVo() {
 	}
 
@@ -202,6 +206,22 @@ public class DriverDetailsVo implements Serializable {
 
 	public void setTripDetailsVoList(List<TripDetailsVo> tripDetailsVoList) {
 		this.tripDetailsVoList = tripDetailsVoList;
+	}
+	
+	public Double getCurrentLattitude() {
+		return currentLattitude;
+	}
+
+	public void setCurrentLattitude(Double currentLattitude) {
+		this.currentLattitude = currentLattitude;
+	}
+
+	public Double getCurrentLongitude() {
+		return currentLongitude;
+	}
+
+	public void setCurrentLongitude(Double currentLongitude) {
+		this.currentLongitude = currentLongitude;
 	}
 
 }

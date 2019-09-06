@@ -7,4 +7,6 @@ package com.transporter.dao;
 
 public interface DriverDao extends GenericDao {
 
+	int updateLattitudeAndLongitude(int id, String lattitude, String longitude);
+
 }

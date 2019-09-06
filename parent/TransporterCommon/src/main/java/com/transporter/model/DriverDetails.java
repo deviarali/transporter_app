@@ -87,6 +87,12 @@ public class DriverDetails implements Serializable {
 	
 	@OneToMany(mappedBy="driverDetails")
 	private List<TripDetails> tripDetailsList;
+	
+	@Column(name = "current_lattitude")
+	private Double currentLattitude;
+	
+	@Column(name = "current_longitude")
+	private Double currentLongitude;
 
 	public DriverDetails() {
 	}
@@ -243,6 +249,22 @@ public class DriverDetails implements Serializable {
 		this.tripDetailsList = tripDetailsList;
 	}
 
+	public Double getCurrentLattitude() {
+		return currentLattitude;
+	}
+
+	public void setCurrentLattitude(Double currentLattitude) {
+		this.currentLattitude = currentLattitude;
+	}
+
+	public Double getCurrentLongitude() {
+		return currentLongitude;
+	}
+
+	public void setCurrentLongitude(Double currentLongitude) {
+		this.currentLongitude = currentLongitude;
+	}
+
 	public static DriverDetailsVo convertModelToVo(DriverDetails driverDetails) {
 		if(driverDetails == null)
 		return null;
@@ -263,6 +285,8 @@ public class DriverDetails implements Serializable {
 		driverDetailsVo.setTransportType(driverDetails.getTransportType());
 		/*driverDetailsVo.setTripDetailsVoList(driverDetailsCreatedBy.getTripDetailsList());
 		driverDetailsVo.setUser();*/
+		driverDetailsVo.setCurrentLattitude(driverDetails.getCurrentLattitude());
+		driverDetailsVo.setCurrentLongitude(driverDetails.getCurrentLongitude());
 		return driverDetailsVo;
 	}
 

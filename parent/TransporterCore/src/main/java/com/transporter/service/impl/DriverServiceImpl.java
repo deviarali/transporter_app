@@ -64,4 +64,15 @@ public class DriverServiceImpl implements DriverService{
 		return response;
 	}
 
+	@Override
+	@Transactional
+	public String updateLattitudeAndLongitude(int id, String lattitude, String longitude) {
+		String response = null;
+		int updated = driverDao.updateLattitudeAndLongitude(id, lattitude, longitude);
+		if(updated == 1) {
+			response = WebConstants.SUCCESS;
+		}
+		return response;
+	}
+
 }
