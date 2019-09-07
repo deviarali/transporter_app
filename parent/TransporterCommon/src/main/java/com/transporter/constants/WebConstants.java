@@ -12,4 +12,5 @@ public class WebConstants {
 	public static final String WEB_RESPONSE_NO_RECORD_FOUND = "DATA_DOES_NOT_EXIST";
 	public static final String SUCCESS = "success";
 	public static final String INVALID_USER = "Invalid user";
+	public static final String NO_DATA_FOUND = "No data found";
 }

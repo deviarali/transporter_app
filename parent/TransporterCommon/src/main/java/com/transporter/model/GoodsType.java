@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.transporter.vo.GoodsTypeVo;
+
 @Entity
 @Table(name = "goodstype")
 public class GoodsType {
@@ -31,5 +33,14 @@ public class GoodsType {
 
 	public void setGoodsType(String goodsType) {
 		this.goodsType = goodsType;
+	}
+	
+	public static GoodsTypeVo convertModelToVo(GoodsType goodsType) {
+		if(null == goodsType)
+			return null;
+		GoodsTypeVo goodsTypeVo = new GoodsTypeVo();
+		goodsTypeVo.setId(goodsType.getId());
+		goodsTypeVo.setGoodsType(goodsType.getGoodsType());
+		return goodsTypeVo;
 	}
 }

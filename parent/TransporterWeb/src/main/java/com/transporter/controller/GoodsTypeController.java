@@ -8,27 +8,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
-import com.transporter.model.GoodsType;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.GoodsTypeService;
 import com.transporter.utils.RestUtils;
+import com.transporter.vo.GoodsTypeVo;
 
 @RestController
 public class GoodsTypeController {
 
 	@Autowired
-	GoodsTypeService goodsTypeService;
+	private GoodsTypeService goodsTypeService;
 
 	@RequestMapping(value = "goods/goodsTypes", method = RequestMethod.GET)
 	public CommonResponse getGoodsType() {
 		CommonResponse response = null;
-		List<GoodsType> goodsTypeList = goodsTypeService.getAllGoodsType();
+		List<GoodsTypeVo> goodsTypeList = goodsTypeService.getAllGoodsType();
 		if (goodsTypeList != null && goodsTypeList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(goodsTypeList);
 		} else {
-			response = RestUtils.wrapObjectForFailure("Goods type not found", "error", WebConstants.WEB_RESPONSE_ERROR);
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.NO_DATA_FOUND);
 		}
-
 		return response;
 	}
 

@@ -2,10 +2,10 @@ package com.transporter.service;
 
 import java.util.List;
 
-import com.transporter.model.GoodsType;
+import com.transporter.vo.GoodsTypeVo;
 
 public interface GoodsTypeService {
 
-	List<GoodsType> getAllGoodsType();
+	List<GoodsTypeVo> getAllGoodsType();
 
 }
