@@ -15,6 +15,7 @@ import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.User;
 import com.transporter.model.UserRole;
+import com.transporter.repo.UserRepo;
 import com.transporter.service.UserService;
 import com.transporter.utility.TransporterUtility;
 import com.transporter.utils.PasswordUtils;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private TransporterUtility transporterUtility;
+	
+	@Autowired
+	private UserRepo userRepo;
 	
 
 	@Override
@@ -113,6 +117,25 @@ public class UserServiceImpl implements UserService {
 			response = WebConstants.SUCCESS;
 		}
 		return response;
+	}
+	
+	@Override
+	public User findById(int id) {
+		// TODO Auto-generated method stub
+		
+	User internalUser =	userRepo.findOne(id);
+		return internalUser;
+	}
+
+	@Override
+	public User updateInternalUser(UserVo userVo, int id) {
+		
+		User user = findById(id);
+		user.setFirstName(userVo.getFirstName());
+		user.setLastName(userVo.getLastName());
+		user.setEmailId(userVo.getEmailId());
+		return userRepo.save(user);
+		
 	}
 
 }

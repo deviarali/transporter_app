@@ -21,4 +21,8 @@ public interface UserService {
 
 	public String updateFcmToken(int id, String fcmToken);
 	
+	public User findById(int id);
+
+	public User updateInternalUser(UserVo userVo, int id);
+	
 }
