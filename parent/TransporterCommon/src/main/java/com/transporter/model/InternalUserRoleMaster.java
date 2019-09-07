@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.transporter.vo.InternalUserRoleMasterVo;
+
 
 /**
  * The persistent class for the internaluserrolemaster database table.
@@ -17,7 +19,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="internaluserrolemaster")
-public class InternalUserroleMaster implements Serializable {
+public class InternalUserRoleMaster implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -30,7 +32,7 @@ public class InternalUserroleMaster implements Serializable {
 	@Column(name="role_name")
 	private String roleName;
 
-	public InternalUserroleMaster() {
+	public InternalUserRoleMaster() {
 	}
 
 	public int getId() {
@@ -55,6 +57,16 @@ public class InternalUserroleMaster implements Serializable {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+	
+	public static InternalUserRoleMasterVo convertModelToVo(InternalUserRoleMaster internalUserRoleMaster) {
+		if(null == internalUserRoleMaster)
+			return null;
+		InternalUserRoleMasterVo internalUserRoleMasterVo = new InternalUserRoleMasterVo();
+		internalUserRoleMasterVo.setId(internalUserRoleMaster.getId());
+		internalUserRoleMasterVo.setRoleName(internalUserRoleMaster.getRoleName());
+		internalUserRoleMasterVo.setRoleDescription(internalUserRoleMaster.getRoleDescription());
+		return internalUserRoleMasterVo;
 	}
 	
 }

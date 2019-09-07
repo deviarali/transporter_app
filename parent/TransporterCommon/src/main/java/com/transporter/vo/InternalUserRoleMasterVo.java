@@ -7,7 +7,7 @@ import java.io.Serializable;
  * The persistent class for the internaluserrolemaster database table.
  * 
  */
-public class InternalUserroleMasterVo implements Serializable {
+public class InternalUserRoleMasterVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
@@ -16,7 +16,7 @@ public class InternalUserroleMasterVo implements Serializable {
 
 	private String roleName;
 
-	public InternalUserroleMasterVo() {
+	public InternalUserRoleMasterVo() {
 	}
 
 	public int getId() {

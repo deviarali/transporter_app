@@ -20,7 +20,7 @@ public class InternalUserDetails implements Serializable {
 	private int id;
 
 	@Column(name="active_internal")
-	private byte activeInternal;
+	private int activeInternal;
 
 	@Column(name="address_city")
 	private String addressCity;
@@ -41,7 +41,7 @@ public class InternalUserDetails implements Serializable {
 	//bi-directional many-to-one association to Internaluserrolemaster
 	@ManyToOne
 	@JoinColumn(name="internal_user_role")
-	private InternalUserroleMaster internalUserroleMaster;
+	private InternalUserRoleMaster internalUserroleMaster;
 
 	//bi-directional many-to-one association to User
 	@OneToOne(mappedBy="internalUserDetails")
@@ -58,11 +58,11 @@ public class InternalUserDetails implements Serializable {
 		this.id = id;
 	}
 
-	public byte getActiveInternal() {
+	public int getActiveInternal() {
 		return activeInternal;
 	}
 
-	public void setActiveInternal(byte activeInternal) {
+	public void setActiveInternal(int activeInternal) {
 		this.activeInternal = activeInternal;
 	}
 
@@ -106,11 +106,11 @@ public class InternalUserDetails implements Serializable {
 		this.dateofbirth = dateofbirth;
 	}
 
-	public InternalUserroleMaster getInternalUserroleMaster() {
+	public InternalUserRoleMaster getInternalUserroleMaster() {
 		return internalUserroleMaster;
 	}
 
-	public void setInternalUserroleMaster(InternalUserroleMaster internalUserroleMaster) {
+	public void setInternalUserroleMaster(InternalUserRoleMaster internalUserroleMaster) {
 		this.internalUserroleMaster = internalUserroleMaster;
 	}
 
