@@ -45,20 +45,15 @@ public class VehicleDetails implements Serializable {
 	@Column(name="vehicle_verification_status")
 	private String vehicleVerificationStatus;
 
-	//bi-directional many-to-one association to User
-	@OneToOne
-	@JoinColumn(name="created_by")
-	private User createdBy;
+	@Column(name="created_by")
+	private String createdBy;
 
-	//bi-directional many-to-one association to Driverdetail
 	@OneToOne
 	@JoinColumn(name="driver_id")
 	private DriverDetails driverDetails;
 
-	//bi-directional many-to-one association to User
-	@OneToOne
-	@JoinColumn(name="verified_by")
-	private User verifiedBy;
+	@Column(name="verified_by")
+	private String verifiedBy;
 
 	public VehicleDetails() {
 	}
@@ -135,11 +130,11 @@ public class VehicleDetails implements Serializable {
 		this.vehicleVerificationStatus = vehicleVerificationStatus;
 	}
 
-	public User getCreatedBy() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(User createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -151,11 +146,11 @@ public class VehicleDetails implements Serializable {
 		this.driverDetails = driverDetails;
 	}
 
-	public User getVerifiedBy() {
+	public String getVerifiedBy() {
 		return verifiedBy;
 	}
 
-	public void setVerifiedBy(User verifiedBy) {
+	public void setVerifiedBy(String verifiedBy) {
 		this.verifiedBy = verifiedBy;
 	}
 	

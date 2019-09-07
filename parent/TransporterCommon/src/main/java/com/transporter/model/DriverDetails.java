@@ -3,6 +3,7 @@ package com.transporter.model;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserVo;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * The persistent class for the driverdetails database table.
  * 
  */
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name="driverdetails")
 public class DriverDetails implements Serializable {
@@ -81,13 +83,6 @@ public class DriverDetails implements Serializable {
 	@JoinColumn(name="verified_by")
 	private User verifedBy;
 
-	//bi-directional many-to-one association to Vehicledetail
-	@OneToMany(mappedBy="driverDetails")
-	private List<VehicleDetails> vehicleDetailsList;
-	
-	@OneToMany(mappedBy="driverDetails")
-	private List<TripDetails> tripDetailsList;
-	
 	@Column(name = "current_lattitude")
 	private Double currentLattitude;
 	
@@ -233,22 +228,7 @@ public class DriverDetails implements Serializable {
 		this.verifedBy = verifedBy;
 	}
 
-	public List<VehicleDetails> getVehicleDetailsList() {
-		return vehicleDetailsList;
-	}
-
-	public void setVehicleDetailsList(List<VehicleDetails> vehicleDetailsList) {
-		this.vehicleDetailsList = vehicleDetailsList;
-	}
-
-	public List<TripDetails> getTripDetailsList() {
-		return tripDetailsList;
-	}
-
-	public void setTripDetailsList(List<TripDetails> tripDetailsList) {
-		this.tripDetailsList = tripDetailsList;
-	}
-
+	
 	public Double getCurrentLattitude() {
 		return currentLattitude;
 	}

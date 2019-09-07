@@ -29,11 +29,11 @@ public class VehicleDetailsVo implements Serializable {
 
 	private String vehicleVerificationStatus;
 
-	private UserVo createdByVo;
+	private String createdBy;
 
-	private DriverDetailsVo driverDetailsVo;
+	private DriverDetailsVo driverDetails;
 
-	private UserVo verifiedByVo;
+	private String verifiedBy;
 
 	public VehicleDetailsVo() {
 	}
@@ -110,28 +110,28 @@ public class VehicleDetailsVo implements Serializable {
 		this.vehicleVerificationStatus = vehicleVerificationStatus;
 	}
 
-	public UserVo getCreatedByVo() {
-		return createdByVo;
+	public DriverDetailsVo getDriverDetails() {
+		return driverDetails;
 	}
 
-	public void setCreatedByVo(UserVo createdByVo) {
-		this.createdByVo = createdByVo;
+	public void setDriverDetails(DriverDetailsVo driverDetails) {
+		this.driverDetails = driverDetails;
 	}
 
-	public DriverDetailsVo getDriverDetailsVo() {
-		return driverDetailsVo;
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setDriverDetailsVo(DriverDetailsVo driverDetailsVo) {
-		this.driverDetailsVo = driverDetailsVo;
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	public UserVo getVerifiedByVo() {
-		return verifiedByVo;
+	public String getVerifiedBy() {
+		return verifiedBy;
 	}
 
-	public void setVerifiedByVo(UserVo verifiedByVo) {
-		this.verifiedByVo = verifiedByVo;
+	public void setVerifiedBy(String verifiedBy) {
+		this.verifiedBy = verifiedBy;
 	}
-	
+
 }

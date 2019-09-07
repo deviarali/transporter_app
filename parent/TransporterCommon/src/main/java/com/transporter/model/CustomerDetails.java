@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.transporter.vo.CustomerDetailsVo;
 
 
@@ -25,6 +26,7 @@ import com.transporter.vo.CustomerDetailsVo;
  * The persistent class for the customerdetails database table.
  * 
  */
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name="customerdetails")
 public class CustomerDetails implements Serializable {
@@ -54,9 +56,6 @@ public class CustomerDetails implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
-	@OneToMany(mappedBy = "customerDetails")
-	private List<TripDetails> tripDetailsList;
 
 	public CustomerDetails() {
 	}
@@ -117,13 +116,6 @@ public class CustomerDetails implements Serializable {
 		this.user = user;
 	}
 
-	public List<TripDetails> getTripDetailsList() {
-		return tripDetailsList;
-	}
-
-	public void setTripDetailsList(List<TripDetails> tripDetailsList) {
-		this.tripDetailsList = tripDetailsList;
-	}
 
 	public static CustomerDetailsVo convertModelToVO(CustomerDetails customerDetails) {
 		if(customerDetails == null)

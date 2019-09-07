@@ -8,7 +8,8 @@ package com.transporter.exceptions;
 public enum ErrorCodes 
 {
 	MOEXISTS("Mobile already exists"),
-	NOTSAVED("Not Saved");
+	NOTSAVED("Not Saved"),
+	VEHICLEEXISTS("Vehicle already exists");
 	
 	private final String value;
 

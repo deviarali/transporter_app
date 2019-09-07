@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.transporter.vo.UserVo;
 
 
@@ -22,6 +23,7 @@ import com.transporter.vo.UserVo;
  * The persistent class for the user database table.
  * 
  */
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
@@ -77,22 +79,6 @@ public class User implements Serializable {
 
 	@Column(name="transporter_id")
 	private int transporterId;
-
-	//bi-directional many-to-one association to Customerdetail
-	@OneToOne(mappedBy="user")
-	private CustomerDetails customerDetails;
-
-	//bi-directional many-to-one association to Driverdetail
-	@OneToOne(mappedBy="createdBy")
-	private DriverDetails driverDetailsCreatedBy;
-
-	//bi-directional many-to-one association to Driverdetail
-	@OneToOne(mappedBy="user")
-	private DriverDetails driverDetails;
-
-	//bi-directional many-to-one association to Driverdetail
-	@OneToOne(mappedBy="verifedBy")
-	private DriverDetails driverDetailsVerifedBy;
 
 	//bi-directional many-to-one association to Userrole
 	@ManyToOne
@@ -238,38 +224,7 @@ public class User implements Serializable {
 		this.transporterId = transporterId;
 	}
 
-	public CustomerDetails getCustomerDetails() {
-		return customerDetails;
-	}
-
-	public void setCustomerDetails(CustomerDetails customerDetails) {
-		this.customerDetails = customerDetails;
-	}
-
-	public DriverDetails getDriverDetailsCreatedBy() {
-		return driverDetailsCreatedBy;
-	}
-
-	public void setDriverDetailsCreatedBy(DriverDetails driverDetailsCreatedBy) {
-		this.driverDetailsCreatedBy = driverDetailsCreatedBy;
-	}
-
-	public DriverDetails getDriverDetails() {
-		return driverDetails;
-	}
-
-	public void setDriverDetails(DriverDetails driverDetails) {
-		this.driverDetails = driverDetails;
-	}
-
-	public DriverDetails getDriverDetailsVerifedBy() {
-		return driverDetailsVerifedBy;
-	}
-
-	public void setDriverDetailsVerifedBy(DriverDetails driverDetailsVerifedBy) {
-		this.driverDetailsVerifedBy = driverDetailsVerifedBy;
-	}
-
+	
 	public UserRole getUserRole() {
 		return userrole;
 	}
@@ -315,8 +270,6 @@ public class User implements Serializable {
 		userVo.setTransporterId(user.getTransporterId());
 		userVo.setCreatedBy(user.getCreatedBy());
 		userVo.setCreatedOn(user.getCreatedOn());
-		userVo.setCustomerDetails(CustomerDetails.convertModelToVO(user.getCustomerDetails()));
-		userVo.setDriverDetailsCreatedByVo(DriverDetails.convertModelToVo(user.getDriverDetailsCreatedBy()));
 		userVo.setProfilePictureUrl(user.getProfilePictureUrl());
 		return userVo;
 	}
