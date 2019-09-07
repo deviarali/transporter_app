@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.transporter.constants.WebConstants;
 import com.transporter.dao.CustomerDetailsDao;
 import com.transporter.enums.UserRoleEnum;
+import com.transporter.exceptions.BusinessException;
+import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.CustomerDetails;
 import com.transporter.model.User;
 import com.transporter.service.CustomerDetailsService;
@@ -25,8 +28,13 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	
 	@Override
 	@Transactional
-	public CustomerDetailsVo registerCustomer(CustomerDetailsVo customerDetailsVo) {
-		UserVo userVo = customerDetailsVo.getUserVo();
+	public String registerCustomer(CustomerDetailsVo customerDetailsVo) {
+		String response = null;
+		UserVo userExists = userService.isUserExists(customerDetailsVo.getUser().getMobileNumber());
+		if(null != userExists) {
+			throw new BusinessException(ErrorCodes.MOEXISTS.name(), ErrorCodes.MOEXISTS.value());
+		}
+		UserVo userVo = customerDetailsVo.getUser();
 		UserRoleVo userRoleVo = new UserRoleVo();
 		userRoleVo.setId(UserRoleEnum.CUSTOMER.getId());
 		userVo.setUserRoleVo(userRoleVo);
@@ -34,13 +42,19 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setUser(user);
-		customerDetailsDao.save(customerDetails);		
-		return CustomerDetails.convertModelToVO(customerDetails);
+		customerDetailsDao.save(customerDetails);
+		if(customerDetails.getId() > 0) {
+			int generate = generateOtp(customerDetailsVo.getUser().getMobileNumber());
+			if(generate == 1) {
+				response = WebConstants.SUCCESS;
+			}
+		}
+		return response;
 	}
 
 	@Override
 	public UserVo isUserExists(CustomerDetailsVo customerDetailsVo) {
-		return userService.isUserExists(customerDetailsVo.getUserVo().getMobileNumber());
+		return userService.isUserExists(customerDetailsVo.getUser().getMobileNumber());
 	}
 	
 	@Override
@@ -49,20 +63,21 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	}
 
 	@Override
+	@Transactional
 	public CustomerDetailsVo validateOtp(String mobile, String otp) {
-		UserVo userVo = userService.validateOtp(mobile, otp); 
 		CustomerDetailsVo customerDetailsVo = null;
-		if(userVo != null)
-		{
-			customerDetailsVo = findCustomerByUserId(userVo.getId());
+		UserVo userVo = userService.validateOtp(mobile, otp);
+		if(userVo == null) {
+			throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
 		}
+		customerDetailsVo = findCustomerByUserId(userVo.getId());
 		return customerDetailsVo;
 	}
 	
 	@Override
 	@Transactional
 	public CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo) {
-		User user = userService.updateUser(customerDetailsVo.getUserVo());
+		User user = userService.updateUser(customerDetailsVo.getUser());
 
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setUser(user);
@@ -70,8 +85,11 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		return CustomerDetails.convertModelToVO(customerDetails);
 	}
 
+	@Transactional
 	private CustomerDetailsVo findCustomerByUserId(int id) {
-		return CustomerDetails.convertModelToVO(customerDetailsDao.findCustomerByUserId(id));
+		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
+		CustomerDetailsVo customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
+		return customerDetailsVo;
 	}
 
 }

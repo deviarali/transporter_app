@@ -20,7 +20,7 @@ public class CustomerDetailsVo implements Serializable {
 
 	private Date dateofbirth;
 
-	private UserVo userVo;
+	private UserVo user;
 	
 	private List<TripDetailsVo> tripDetailsVoList;
 
@@ -75,12 +75,12 @@ public class CustomerDetailsVo implements Serializable {
 		this.dateofbirth = dateofbirth;
 	}
 
-	public UserVo getUserVo() {
-		return this.userVo;
+	public UserVo getUser() {
+		return this.user;
 	}
 
-	public void setUser(UserVo userVo) {
-		this.userVo = userVo;
+	public void setUser(UserVo user) {
+		this.user = user;
 	}
 
 	public List<TripDetailsVo> getTripDetailsVoList() {

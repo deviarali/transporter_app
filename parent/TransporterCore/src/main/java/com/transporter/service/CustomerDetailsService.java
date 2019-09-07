@@ -5,7 +5,7 @@ import com.transporter.vo.UserVo;
 
 public interface CustomerDetailsService {
 
-	CustomerDetailsVo registerCustomer(CustomerDetailsVo customerDetailsVo);
+	String registerCustomer(CustomerDetailsVo customerDetailsVo);
 
 	UserVo isUserExists(CustomerDetailsVo customerDetailsVo);
 

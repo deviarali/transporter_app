@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.CommonConstants;
 import com.transporter.constants.WebConstants;
-import com.transporter.exceptions.ErrorCodes;
+import com.transporter.exceptions.BusinessException;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.utils.RestUtils;
@@ -30,7 +30,7 @@ import com.transporter.vo.UserVo;
 @RestController
 public class CustomerDetailsController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CustomerDetailsController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CustomerDetailsController.class);
 
 	@Autowired
 	private CustomerDetailsService customerDetailsService;
@@ -38,28 +38,20 @@ public class CustomerDetailsController {
 	@RequestMapping(value = "customer/registerCustomer", method = RequestMethod.POST)
 	public CommonResponse registerCustomer(@RequestBody CustomerDetailsVo customerDetailsVo) {
 		CommonResponse response = null;
-
-		Map<String, Object> map = validateCustomer(customerDetailsVo);
-
-		if (!map.isEmpty()) {
-			response = RestUtils.wrapObjectForFailure(map, "validation error", WebConstants.WEB_RESPONSE_ERROR);
-			LOG.error("Validation missing");
-			return response;
-		}
-
-		UserVo userVo = customerDetailsService.isUserExists(customerDetailsVo);
-		if (null != userVo) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, ErrorCodes.MOEXISTS.value());
-			return response;
-		}
-
-		CustomerDetailsVo customerDetailsVo2 = customerDetailsService.registerCustomer(customerDetailsVo);
-		if (customerDetailsVo2 != null) {
-			response = RestUtils.wrapObjectForSuccess(customerDetailsVo2);
-			LOG.info("Owner registed successfully " + customerDetailsVo.getUserVo().getFirstName());
-		} else {
-			response = RestUtils.wrapObjectForFailure("Not registered", "error", WebConstants.WEB_RESPONSE_ERROR);
-			LOG.error("Owner not registed " + customerDetailsVo.getUserVo().getFirstName());
+		try {
+			String created = customerDetailsService.registerCustomer(customerDetailsVo);
+			if(!StringUtils.isNullOrEmpty(created)) {
+				response = RestUtils.wrapObjectForSuccess(created);
+			} else {
+				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,"internal server error");
+				LOGGER.error("customer not created. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			LOGGER.error("user already exists. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,e.getMessage());
+			LOGGER.error("Internal server error. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
 		}
 
 		return response;
@@ -73,7 +65,7 @@ public class CustomerDetailsController {
 
 		if (!map.isEmpty()) {
 			response = RestUtils.wrapObjectForFailure(map, "validation error", WebConstants.WEB_RESPONSE_ERROR);
-			LOG.error("Validation missing");
+			LOGGER.error("Validation missing");
 			return response;
 		}
 
@@ -84,24 +76,24 @@ public class CustomerDetailsController {
 
 			if (updatedCustomerDetailsVo != null) {
 				response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
-				LOG.info("Customer details updated successfully " + customerDetailsVo.getUserVo().getFirstName());
+				LOGGER.info("Customer details updated successfully " + customerDetailsVo.getUser().getFirstName());
 			} else {
 				response = RestUtils.wrapObjectForFailure("customer not found", "error",
 						WebConstants.WEB_RESPONSE_ERROR);
-				LOG.error("customer not found " + customerDetailsVo.getUserVo().getFirstName());
+				LOGGER.error("customer not found " + customerDetailsVo.getUser().getFirstName());
 			}
 		} else {
 			response = RestUtils.wrapObjectForFailure("Customer not found", "error", WebConstants.WEB_RESPONSE_ERROR);
-			LOG.error("customer not found " + customerDetailsVo.getUserVo().getFirstName());
+			LOGGER.error("customer not found " + customerDetailsVo.getUser().getFirstName());
 		}
 
 		return response;
 	}
 
 	@RequestMapping(value = "customer/generateOtp", method = RequestMethod.POST)
-	public CommonResponse generateOtp(@RequestParam String mobile) {
+	public CommonResponse generateOtp(@RequestParam String mobileNumber) {
 		CommonResponse response = null;
-		int generated = customerDetailsService.generateOtp(mobile);
+		int generated = customerDetailsService.generateOtp(mobileNumber);
 		if (generated != 0)
 			response = RestUtils.wrapObjectForSuccess("success");
 		else
@@ -111,13 +103,19 @@ public class CustomerDetailsController {
 	}
 
 	@RequestMapping(value = "customer/validateOtp", method = RequestMethod.POST)
-	public CommonResponse validateOtp(@RequestParam String mobile, @RequestParam String otp) {
+	public CommonResponse validateOtp(@RequestParam String mobileNumber, @RequestParam String otp) {
 		CommonResponse response = null;
-		CustomerDetailsVo customerDetailsVo = customerDetailsService.validateOtp(mobile, otp);
-		if (customerDetailsVo != null)
-			response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
-		else
-			response = RestUtils.wrapObjectForFailure("invalid otp", "error", WebConstants.WEB_RESPONSE_ERROR);
+		try {
+			CustomerDetailsVo customerDetailsVo = customerDetailsService.validateOtp(mobileNumber, otp);
+			if (customerDetailsVo != null)
+				response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
+			else
+				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INVALID_USER);
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
+		}
 		return response;
 	}
 
@@ -126,11 +124,11 @@ public class CustomerDetailsController {
 		if (customerDetailsVo == null) {
 			map.put("All", CommonConstants.ALL_FIELDS_REQUIRED);
 		} else {
-			if (StringUtils.isNullOrEmpty(customerDetailsVo.getUserVo().getFirstName())) {
+			if (StringUtils.isNullOrEmpty(customerDetailsVo.getUser().getFirstName())) {
 				map.put("firstName", CommonConstants.FIRST_NAME_EMPTY);
 			}
-			if (StringUtils.isNullOrEmpty(customerDetailsVo.getUserVo().getMobileNumber())
-					|| StringUtils.isEmptyOrWhitespaceOnly(customerDetailsVo.getUserVo().getMobileNumber())) {
+			if (StringUtils.isNullOrEmpty(customerDetailsVo.getUser().getMobileNumber())
+					|| StringUtils.isEmptyOrWhitespaceOnly(customerDetailsVo.getUser().getMobileNumber())) {
 				map.put("mobileNumber", CommonConstants.MOBILE_NUMBER_EMPTY);
 			}
 		}

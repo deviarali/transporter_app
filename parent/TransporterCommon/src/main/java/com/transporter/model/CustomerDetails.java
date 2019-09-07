@@ -127,7 +127,7 @@ public class CustomerDetails implements Serializable {
 		customerDetailsVo.setAddressStreet(customerDetailsVo.getAddressStreet());
 		customerDetailsVo.setAddressZipcode(customerDetails.getAddressZipcode());
 		customerDetailsVo.setDateofbirth(customerDetails.getDateofbirth());
-	//	customerDetailsVo.setTripDetailsVoList(customerDetails.getTripDetailsList());
+		customerDetailsVo.setUser(User.convertModelToVo(customerDetails.getUser()));
 		return customerDetailsVo;
 	}
 

@@ -25,7 +25,7 @@ public class CustomerDetailsDaoImpl extends GenericDaoImpl implements CustomerDe
 	@Override
 	public CustomerDetails findCustomerByUserId(int id) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "From CustomerModel cm where cm.user.id= :id";
+		String sqlQuery = "From CustomerDetails cm where cm.user.id= :id";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("id", id);
 		return (CustomerDetails) query.uniqueResult();
