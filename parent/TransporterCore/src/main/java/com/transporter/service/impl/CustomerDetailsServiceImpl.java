@@ -3,7 +3,9 @@ package com.transporter.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.CustomerDetailsDao;
 import com.transporter.enums.UserRoleEnum;
@@ -13,6 +15,7 @@ import com.transporter.model.CustomerDetails;
 import com.transporter.model.User;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.service.UserService;
+import com.transporter.utility.TransporterUtility;
 import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
@@ -25,6 +28,9 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	
 	@Autowired
 	private CustomerDetailsDao customerDetailsDao;
+	
+	@Autowired
+	private TransporterUtility transporterUtility;
 	
 	@Override
 	@Transactional
@@ -90,6 +96,22 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
 		CustomerDetailsVo customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
 		return customerDetailsVo;
+	}
+
+	@Override
+	public String updateProfilePicture(MultipartFile multipartFile, String mobileNumber) {
+		UserVo user = userService.isUserExists(mobileNumber);
+		if(user == null) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
+		}
+		String generateFilePathAndStore = transporterUtility.generateFilePathAndStore(multipartFile, "customer");
+		if(!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
+			int updated = userService.updateProfilePicture(mobileNumber, generateFilePathAndStore);
+			if(updated != 0) {
+				return generateFilePathAndStore;
+			}
+		}
+		return null;
 	}
 
 }
