@@ -2,8 +2,11 @@ package com.transporter.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,10 +21,12 @@ import com.transporter.vo.UserVo;
 @RestController
 public class UserController {
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(name = "/updateProfilePicture")
+	@RequestMapping(value = "user/updateProfilePicture")
 	public CommonResponse updateProfilePicture(HttpServletRequest req, @RequestParam(name = "file") MultipartFile multipartFile) {
 		CommonResponse response = null;
 		String mobileNumber = req.getParameter("mobileNumber");
@@ -38,6 +43,23 @@ public class UserController {
 			response = RestUtils.wrapObjectForFailure("picture not updated", WebConstants.WEB_RESPONSE_ERROR, WebConstants.WEB_RESPONSE_ERROR);
 		}
 		
+		return response;
+	}
+	
+	@RequestMapping(value = "user/updateFcmToken", method = RequestMethod.POST)
+	public CommonResponse updateFcmToken(@RequestParam(name = "id") int id, @RequestParam(name = "fcmToken") String fcmToken) {
+		CommonResponse response = null;
+		try {
+			String success  = userService.updateFcmToken(id, fcmToken);
+			if(!StringUtils.isNullOrEmpty(success)) {
+				response = RestUtils.wrapObjectForSuccess(success);
+			} else {
+				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, "not updated");
+			}
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, "internal server error");
+			LOGGER.error("fcm token not updated for the user : "+id +" exception is : "+e.getMessage());
+		}
 		return response;
 	}
 }

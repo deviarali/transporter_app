@@ -18,5 +18,7 @@ public interface UserService {
 	public User updateUser(UserVo userVo);
 
 	public String updateProfilePicture(MultipartFile multipart, String mobileNumber);
+
+	public String updateFcmToken(int id, String fcmToken);
 	
 }

@@ -56,6 +56,8 @@ public class UserVo implements Serializable {
 	private InternalUserDetailsVo internalUserDetailsVo;
 
 	private String profilePictureUrl;
+	
+	private String fcmToken;
 
 	public UserVo() {
 	}
@@ -241,6 +243,14 @@ public class UserVo implements Serializable {
 
 	public void setProfilePictureUrl(String profilePictureUrl) {
 		this.profilePictureUrl = profilePictureUrl;
+	}
+
+	public String getFcmToken() {
+		return fcmToken;
+	}
+
+	public void setFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
 	}
 
 }

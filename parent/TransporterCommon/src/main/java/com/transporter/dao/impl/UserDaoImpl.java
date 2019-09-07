@@ -68,4 +68,16 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 		return rows;
 	}
 
+	@Override
+	public int updateFcmToken(int id, String fcmToken) {
+		Session session = sessionFactory.getCurrentSession();
+		int rows = 0;
+		String sqlQuery = "Update User usr set usr.fcmToken= :fcmToken where usr.id= :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", id);
+		query.setParameter("fcmToken", fcmToken);
+		rows = query.executeUpdate();
+		return rows;
+	}
+
 }

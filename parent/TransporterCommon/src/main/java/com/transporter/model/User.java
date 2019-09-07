@@ -92,6 +92,9 @@ public class User implements Serializable {
 	
 	@Column(name = "profile_picture_url")
 	private String profilePictureUrl;
+	
+	@Column(name = "fcmToken")
+	private String fcmToken;
 
 	public User() {
 	}
@@ -249,6 +252,14 @@ public class User implements Serializable {
 		this.profilePictureUrl = profilePictureUrl;
 	}
 
+	public String getFcmToken() {
+		return fcmToken;
+	}
+
+	public void setFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
+	}
+
 	public static UserVo convertModelToVo(User user) {
 		if(user == null)
 			return null;
@@ -271,6 +282,7 @@ public class User implements Serializable {
 		userVo.setCreatedBy(user.getCreatedBy());
 		userVo.setCreatedOn(user.getCreatedOn());
 		userVo.setProfilePictureUrl(user.getProfilePictureUrl());
+		userVo.setFcmToken(user.getFcmToken());
 		return userVo;
 	}
 	

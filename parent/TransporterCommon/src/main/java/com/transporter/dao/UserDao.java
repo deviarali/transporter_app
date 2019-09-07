@@ -15,4 +15,6 @@ public interface UserDao extends GenericDao {
 
 	int updateProfilePicture(String mobileNumber, String generateFilePathAndStore);
 
+	int updateFcmToken(int id, String fcmToken);
+
 }

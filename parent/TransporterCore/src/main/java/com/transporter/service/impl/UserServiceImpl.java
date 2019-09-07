@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public UserVo validateOtp(String mobile, String otp) {
 		
 		User user = userDao.validateOtp(mobile, otp);
@@ -96,6 +97,16 @@ public class UserServiceImpl implements UserService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public String updateFcmToken(int id, String fcmToken) {
+		String response = null;
+		int update = userDao.updateFcmToken(id, fcmToken);
+		if(update != 0) {
+			response = WebConstants.SUCCESS;
+		}
+		return response;
 	}
 
 }
