@@ -77,6 +77,18 @@ public class GenericDaoImpl implements GenericDao {
 		}
 
 	}
+	
+	@Override
+	public Object get(Class cls, Integer id) throws DatabaseException {
+		Session session = sessionFactory.getCurrentSession();
+		Object obj = null;
+		try {
+			obj = session.get(cls, id);
+			return obj;
+		} catch (Exception e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+	}
 
 	/**
 	 * Use this method to load a plain object, i.e a class without any

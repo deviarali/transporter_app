@@ -22,6 +22,8 @@ public interface GenericDao {
 	public void update(Object obj) throws DatabaseException;
 
 	public Object load(Class cls, Integer id) throws DatabaseException;
+	
+	public Object get(Class cls, Integer id) throws DatabaseException;
 
 	public Object load(@SuppressWarnings("rawtypes") Class cls,
 	        Object compositeKey) throws DatabaseException;
