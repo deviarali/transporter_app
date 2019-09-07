@@ -21,6 +21,7 @@ import com.transporter.utils.PasswordUtils;
 import com.transporter.vo.UserVo;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -112,11 +113,6 @@ public class UserServiceImpl implements UserService {
 			response = WebConstants.SUCCESS;
 		}
 		return response;
-	}
-
-	@Override
-	public int updateProfilePicture(String mobileNumber, String generateFilePathAndStore) {
-		return userDao.updateProfilePicture(mobileNumber, generateFilePathAndStore);
 	}
 
 }

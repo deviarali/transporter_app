@@ -3,8 +3,6 @@ package com.transporter.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.CommonConstants;
@@ -119,27 +116,6 @@ public class CustomerDetailsController {
 		} catch (Exception e) {
 			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
 		}
-		return response;
-	}
-	
-	@RequestMapping(value = "customer/updateProfilePicture")
-	public CommonResponse updateProfilePicture(HttpServletRequest req, @RequestParam(name = "file") MultipartFile multipartFile) {
-		CommonResponse response = null;
-		String mobileNumber = req.getParameter("mobileNumber");
-		try {
-			String updateProfilePicture = customerDetailsService.updateProfilePicture(multipartFile, mobileNumber);
-			if(!StringUtils.isNullOrEmpty(updateProfilePicture)) {
-				response = RestUtils.wrapObjectForSuccess(updateProfilePicture);
-			} else {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.NOT_UPDATED);
-			}
-		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
-		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
-			LOGGER.error("Update profile picture error, mobile number : "+mobileNumber +" exception is : "+e.getMessage());
-		}
-		
 		return response;
 	}
 

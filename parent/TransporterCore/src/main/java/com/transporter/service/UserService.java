@@ -20,7 +20,5 @@ public interface UserService {
 	public String updateProfilePicture(MultipartFile multipart, String mobileNumber);
 
 	public String updateFcmToken(int id, String fcmToken);
-
-	public int updateProfilePicture(String mobileNumber, String generateFilePathAndStore);
 	
 }
