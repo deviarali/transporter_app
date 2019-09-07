@@ -9,7 +9,8 @@ public enum ErrorCodes
 {
 	MOEXISTS("Mobile already exists"),
 	NOTSAVED("Not Saved"),
-	VEHICLEEXISTS("Vehicle already exists");
+	VEHICLEEXISTS("Vehicle already exists"),
+	INVALIDOTP("Invalid otp");
 	
 	private final String value;
 
