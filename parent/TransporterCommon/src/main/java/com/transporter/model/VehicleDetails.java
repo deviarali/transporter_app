@@ -43,7 +43,7 @@ public class VehicleDetails implements Serializable {
 	private String vehicleVerificationPendingReason;
 
 	@Column(name="vehicle_verification_status")
-	private String vehicleVerificationStatus;
+	private int vehicleVerificationStatus;
 
 	@Column(name="created_by")
 	private String createdBy;
@@ -122,11 +122,11 @@ public class VehicleDetails implements Serializable {
 		this.vehicleVerificationPendingReason = vehicleVerificationPendingReason;
 	}
 
-	public String getVehicleVerificationStatus() {
+	public int getVehicleVerificationStatus() {
 		return vehicleVerificationStatus;
 	}
 
-	public void setVehicleVerificationStatus(String vehicleVerificationStatus) {
+	public void setVehicleVerificationStatus(int vehicleVerificationStatus) {
 		this.vehicleVerificationStatus = vehicleVerificationStatus;
 	}
 
