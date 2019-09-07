@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
 		if(user == null) {
 			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
 		}
-		String generateFilePathAndStore = transporterUtility.generateFilePathAndStore(multipart, "user");
+		String generateFilePathAndStore = transporterUtility.generateFilePathAndStore(multipart, "profile");
 		if(!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
 			int updated = userDao.updateProfilePicture(mobileNumber, generateFilePathAndStore);
 			if(updated != 0) {
