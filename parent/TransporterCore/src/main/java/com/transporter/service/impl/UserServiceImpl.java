@@ -11,6 +11,8 @@ import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.UserDao;
 import com.transporter.enums.UserRoleEnum;
+import com.transporter.exceptions.BusinessException;
+import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.User;
 import com.transporter.model.UserRole;
 import com.transporter.service.UserService;
@@ -89,6 +91,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public String updateProfilePicture(MultipartFile multipart, String mobileNumber) {
+		User user = userDao.isUserExists(mobileNumber);
+		if(user == null) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
+		}
 		String generateFilePathAndStore = transporterUtility.generateFilePathAndStore(multipart, "user");
 		if(!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
 			int updated = userDao.updateProfilePicture(mobileNumber, generateFilePathAndStore);

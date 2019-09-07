@@ -13,4 +13,5 @@ public class WebConstants {
 	public static final String SUCCESS = "success";
 	public static final String INVALID_USER = "Invalid user";
 	public static final String NO_DATA_FOUND = "No data found";
+	public static final String NOT_UPDATED = "Not updated";
 }
