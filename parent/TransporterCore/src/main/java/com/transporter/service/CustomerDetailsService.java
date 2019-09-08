@@ -12,9 +12,9 @@ public interface CustomerDetailsService {
 	int generateOtp(String mobile);
 
 	CustomerDetailsVo validateOtp(String mobile, String otp);
-	
+
 	CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo);
 
-	UserVo updateUserProfile(UserVo userVo);
+	CustomerDetailsVo updateUserProfile(UserVo userVo);
 
 }

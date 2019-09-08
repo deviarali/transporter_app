@@ -139,12 +139,12 @@ public class CustomerDetailsController {
 	@PutMapping(value = "/customer/updateCustomer")
 	public CommonResponse updateUserProfile(@RequestBody UserVo userVo) {
 		CommonResponse response = null;
-		UserVo updateUserProfile = customerDetailsService.updateUserProfile(userVo);
-		if (updateUserProfile == null) {
+		CustomerDetailsVo customerDetails = customerDetailsService.updateUserProfile(userVo);
+		if (customerDetails == null) {
 			response = RestUtils.wrapObjectForFailure("user not found", WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
 		} else {
-			response = RestUtils.wrapObjectForSuccess(updateUserProfile);
+			response = RestUtils.wrapObjectForSuccess(customerDetails);
 		}
 		return response;
 	}

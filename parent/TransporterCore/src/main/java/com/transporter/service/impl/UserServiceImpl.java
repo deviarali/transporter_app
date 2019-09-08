@@ -27,13 +27,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private TransporterUtility transporterUtility;
-	
+
 	@Autowired
 	private UserRepo userRepo;
-	
 
 	@Override
 	public User registerUser(UserVo userVo) {
@@ -64,11 +63,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserVo validateOtp(String mobile, String otp) {
-		
+
 		User user = userDao.validateOtp(mobile, otp);
 		return User.convertModelToVo(user);
 	}
-	
+
 	@Override
 	public User updateUser(UserVo userVo) {
 		User user = new User();
@@ -86,9 +85,8 @@ public class UserServiceImpl implements UserService {
 		userDao.saveOrUpdate(user);
 		return user;
 	}
-	
-	public String generateOtp()
-	{
+
+	public String generateOtp() {
 		return "55555";
 	}
 
@@ -96,13 +94,13 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public String updateProfilePicture(MultipartFile multipart, String mobileNumber) {
 		User user = userDao.isUserExists(mobileNumber);
-		if(user == null) {
+		if (user == null) {
 			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
 		}
 		String generateFilePathAndStore = transporterUtility.generateFilePathAndStore(multipart, "profile");
-		if(!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
+		if (!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
 			int updated = userDao.updateProfilePicture(mobileNumber, generateFilePathAndStore);
-			if(updated != 0) {
+			if (updated != 0) {
 				return generateFilePathAndStore;
 			}
 		}
@@ -113,29 +111,26 @@ public class UserServiceImpl implements UserService {
 	public String updateFcmToken(int id, String fcmToken) {
 		String response = null;
 		int update = userDao.updateFcmToken(id, fcmToken);
-		if(update != 0) {
+		if (update != 0) {
 			response = WebConstants.SUCCESS;
 		}
 		return response;
 	}
-	
+
 	@Override
 	public User findById(int id) {
-		// TODO Auto-generated method stub
-		
-	User internalUser =	userRepo.findOne(id);
+		User internalUser = userRepo.findOne(id);
 		return internalUser;
 	}
 
 	@Override
 	public User updateInternalUser(UserVo userVo, int id) {
-		
+
 		User user = findById(id);
 		user.setFirstName(userVo.getFirstName());
 		user.setLastName(userVo.getLastName());
 		user.setEmailId(userVo.getEmailId());
 		return userRepo.save(user);
-		
-	}
 
+	}
 }

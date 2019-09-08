@@ -98,10 +98,10 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 
 	@Override
 	@Transactional
-	public UserVo updateUserProfile(UserVo userVo) {
-		User user = userDao.isUserExistsUsingId(userVo.getId());
+	public CustomerDetailsVo updateUserProfile(UserVo userVo) {
+		User user = userService.findById(userVo.getId());
 		if (user == null) {
-			return User.convertModelToVo(user);
+			return null;
 		}
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setId(userVo.getCustomerDetails().getId());
@@ -112,7 +112,7 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		customerDetails.setAddressZipcode(userVo.getCustomerDetails().getAddressZipcode());
 		customerDetails.setDateofbirth(userVo.getCustomerDetails().getDateofbirth());
 		customerDetailsDao.saveOrUpdate(customerDetails);
-		return User.convertModelToVo(user);
+		return CustomerDetails.convertModelToVO(customerDetails);
 	}
 
 }

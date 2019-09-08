@@ -2,7 +2,6 @@ package com.transporter.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -123,8 +120,8 @@ public class CustomerDetails implements Serializable {
 		CustomerDetailsVo customerDetailsVo = new CustomerDetailsVo();
 		customerDetailsVo.setId(customerDetails.getId());
 		customerDetailsVo.setAddressCity(customerDetails.getAddressCity());
-		customerDetailsVo.setAddressState(customerDetailsVo.getAddressState());
-		customerDetailsVo.setAddressStreet(customerDetailsVo.getAddressStreet());
+		customerDetailsVo.setAddressState(customerDetails.getAddressState());
+		customerDetailsVo.setAddressStreet(customerDetails.getAddressStreet());
 		customerDetailsVo.setAddressZipcode(customerDetails.getAddressZipcode());
 		customerDetailsVo.setDateofbirth(customerDetails.getDateofbirth());
 		customerDetailsVo.setUser(User.convertModelToVo(customerDetails.getUser()));
