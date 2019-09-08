@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.transporter.constants.WebConstants;
 import com.transporter.dao.VehicleDetailsDao;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
@@ -29,13 +30,13 @@ public class VehicleServiceImpl implements VehicleService {
 	@Override
 	@Transactional
 	public String registerVehicle(VehicleDetailsVo vehicleDetailsVo) {
-		
+		 String response = null;
 		VehicleDetails details = vehicleDetailsDao.isVehicleExists(vehicleDetailsVo.getVehicleNum());
 		if(null != details) {
 			new BusinessException(ErrorCodes.VEHICLEEXISTS.name(), ErrorCodes.VEHICLEEXISTS.value());
 		}
 		VehicleDetails vehicleDetails = new VehicleDetails();
-		vehicleDetails.setCreatedBy(vehicleDetailsVo.getCreatedBy());
+		vehicleDetails.setCreatedBy(Integer.parseInt(vehicleDetailsVo.getCreatedBy()));
 		vehicleDetails.setCreatedOn(new Date());
 		DriverDetailsVo driverDetailsVo = vehicleDetailsVo.getDriverDetails();
 		DriverDetails driverDetails = new DriverDetails();
@@ -45,8 +46,12 @@ public class VehicleServiceImpl implements VehicleService {
 		vehicleDetails.setVehicleModel(vehicleDetailsVo.getVehicleModel());
 		vehicleDetails.setVehicleNum(vehicleDetailsVo.getVehicleNum());
 		vehicleDetails.setVehicleType(vehicleDetailsVo.getVehicleType());
-		vehicleDetailsDao.save(vehicleDetails);
-		return null;
+		 vehicleDetailsDao.save(vehicleDetails);
+		if(vehicleDetails.getId()>0)
+		{
+			return response = WebConstants.SUCCESS;
+		}
+			return response;
 	}
 	
 }

@@ -74,7 +74,7 @@ public class UserController {
 		}
 		return response;
 	}
-
+	/* IntenalUser update API  */
 	@RequestMapping(value = "user/updateInternalUser/{id}", method = RequestMethod.PUT)
 	public CommonResponse updateCustomer(@RequestBody UserVo userVo, @PathVariable int id) {
 		CommonResponse response = null;

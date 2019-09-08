@@ -21,8 +21,8 @@ public class TripDetailsServiceImpl implements TripDetailsService{
 	TripDetailsRepo  tripDetailsRepo;
 	
 	@Override
-	public List<TripDetails> getTripHistory(int id, int tripstatus) {
-		// TODO Auto-generated method stub
+	public List<TripDetails> getTripHistory(int id, int tripstatus) 
+	{
 		List<TripDetails> history = tripDetailsRepo.getHistory(id,tripstatus);
 		return history;
 	}
