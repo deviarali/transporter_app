@@ -46,7 +46,7 @@ public class VehicleDetails implements Serializable {
 	private int vehicleVerificationStatus;
 
 	@Column(name="created_by")
-	private String createdBy;
+	private int createdBy;
 
 	@OneToOne
 	@JoinColumn(name="driver_id")
@@ -130,11 +130,13 @@ public class VehicleDetails implements Serializable {
 		this.vehicleVerificationStatus = vehicleVerificationStatus;
 	}
 
-	public String getCreatedBy() {
+	
+
+	public int getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
 

@@ -30,7 +30,6 @@ public class TripDetailsController {
 	public CommonResponse getHistoryDetails(@PathVariable("id") int id ,@PathVariable("tripstatus") int tripstatus) {
 		CommonResponse response = null;
 		
-		
 		List<TripDetails> tripHistoryList = tripDetailsService.getTripHistory(id,tripstatus);
 		if (tripHistoryList != null && tripHistoryList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(tripHistoryList);

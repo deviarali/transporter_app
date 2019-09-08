@@ -41,6 +41,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 				response = RestUtils.wrapObjectForSuccess(saved);
 				LOGGER.info("Vehicle registered successfully");
 			}
+			else
+			{
+				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+				LOGGER.error("Vehicle not registered"+vehicleDetailsVo.getVehicleNum());
+			}
 		} catch(BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
 			LOGGER.error("Vehicle already exists :"+vehicleDetailsVo.getVehicleNum() +" exception : "+be.getErrorMsg());
