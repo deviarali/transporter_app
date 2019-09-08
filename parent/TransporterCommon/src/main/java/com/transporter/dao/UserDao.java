@@ -17,4 +17,6 @@ public interface UserDao extends GenericDao {
 
 	int updateFcmToken(int id, String fcmToken);
 
+	User isUserExistsUsingId(int id);
+
 }

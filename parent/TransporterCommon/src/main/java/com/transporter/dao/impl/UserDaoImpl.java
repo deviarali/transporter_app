@@ -80,4 +80,14 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 		return rows;
 	}
 
+	@Override
+	public User isUserExistsUsingId(int UserId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "FROM User usr where usr.id= :UserId";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("UserId", UserId);
+		User user = (User) query.uniqueResult();
+		return user;
+	}
+
 }

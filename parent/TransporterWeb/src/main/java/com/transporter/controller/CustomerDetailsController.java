@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -133,5 +134,18 @@ public class CustomerDetailsController {
 			}
 		}
 		return map;
+	}
+	
+	@PutMapping(value = "/customer/updateCustomer")
+	public CommonResponse updateUserProfile(@RequestBody UserVo userVo) {
+		CommonResponse response = null;
+		UserVo updateUserProfile = customerDetailsService.updateUserProfile(userVo);
+		if (updateUserProfile == null) {
+			response = RestUtils.wrapObjectForFailure("user not found", WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
+		} else {
+			response = RestUtils.wrapObjectForSuccess(updateUserProfile);
+		}
+		return response;
 	}
 }

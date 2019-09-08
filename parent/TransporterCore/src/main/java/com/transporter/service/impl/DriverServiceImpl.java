@@ -44,7 +44,7 @@ public class DriverServiceImpl implements DriverService{
 		UserVo userVo = driverDetailsVo.getUser();
 		UserRoleVo userRoleVo = new UserRoleVo();
 		userRoleVo.setId(UserRoleEnum.DRIVER.getId());
-		userVo.setUserRoleVo(userRoleVo);
+		userVo.setUserRole(userRoleVo);
 		User user = userService.registerUser(userVo);
 		DriverDetails driverDetails = new DriverDetails();
 		driverDetails.setCreatedOn(new Date());

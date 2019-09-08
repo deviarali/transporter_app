@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
@@ -36,6 +37,15 @@ public class TripDetailsController {
 			response = RestUtils.wrapObjectForFailure("Trip History not found", "error", WebConstants.WEB_RESPONSE_ERROR);
 		}
 
+		return response;
+	}
+	
+	@RequestMapping(value = "trip/checkVehicleAvailability", method = RequestMethod.POST)
+	public CommonResponse checkVehicleAvailability(
+			@RequestParam(name = "lattitude")String lattitude, @RequestParam(name = "longitude")String longitude) {
+		CommonResponse response = null;
+		String check = tripDetailsService.checkVehicleAvailability(lattitude, longitude);
+		response = RestUtils.wrapObjectForSuccess(check);
 		return response;
 	}
 

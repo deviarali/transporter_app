@@ -43,17 +43,13 @@ public class UserVo implements Serializable {
 
 	private int transporterId;
 
-	private CustomerDetailsVo customerDetailsVo;
+	private CustomerDetailsVo customerDetails;
 
-	private DriverDetailsVo driverDetailsCreatedByVo;
+	private DriverDetailsVo driverDetails;
 
-	private DriverDetailsVo driverDetailsVo;
+	private UserRoleVo userRole;
 
-	private DriverDetailsVo driverDetailsVerifedByVo;
-
-	private UserRoleVo userRoleVo;
-
-	private InternalUserDetailsVo internalUserDetailsVo;
+	private InternalUserDetailsVo internalUserDetails;
 
 	private String profilePictureUrl;
 	
@@ -189,54 +185,7 @@ public class UserVo implements Serializable {
 	public void setTransporterId(int transporterId) {
 		this.transporterId = transporterId;
 	}
-
-	public CustomerDetailsVo getCustomerDetails() {
-		return customerDetailsVo;
-	}
-
-	public void setCustomerDetails(CustomerDetailsVo customerDetails) {
-		this.customerDetailsVo = customerDetails;
-	}
-
-	public DriverDetailsVo getDriverDetailsCreatedByVo() {
-		return driverDetailsCreatedByVo;
-	}
-
-	public void setDriverDetailsCreatedByVo(DriverDetailsVo driverDetailsCreatedByVo) {
-		this.driverDetailsCreatedByVo = driverDetailsCreatedByVo;
-	}
-
-	public DriverDetailsVo getDriverDetailsVo() {
-		return driverDetailsVo;
-	}
-
-	public void setDriverDetailsVo(DriverDetailsVo driverDetailsVo) {
-		this.driverDetailsVo = driverDetailsVo;
-	}
-
-	public DriverDetailsVo getDriverDetailsVerifedByVo() {
-		return driverDetailsVerifedByVo;
-	}
-
-	public void setDriverDetailsVerifedByVo(DriverDetailsVo driverDetailsVerifedByVo) {
-		this.driverDetailsVerifedByVo = driverDetailsVerifedByVo;
-	}
-
-	public UserRoleVo getUserRoleVo() {
-		return userRoleVo;
-	}
-
-	public void setUserRoleVo(UserRoleVo userRoleVo) {
-		this.userRoleVo = userRoleVo;
-	}
-
-	public InternalUserDetailsVo getInternalUserDetailsVo() {
-		return internalUserDetailsVo;
-	}
-
-	public void setInternalUserDetailsVo(InternalUserDetailsVo internalUserDetailsVo) {
-		this.internalUserDetailsVo = internalUserDetailsVo;
-	}
+	
 	public String getProfilePictureUrl() {
 		return profilePictureUrl;
 	}
@@ -251,6 +200,38 @@ public class UserVo implements Serializable {
 
 	public void setFcmToken(String fcmToken) {
 		this.fcmToken = fcmToken;
+	}
+
+	public CustomerDetailsVo getCustomerDetails() {
+		return customerDetails;
+	}
+
+	public void setCustomerDetails(CustomerDetailsVo customerDetails) {
+		this.customerDetails = customerDetails;
+	}
+
+	public DriverDetailsVo getDriverDetails() {
+		return driverDetails;
+	}
+
+	public void setDriverDetails(DriverDetailsVo driverDetails) {
+		this.driverDetails = driverDetails;
+	}
+
+	public UserRoleVo getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRoleVo userRole) {
+		this.userRole = userRole;
+	}
+
+	public InternalUserDetailsVo getInternalUserDetails() {
+		return internalUserDetails;
+	}
+
+	public void setInternalUserDetails(InternalUserDetailsVo internalUserDetails) {
+		this.internalUserDetails = internalUserDetails;
 	}
 
 }

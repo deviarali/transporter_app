@@ -15,4 +15,6 @@ public interface CustomerDetailsService {
 	
 	CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo);
 
+	UserVo updateUserProfile(UserVo userVo);
+
 }
