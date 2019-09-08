@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.CustomerDetailsDao;
+import com.transporter.dao.UserDao;
 import com.transporter.enums.UserRoleEnum;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
@@ -25,6 +26,9 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	
 	@Autowired
 	private CustomerDetailsDao customerDetailsDao;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@Override
 	@Transactional
@@ -90,6 +94,25 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
 		CustomerDetailsVo customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
 		return customerDetailsVo;
+	}
+
+	@Override
+	@Transactional
+	public UserVo updateUserProfile(UserVo userVo) {
+		User user = userDao.isUserExistsUsingId(userVo.getId());
+		if (user == null) {
+			return User.convertModelToVo(user);
+		}
+		CustomerDetails customerDetails = new CustomerDetails();
+		customerDetails.setId(userVo.getCustomerDetails().getId());
+		customerDetails.setUser(user);
+		customerDetails.setAddressCity(userVo.getCustomerDetails().getAddressCity());
+		customerDetails.setAddressState(userVo.getCustomerDetails().getAddressState());
+		customerDetails.setAddressStreet(userVo.getCustomerDetails().getAddressStreet());
+		customerDetails.setAddressZipcode(userVo.getCustomerDetails().getAddressZipcode());
+		customerDetails.setDateofbirth(userVo.getCustomerDetails().getDateofbirth());
+		customerDetailsDao.saveOrUpdate(customerDetails);
+		return User.convertModelToVo(user);
 	}
 
 }
