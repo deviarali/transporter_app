@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 		user.setMobileNumber(userVo.getMobileNumber());
 		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
 		user.setStatus(0);
-		user.setUserRole(UserRole.convertVoToModel(userVo.getUserRoleVo()));
+		user.setUserRole(UserRole.convertVoToModel(userVo.getUserRole()));
 		userDao.save(user);
 		return user;
 	}

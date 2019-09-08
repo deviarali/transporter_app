@@ -84,14 +84,15 @@ public class UserController {
 			if (userId == null) {
 				response = RestUtils.wrapObjectForFailure("user not found", WebConstants.WEB_RESPONSE_ERROR,
 						WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
-			} else {
-				User userInternal = userService.updateInternalUser(userVo, id);
-				response = RestUtils.wrapObjectForSuccess(userVo);
-			}
+				return response;
+			} 
+			User userInternal = userService.updateInternalUser(userVo, id);
+			
+			response = RestUtils.wrapObjectForSuccess(userVo);
+			
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
-					"internal server error");
-			LOGGER.error("User not updated for the user : " + id + " exception is : " + e.getMessage());
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			LOGGER.error("Internal user not updated for the user : "+id +" exception is : "+e.getMessage());
 		}
 		return response;
 	}

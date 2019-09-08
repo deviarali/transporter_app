@@ -37,7 +37,7 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		UserVo userVo = customerDetailsVo.getUser();
 		UserRoleVo userRoleVo = new UserRoleVo();
 		userRoleVo.setId(UserRoleEnum.CUSTOMER.getId());
-		userVo.setUserRoleVo(userRoleVo);
+		userVo.setUserRole(userRoleVo);
 		User user = userService.registerUser(userVo);
 
 		CustomerDetails customerDetails = new CustomerDetails();

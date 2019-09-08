@@ -43,7 +43,7 @@ public class InternalUserServiceImpl implements InternalUserService {
 		UserVo userVo = internalUserDetailsVo.getUser();
 		UserRoleVo userRoleVo = new UserRoleVo();
 		userRoleVo.setId(UserRoleEnum.INTERNALUSER.getId());
-		userVo.setUserRoleVo(userRoleVo);
+		userVo.setUserRole(userRoleVo);
 		User user = userService.registerUser(userVo);
 		InternalUserDetails internalUserDetails = new InternalUserDetails();
 		internalUserDetails.setActiveInternal(1);
