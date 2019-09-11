@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
 public class VehicleTypeVo {
 
 	private int id;
@@ -28,6 +31,10 @@ public class VehicleTypeVo {
 	private int length;
 
 	private String unselectedVehicleUrl;
+	
+	private MultipartFile selectedVehicle;
+	
+	private MultipartFile unSelectedVehicle;
 
 	public int getId() {
 		return id;
@@ -115,6 +122,22 @@ public class VehicleTypeVo {
 
 	public void setUnselectedVehicleUrl(String unselectedVehicleUrl) {
 		this.unselectedVehicleUrl = unselectedVehicleUrl;
+	}
+
+	public MultipartFile getSelectedVehicle() {
+		return selectedVehicle;
+	}
+
+	public void setSelectedVehicle(MultipartFile selectedVehicle) {
+		this.selectedVehicle = selectedVehicle;
+	}
+
+	public MultipartFile getUnSelectedVehicle() {
+		return unSelectedVehicle;
+	}
+
+	public void setUnSelectedVehicle(MultipartFile unSelectedVehicle) {
+		this.unSelectedVehicle = unSelectedVehicle;
 	}
 	
 }

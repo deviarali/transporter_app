@@ -9,26 +9,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.model.CancelReasons;
 import com.transporter.model.VehicleType;
 import com.transporter.response.CommonResponse;
-import com.transporter.service.DisplayVehicleService;
+import com.transporter.service.VehicleTypeService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.VehicleTypeVo;
 
 @RestController
-public class DisplayVehicleController {
+public class VehicleTypeController {
 
 	@Autowired
-	DisplayVehicleService displayVehicleService;
+	VehicleTypeService vehicleTypeService;
 
 	@RequestMapping(value = "display/getAllDisplayVehicle")
 	public CommonResponse getAllDisplayVehicle() {
 
 		CommonResponse response = null;
-		List<VehicleTypeVo> displayVehicleList = displayVehicleService.getAllDisplayVehicle();
+		List<VehicleTypeVo> displayVehicleList = vehicleTypeService.getAllDisplayVehicle();
 		if (displayVehicleList != null && displayVehicleList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicleList);
 		} else {
@@ -43,7 +44,7 @@ public class DisplayVehicleController {
 	public CommonResponse addDisplayVehicle(@RequestBody VehicleTypeVo displayVehicleVo) {
 
 		CommonResponse response = null;
-		VehicleTypeVo displayVehicle = displayVehicleService.addDisplayVehicle(displayVehicleVo);
+		VehicleTypeVo displayVehicle = vehicleTypeService.addDisplayVehicle(displayVehicleVo,null,null);
 		if (displayVehicle != null) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
@@ -59,7 +60,7 @@ public class DisplayVehicleController {
 	public CommonResponse updateDisplayVehicle(@RequestBody VehicleTypeVo displayVehicleVo) {
 
 		CommonResponse response = null;
-		VehicleTypeVo displayVehicle = displayVehicleService.updateDisplayVehicle(displayVehicleVo);
+		VehicleTypeVo displayVehicle = vehicleTypeService.updateDisplayVehicle(displayVehicleVo);
 		if (displayVehicle != null) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {

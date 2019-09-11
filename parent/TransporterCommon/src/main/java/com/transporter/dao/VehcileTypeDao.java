@@ -6,7 +6,7 @@ import com.transporter.dao.impl.GenericDaoImpl;
 import com.transporter.model.VehicleType;
 import com.transporter.vo.VehicleTypeVo;
 
-public interface DisplayVehcileDao extends GenericDao {
+public interface VehcileTypeDao extends GenericDao {
 
 	List<VehicleTypeVo> getAllDisplayVehicle();
 

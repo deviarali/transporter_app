@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.transporter.dao.CancelReasonDao;
-import com.transporter.dao.DisplayVehcileDao;
+import com.transporter.dao.VehcileTypeDao;
 import com.transporter.model.CancelReasons;
 import com.transporter.model.VehicleType;
 import com.transporter.model.User;
@@ -16,7 +16,7 @@ import com.transporter.vo.VehicleTypeVo;
 
 @Repository
 @Transactional
-public class DisplayVehicleDaoImpl extends GenericDaoImpl implements DisplayVehcileDao {
+public class VehicleTypeDaoImpl extends GenericDaoImpl implements VehcileTypeDao {
 
 	@Override
 	public List<VehicleTypeVo> getAllDisplayVehicle() {
