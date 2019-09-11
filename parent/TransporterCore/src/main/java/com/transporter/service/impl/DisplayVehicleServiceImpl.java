@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.transporter.dao.CancelReasonDao;
 import com.transporter.dao.DisplayVehcileDao;
-import com.transporter.model.DisplayVehicle;
+import com.transporter.model.VehicleType;
 import com.transporter.service.DisplayVehicleService;
-import com.transporter.vo.DisplayVehicleVo;
+import com.transporter.vo.VehicleTypeVo;
 
 @Service
 public class DisplayVehicleServiceImpl implements DisplayVehicleService {
@@ -20,19 +20,21 @@ public class DisplayVehicleServiceImpl implements DisplayVehicleService {
 	private DisplayVehcileDao displayVehicleDao;
 
 	@Override
-	public List<DisplayVehicle> getAllDisplayVehicle() {
-		List<DisplayVehicle> displayVehicleList = displayVehicleDao.getAllDisplayVehicle();
+	public List<VehicleTypeVo> getAllDisplayVehicle() {
+		List<VehicleTypeVo> displayVehicleList = displayVehicleDao.getAllDisplayVehicle();
 		return displayVehicleList;
 	}
 
 	@Override
 	@Transactional
-	public DisplayVehicle updateDisplayVehicle(DisplayVehicleVo displayVehicleVo) {
-		DisplayVehicle displayVehicle = null;
+	public VehicleTypeVo updateDisplayVehicle(VehicleTypeVo displayVehicleVo) {
+		VehicleTypeVo displayVehicle = null;
 		if (displayVehicleVo != null) {
-			displayVehicle = new DisplayVehicle();
+			displayVehicle = new VehicleTypeVo();
 			displayVehicle.setId(displayVehicleVo.getId());
 			displayVehicle.setCapacity(displayVehicleVo.getCapacity());
+			displayVehicle.setVehicleName(displayVehicleVo.getVehicleName());
+			displayVehicle.setPrice(displayVehicleVo.getPrice());
 			displayVehicle.setCreatedBy(displayVehicleVo.getCreatedBy());
 			displayVehicle.setHeight(displayVehicleVo.getHeight());
 			displayVehicle.setLength(displayVehicleVo.getLength());
@@ -51,11 +53,13 @@ public class DisplayVehicleServiceImpl implements DisplayVehicleService {
 
 	@Override
 	@Transactional
-	public DisplayVehicle addDisplayVehicle(DisplayVehicleVo displayVehicleVo) {
-		DisplayVehicle displayVehicle = null;
+	public VehicleTypeVo addDisplayVehicle(VehicleTypeVo displayVehicleVo) {
+		VehicleTypeVo displayVehicle = null;
 		if (displayVehicleVo != null) {
-			displayVehicle = new DisplayVehicle();
+			displayVehicle = new VehicleTypeVo();
 			displayVehicle.setCapacity(displayVehicleVo.getCapacity());
+			displayVehicle.setVehicleName(displayVehicleVo.getVehicleName());
+			displayVehicle.setPrice(displayVehicleVo.getPrice());
 			displayVehicle.setCreatedBy(displayVehicleVo.getCreatedBy());
 			displayVehicle.setHeight(displayVehicleVo.getHeight());
 			displayVehicle.setLength(displayVehicleVo.getLength());
@@ -72,7 +76,7 @@ public class DisplayVehicleServiceImpl implements DisplayVehicleService {
 	}
 
 	@Override
-	public DisplayVehicle deleteDisplayVehicle(DisplayVehicle displayVehicle) {
+	public VehicleType deleteDisplayVehicle(VehicleType displayVehicle) {
 		// TODO Auto-generated method stub
 		return null;
 	}

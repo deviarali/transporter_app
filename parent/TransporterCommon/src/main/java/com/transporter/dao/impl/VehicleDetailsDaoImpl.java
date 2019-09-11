@@ -26,4 +26,14 @@ public class VehicleDetailsDaoImpl extends GenericDaoImpl implements VehicleDeta
 		return vehicleDetails;
 	}
 
+	@Override
+	public VehicleDetails isVehicleExistById(int id) {
+		VehicleDetails vehicleDetails = null;
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "From VehicleDetails vd WHERE vd.id= :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id",id);
+		vehicleDetails = (VehicleDetails) query.uniqueResult();
+		return vehicleDetails;
+	}
 }

@@ -14,4 +14,7 @@ public class WebConstants {
 	public static final String INVALID_USER = "Invalid user";
 	public static final String NO_DATA_FOUND = "No data found";
 	public static final String NOT_UPDATED = "Not updated";
+	public static final String VEHICLE_NOT_UPDATED = "Vehicle Not Found";
+	public static final String VEHICLE_FAILED_TO_DISPLAY ="Failed to add display";
+	
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
+import com.transporter.model.VehicleDetails;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.DriverService;
 import com.transporter.service.VehicleService;
@@ -55,5 +56,22 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 		}
 		
 		return response;
+	}
+	
+	@RequestMapping(value="vehicle/updateVehicle", method=RequestMethod.PATCH)
+	public CommonResponse updateVehicleDetails(@RequestBody VehicleDetailsVo vehicleDetailsVo)
+	{
+		CommonResponse response = null;
+		
+			VehicleDetailsVo updateVechile = vehicleService.updateVehicleDetails(vehicleDetailsVo);
+		 
+			if (updateVechile == null) {
+				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
+			} else {
+				response = RestUtils.wrapObjectForSuccess(updateVechile);
+			}
+			return response;
+		
 	}
 }

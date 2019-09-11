@@ -5,13 +5,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-public class DisplayVehicleVo {
+public class VehicleTypeVo {
 
 	private int id;
 
 	private int capacity;
 
 	private int size;
+	
+	private String vehicleName;
+	
+	private Double price;
 
 	private String createdBy;
 
@@ -47,6 +51,22 @@ public class DisplayVehicleVo {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	public String getVehicleName() {
+		return vehicleName;
+	}
+
+	public void setVehicleName(String vehicleName) {
+		this.vehicleName = vehicleName;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 	public String getCreatedBy() {
@@ -97,6 +117,4 @@ public class DisplayVehicleVo {
 		this.unselectedVehicleUrl = unselectedVehicleUrl;
 	}
 	
-	
-
 }

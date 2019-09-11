@@ -7,15 +7,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.model.CancelReasons;
-import com.transporter.model.DisplayVehicle;
+import com.transporter.model.VehicleType;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.DisplayVehicleService;
 import com.transporter.utils.RestUtils;
-import com.transporter.vo.DisplayVehicleVo;
+import com.transporter.vo.VehicleTypeVo;
 
 @RestController
 public class DisplayVehicleController {
@@ -27,12 +28,11 @@ public class DisplayVehicleController {
 	public CommonResponse getAllDisplayVehicle() {
 
 		CommonResponse response = null;
-		List<DisplayVehicle> displayVehicleList = displayVehicleService.getAllDisplayVehicle();
+		List<VehicleTypeVo> displayVehicleList = displayVehicleService.getAllDisplayVehicle();
 		if (displayVehicleList != null && displayVehicleList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicleList);
 		} else {
-			response = RestUtils.wrapObjectForFailure("Display vehicle not found", "error",
-					WebConstants.WEB_RESPONSE_ERROR);
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,WebConstants.VEHICLE_NOT_UPDATED);
 
 		}
 		return response;
@@ -40,15 +40,15 @@ public class DisplayVehicleController {
 	
 
 	@RequestMapping(value = "display/addDisplayVehicle",method = RequestMethod.POST)
-	public CommonResponse addDisplayVehicle(@RequestBody DisplayVehicleVo displayVehicleVo) {
+	public CommonResponse addDisplayVehicle(@RequestBody VehicleTypeVo displayVehicleVo) {
 
 		CommonResponse response = null;
-		DisplayVehicle displayVehicle = displayVehicleService.addDisplayVehicle(displayVehicleVo);
+		VehicleTypeVo displayVehicle = displayVehicleService.addDisplayVehicle(displayVehicleVo);
 		if (displayVehicle != null) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
-			response = RestUtils.wrapObjectForFailure("Failed to add display ", "error",
-					WebConstants.WEB_RESPONSE_ERROR);
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.VEHICLE_FAILED_TO_DISPLAY);
 
 		}
 		return response;
@@ -56,15 +56,15 @@ public class DisplayVehicleController {
 	
 	
 	@RequestMapping(value = "display/updateisplayVehicle",method = RequestMethod.PUT)
-	public CommonResponse updateDisplayVehicle(@RequestBody DisplayVehicleVo displayVehicleVo) {
+	public CommonResponse updateDisplayVehicle(@RequestBody VehicleTypeVo displayVehicleVo) {
 
 		CommonResponse response = null;
-		DisplayVehicle displayVehicle = displayVehicleService.updateDisplayVehicle(displayVehicleVo);
+		VehicleTypeVo displayVehicle = displayVehicleService.updateDisplayVehicle(displayVehicleVo);
 		if (displayVehicle != null) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
-			response = RestUtils.wrapObjectForFailure("Failed to add display ", "error",
-					WebConstants.WEB_RESPONSE_ERROR);
+			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.VEHICLE_FAILED_TO_DISPLAY);
 
 		}
 		return response;

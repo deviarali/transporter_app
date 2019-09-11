@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "displayvehicle")
-public class DisplayVehicle {
+@Table(name = "vehicletype")
+public class VehicleType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -19,6 +19,9 @@ public class DisplayVehicle {
 	
 	@Column(name = "size")
 	private int size;
+	
+	@Column(name="vehicle_name")
+	private String vehicleName;
 	
 	@Column(name = "created_by")
 	private String createdBy;
@@ -37,6 +40,9 @@ public class DisplayVehicle {
 	
 	@Column(name = "unselected_vehicle_url")
 	private String unselectedVehicleUrl;
+	
+	@Column(name="price")
+	private Double price;
 
 	public int getId() {
 		return id;
@@ -60,6 +66,16 @@ public class DisplayVehicle {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+	
+	
+	
+	public String getVehicleName() {
+		return vehicleName;
+	}
+
+	public void setVehicleName(String vehicleName) {
+		this.vehicleName = vehicleName;
 	}
 
 	public String getCreatedBy() {
@@ -108,6 +124,14 @@ public class DisplayVehicle {
 
 	public void setUnselectedVehicleUrl(String unselectedVehicleUrl) {
 		this.unselectedVehicleUrl = unselectedVehicleUrl;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 	
 	

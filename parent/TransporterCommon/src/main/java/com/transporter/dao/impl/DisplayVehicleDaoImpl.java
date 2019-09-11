@@ -10,25 +10,25 @@ import org.springframework.transaction.annotation.Transactional;
 import com.transporter.dao.CancelReasonDao;
 import com.transporter.dao.DisplayVehcileDao;
 import com.transporter.model.CancelReasons;
-import com.transporter.model.DisplayVehicle;
+import com.transporter.model.VehicleType;
 import com.transporter.model.User;
-import com.transporter.vo.DisplayVehicleVo;
+import com.transporter.vo.VehicleTypeVo;
 
 @Repository
 @Transactional
 public class DisplayVehicleDaoImpl extends GenericDaoImpl implements DisplayVehcileDao {
 
 	@Override
-	public List<DisplayVehicle> getAllDisplayVehicle() {
+	public List<VehicleTypeVo> getAllDisplayVehicle() {
 		Session session = sessionFactory.getCurrentSession();
 		String sqlQuery = "FROM DisplayVehicle displayVehicle";
 		Query query = session.createQuery(sqlQuery);
-		List<DisplayVehicle> displayVehicleList = query.list();
+		List<VehicleTypeVo> displayVehicleList = query.list();
 		return displayVehicleList;
 	}
 
 	@Override
-	public DisplayVehicle deleteDisplayVehicle(DisplayVehicle displayVehicle) {
+	public VehicleType deleteDisplayVehicle(VehicleType displayVehicle) {
 		return null;
 	}
 

@@ -11,8 +11,11 @@ import com.transporter.dao.VehicleDetailsDao;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.DriverDetails;
+import com.transporter.model.User;
 import com.transporter.model.VehicleDetails;
+import com.transporter.response.CommonResponse;
 import com.transporter.service.VehicleService;
+import com.transporter.utils.RestUtils;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehicleDetailsVo;
 
@@ -52,6 +55,39 @@ public class VehicleServiceImpl implements VehicleService {
 			return response = WebConstants.SUCCESS;
 		}
 			return response;
+	}
+
+	@Override
+	@Transactional
+	public VehicleDetailsVo updateVehicleDetails(VehicleDetailsVo vehicleDetailsVo) {
+		System.out.println(vehicleDetailsVo.getId());
+		VehicleDetails vehicleDetailsExist = isVehilceExistById(vehicleDetailsVo.getId());
+		if (vehicleDetailsExist == null) {
+			throw new BusinessException(ErrorCodes.VEHICLENOTFOUND.name(), ErrorCodes.VEHICLENOTFOUND.value());
+		}
+		else
+		{
+			vehicleDetailsExist.setId(vehicleDetailsVo.getId());
+			vehicleDetailsExist.setVehicleColor(vehicleDetailsVo.getVehicleColor());
+			vehicleDetailsExist.setVehicleModel(vehicleDetailsVo.getVehicleModel());
+			vehicleDetailsExist.setVehicleType(vehicleDetailsVo.getVehicleType());
+			vehicleDetailsExist.setVehicleNum(vehicleDetailsExist.getVehicleNum());
+			try{
+			vehicleDetailsDao.saveOrUpdate(vehicleDetailsExist);
+			}
+			catch(Exception e)
+			{
+				throw new BusinessException(ErrorCodes.VSAVE.name(), ErrorCodes.VSAVE.value());
+			}
+			
+		}
+		return vehicleDetailsVo;
+	
+	}
+
+	@Override
+	public VehicleDetails isVehilceExistById(int vehicleId) {
+		return vehicleDetailsDao.isVehicleExistById(vehicleId);
 	}
 	
 }

@@ -11,7 +11,10 @@ public enum ErrorCodes
 	NOTSAVED("Not Saved"),
 	VEHICLEEXISTS("Vehicle already exists"),
 	INVALIDOTP("Invalid otp"),
-	UNFOUND("User not found");
+	UNFOUND("User not found"),
+	VEHICLENOTFOUND("Vehicle not exit"),
+	VSAVE("Vehicle Details  not saved");
+	
 	
 	private final String value;
 

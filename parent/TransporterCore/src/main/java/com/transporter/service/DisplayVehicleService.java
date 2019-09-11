@@ -2,17 +2,17 @@ package com.transporter.service;
 
 import java.util.List;
 
-import com.transporter.model.DisplayVehicle;
-import com.transporter.vo.DisplayVehicleVo;
+import com.transporter.model.VehicleType;
+import com.transporter.vo.VehicleTypeVo;
 
 public interface DisplayVehicleService {
 
-	List<DisplayVehicle> getAllDisplayVehicle();
+	List<VehicleTypeVo> getAllDisplayVehicle();
 
-	DisplayVehicle updateDisplayVehicle(DisplayVehicleVo displayVehicleVo);
+	VehicleTypeVo updateDisplayVehicle(VehicleTypeVo displayVehicleVo);
 
-	DisplayVehicle addDisplayVehicle(DisplayVehicleVo displayVehicleVo);
+	VehicleTypeVo addDisplayVehicle(VehicleTypeVo displayVehicleVo);
 
-	DisplayVehicle deleteDisplayVehicle(DisplayVehicle displayVehicle);
+	VehicleType deleteDisplayVehicle(VehicleType displayVehicle);
 
 }

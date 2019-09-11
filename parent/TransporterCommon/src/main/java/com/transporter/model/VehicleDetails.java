@@ -2,6 +2,10 @@ package com.transporter.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import com.transporter.vo.UserVo;
+import com.transporter.vo.VehicleDetailsVo;
+
 import java.util.Date;
 
 
@@ -154,6 +158,18 @@ public class VehicleDetails implements Serializable {
 
 	public void setVerifiedBy(String verifiedBy) {
 		this.verifiedBy = verifiedBy;
+	}
+
+	public static VehicleDetailsVo convertModelToVo(VehicleDetails vehicleDetails) {
+		if(vehicleDetails == null)
+			return null;
+		VehicleDetailsVo vehicleDetailsVo = new VehicleDetailsVo();
+		vehicleDetailsVo.setId(vehicleDetails.getId());
+		vehicleDetailsVo.setVehicleColor(vehicleDetails.getVehicleColor());
+		vehicleDetailsVo.setVehicleModel(vehicleDetails.getVehicleModel());
+		vehicleDetailsVo.setVehicleNum(vehicleDetails.getVehicleNum());
+		vehicleDetailsVo.setVehicleType(vehicleDetails.getVehicleType());
+		return vehicleDetailsVo;
 	}
 	
 }
