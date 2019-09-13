@@ -17,7 +17,7 @@ public class TransporterPushNotifications {
 	@Value("${android.fcm.url}")
 	private String androidFcmUrl;
 	
-	public String pushNotifications(String[] devicesToken) {
+	public String pushNotifications(Object devicesToken) {
 		String response = null;
 		try {
 			RestTemplate restTemplate = new RestTemplate();

@@ -49,7 +49,7 @@ public class VehicleDetails implements Serializable {
 	private String vehicleNum;
 
 	@ManyToOne
-	@JoinColumn(name = "vehicle_type_id")
+	@JoinColumn(name="vehicle_type")
 	private VehicleType vehicleType;
 
 	@Lob

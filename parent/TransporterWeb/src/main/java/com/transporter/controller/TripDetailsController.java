@@ -40,14 +40,4 @@ public class TripDetailsController {
 		return response;
 	}
 	
-	@RequestMapping(value = "trip/checkVehicleAvailability", method = RequestMethod.POST)
-	public CommonResponse checkVehicleAvailability(
-			@RequestParam(name = "lattitude")String lattitude, @RequestParam(name = "longitude")String longitude) {
-		CommonResponse response = null;
-		String check = tripDetailsService.checkVehicleAvailability(lattitude, longitude);
-		response = RestUtils.wrapObjectForSuccess(check);
-		return response;
-	}
-
-	
 }

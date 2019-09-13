@@ -46,11 +46,12 @@ public class VehicleServiceImpl implements VehicleService {
 		vehicleDetails.setVehicleColor(vehicleDetailsVo.getVehicleColor());
 		vehicleDetails.setVehicleModel(vehicleDetailsVo.getVehicleModel());
 		vehicleDetails.setVehicleNum(vehicleDetailsVo.getVehicleNum());
-		VehicleType type = new VehicleType();
-		type.setId(vehicleDetailsVo.getVehicleType().getId());
-		vehicleDetails.setVehicleType(type);
-		vehicleDetailsDao.save(vehicleDetails);
-		if (vehicleDetails.getId() > 0) {
+		VehicleType vehicleType = new VehicleType();
+		vehicleType.setId(vehicleDetailsVo.getVehicleTypeVo().getId());
+		vehicleDetails.setVehicleType(vehicleType);
+		 vehicleDetailsDao.save(vehicleDetails);
+		if(vehicleDetails.getId()>0)
+		{
 			return response = WebConstants.SUCCESS;
 		}
 		return response;
@@ -67,9 +68,9 @@ public class VehicleServiceImpl implements VehicleService {
 			vehicleDetailsExist.setId(vehicleDetailsVo.getId());
 			vehicleDetailsExist.setVehicleColor(vehicleDetailsVo.getVehicleColor());
 			vehicleDetailsExist.setVehicleModel(vehicleDetailsVo.getVehicleModel());
-			VehicleType type = new VehicleType();
-			type.setId(vehicleDetailsVo.getVehicleType().getId());
-			vehicleDetailsExist.setVehicleType(type);
+			VehicleType vehicleType = new VehicleType();
+			vehicleType.setId(vehicleDetailsVo.getVehicleTypeVo().getId());
+			vehicleDetailsExist.setVehicleType(vehicleType);
 			vehicleDetailsExist.setVehicleNum(vehicleDetailsExist.getVehicleNum());
 			try {
 				vehicleDetailsDao.saveOrUpdate(vehicleDetailsExist);

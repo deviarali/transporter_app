@@ -1,5 +1,7 @@
 package com.transporter.dao;
 
+import java.util.List;
+
 import com.transporter.model.DriverDetails;
 
 /**
@@ -15,5 +17,7 @@ public interface DriverDao extends GenericDao {
 			String generateFilePathAndStoreForDl);
 
 	DriverDetails findById(int driverId);
+	
+	List<DriverDetails> checkVehicleAvailability(String lattitude, String longitude, double distance);
 
 }

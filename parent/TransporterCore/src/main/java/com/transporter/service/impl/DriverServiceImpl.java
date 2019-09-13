@@ -1,8 +1,11 @@
 package com.transporter.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +17,9 @@ import com.transporter.enums.UserRoleEnum;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.DriverDetails;
+import com.transporter.model.TripDetails;
 import com.transporter.model.User;
+import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.service.DriverService;
 import com.transporter.service.UserService;
 import com.transporter.utility.TransporterUtility;
@@ -28,7 +33,7 @@ import com.transporter.vo.UserVo;
  */
 
 @Service
-public class DriverServiceImpl implements DriverService{
+public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private DriverDao driverDao;
@@ -38,6 +43,12 @@ public class DriverServiceImpl implements DriverService{
 	
 	@Autowired
 	private TransporterUtility transporterUtility;
+	
+	@Autowired
+	private TransporterPushNotifications transporterPushNotifications;
+	
+	@Value("${distance.cover}")
+	private double distanceCover;
 	
 	@Override
 	@Transactional
@@ -54,7 +65,7 @@ public class DriverServiceImpl implements DriverService{
 		User user = userService.registerUser(userVo);
 		DriverDetails driverDetails = new DriverDetails();
 		driverDetails.setCreatedOn(new Date());
-		driverDetails.setDrivername(userVo.getFirstName());
+		driverDetails.setDriverName(userVo.getFirstName());
 		driverDetails.setDriverVerificationStatus("pending");
 		driverDetails.setOnRoad(0);
 		User userCreatedBy = new User();
@@ -120,7 +131,7 @@ public class DriverServiceImpl implements DriverService{
 		if (driverDetails == null) {
 			return null;
 		}
-		driverDetails.setDrivername(driverDetailsVo.getDrivername());
+		driverDetails.setDriverName(driverDetailsVo.getDrivername());
 		driverDetails.setAddressCity(driverDetailsVo.getAddressCity());
 		driverDetails.setAddressState(driverDetailsVo.getAddressState());
 		driverDetails.setAddressStreet(driverDetailsVo.getAddressStreet());
@@ -128,5 +139,20 @@ public class DriverServiceImpl implements DriverService{
 		driverDetails.setDateOfBirth(driverDetailsVo.getDateofbirth());
 		driverDao.saveOrUpdate(driverDetails);
 		return DriverDetails.convertModelToVo(driverDetails);
+	}
+	
+	@Override
+	@Transactional
+	public String checkVehicleAvailability(String lattitude, String longitude) {
+		List<DriverDetails> driverDetailsList = driverDao.checkVehicleAvailability(lattitude, longitude, distanceCover);
+		
+		String response = null;
+		if(null != driverDetailsList && !driverDetailsList.isEmpty()) {
+			List<String> devicesToken = new ArrayList<String>();
+			devicesToken.add(driverDetailsList.get(0).getUser().getFcmToken());
+			//String devicesToken[] = {"euRR9XSIZCE:APA91bEWht_WfZjySzUCiKDTaQbNNP8smnx7snHy3jeIAFvxVVZqRmsU1ffvjuDBhFEOiXSjMW-UteYXPeECuv8Il6h4SfGWdGnj3KJbgYJLgscs-4f_N7Lxbp72umt_JYak_Q20Bh7V"};
+			response  = transporterPushNotifications.pushNotifications(devicesToken);
+		}
+		return response;
 	}
 }

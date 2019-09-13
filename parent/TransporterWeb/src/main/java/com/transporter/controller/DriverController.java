@@ -123,4 +123,14 @@ public class DriverController {
 		}
 		return response;
 	}
+	
+    @RequestMapping(value = "driver/checkVehicleAvailability", method = RequestMethod.POST)
+    public CommonResponse checkVehicleAvailability(
+            @RequestParam(name = "lattitude")String lattitude, @RequestParam(name = "longitude")String longitude) {
+        CommonResponse response = null;
+        String check = driverService.checkVehicleAvailability(lattitude, longitude);
+        response = RestUtils.wrapObjectForSuccess(check);
+        return response;
+    }
+
 }

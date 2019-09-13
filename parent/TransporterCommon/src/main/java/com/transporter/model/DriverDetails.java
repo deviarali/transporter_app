@@ -65,7 +65,7 @@ public class DriverDetails implements Serializable {
 	private String driverVerificationStatus;
 
 	@Column(name="driver_name")
-	private String drivername;
+	private String driverName;
 
 	@Column(name="on_road")
 	private int onRoad;
@@ -186,12 +186,12 @@ public class DriverDetails implements Serializable {
 		this.driverVerificationStatus = driverVerificationStatus;
 	}
 
-	public String getDrivername() {
-		return drivername;
+	public String getDriverName() {
+		return driverName;
 	}
 
-	public void setDrivername(String drivername) {
-		this.drivername = drivername;
+	public void setDriverName(String driverName) {
+		this.driverName = driverName;
 	}
 
 	public int getOnRoad() {
@@ -286,7 +286,7 @@ public class DriverDetails implements Serializable {
 		driverDetailsVo.setCreatedOn(driverDetails.createdOn);
 		driverDetailsVo.setDateofbirth(driverDetails.getDateOfBirth());
 		driverDetailsVo.setDriverDocuments(driverDetails.getDriverDocuments());
-		driverDetailsVo.setDrivername(driverDetails.getDrivername());
+		driverDetailsVo.setDrivername(driverDetails.getDriverName());
 		driverDetailsVo.setDriverVerificationPendingReason(driverDetails.getDriverVerificationPendingReason());
 		driverDetailsVo.setDriverVerificationStatus(driverDetails.getDriverVerificationStatus());
 		driverDetailsVo.setId(driverDetails.getId());

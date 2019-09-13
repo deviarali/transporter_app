@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.transporter.dao.TripDetailsDao;
 import com.transporter.model.TripDetails;
 import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.repo.TripDetailsRepo;
@@ -22,6 +23,9 @@ public class TripDetailsServiceImpl implements TripDetailsService{
 	TripDetailsRepo  tripDetailsRepo;
 	
 	@Autowired
+	private TripDetailsDao tripDetailsDao;
+	
+	@Autowired
 	private TransporterPushNotifications transporterPushNotifications;
 	
 	@Override
@@ -33,7 +37,7 @@ public class TripDetailsServiceImpl implements TripDetailsService{
 
 	@Override
 	public String checkVehicleAvailability(String lattitude, String longitude) {
-		
+		TripDetails tripDetails = tripDetailsDao.checkVehicleAvailability(lattitude, longitude);
 		String devicesToken[] = {"euRR9XSIZCE:APA91bEWht_WfZjySzUCiKDTaQbNNP8smnx7snHy3jeIAFvxVVZqRmsU1ffvjuDBhFEOiXSjMW-UteYXPeECuv8Il6h4SfGWdGnj3KJbgYJLgscs-4f_N7Lxbp72umt_JYak_Q20Bh7V"};
 		String response  = transporterPushNotifications.pushNotifications(devicesToken);
 		return response;

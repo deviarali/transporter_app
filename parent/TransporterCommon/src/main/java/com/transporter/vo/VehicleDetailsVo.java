@@ -22,7 +22,7 @@ public class VehicleDetailsVo implements Serializable {
 
 	private String vehicleNum;
 
-	private VehicleTypeVo vehicleType;
+	private VehicleTypeVo vehicleTypeVo;
 
 	private String vehicleVerificationPendingReason;
 
@@ -85,12 +85,12 @@ public class VehicleDetailsVo implements Serializable {
 		this.vehicleNum = vehicleNum;
 	}
 
-	public VehicleTypeVo getVehicleType() {
-		return vehicleType;
+	public VehicleTypeVo getVehicleTypeVo() {
+		return vehicleTypeVo;
 	}
 
-	public void setVehicleType(VehicleTypeVo vehicleType) {
-		this.vehicleType = vehicleType;
+	public void setVehicleType(VehicleTypeVo vehicleTypeVo) {
+		this.vehicleTypeVo = vehicleTypeVo;
 	}
 
 	public String getVehicleVerificationPendingReason() {
