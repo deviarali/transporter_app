@@ -36,9 +36,9 @@ public class CommonController {
 			List<InternalUserRoleMasterVo> internalUserRoles  = commonService.getInternalUserRoles();
 			response = RestUtils.wrapObjectForSuccess(internalUserRoles);
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
 			LOGGER.error("Erroe while fetching internaluserroles api");		
 		}
 		return response;

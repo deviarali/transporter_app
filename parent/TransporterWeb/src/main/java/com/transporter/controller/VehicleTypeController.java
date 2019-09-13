@@ -28,7 +28,7 @@ public class VehicleTypeController {
 		if (displayVehicleList != null && displayVehicleList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicleList);
 		} else {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,WebConstants.VEHICLE_NOT_UPDATED);
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,WebConstants.VEHICLE_NOT_UPDATED);
 
 		}
 		return response;
@@ -43,7 +43,7 @@ public class VehicleTypeController {
 		if (displayVehicle != null) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.VEHICLE_FAILED_TO_DISPLAY);
 
 		}
@@ -59,7 +59,7 @@ public class VehicleTypeController {
 		if (displayVehicle != null) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.VEHICLE_FAILED_TO_DISPLAY);
 
 		}

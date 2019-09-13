@@ -44,10 +44,10 @@ public class DriverController {
 				LOGGER.info("Driver registered successfully");
 			}
 		} catch(BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 			LOGGER.error("Driver not registered for mobile number :"+driverDetailsVo.getUser().getMobileNumber() +" exception : "+be.getErrorMsg());
 		} catch(Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, null, e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
 			LOGGER.error("Driver not registered for mobile number :"+driverDetailsVo.getUser().getMobileNumber() +" exception : "+e.getMessage());
 		}
 		
@@ -79,13 +79,13 @@ public class DriverController {
 			if (!StringUtils.isBlank(updated)) {
 				response = RestUtils.wrapObjectForSuccess(updated);
 			} else {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						WebConstants.NOT_UPDATED);
 			}
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 			LOGGER.error(
 					"Update Driver documents error, User id : " + userId + " exception is : " + e.getMessage());
@@ -102,11 +102,11 @@ public class DriverController {
 			if (details != null) {
 				response = RestUtils.wrapObjectForSuccess(details);
 			} else {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						WebConstants.NOT_UPDATED);
 			}
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		}
 		return response;
 	}

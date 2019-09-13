@@ -44,14 +44,14 @@ public class CustomerDetailsController {
 			if(!StringUtils.isBlank(created)) {
 				response = RestUtils.wrapObjectForSuccess(created);
 			} else {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,"internal server error");
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,"internal server error");
 				LOGGER.error("customer not created. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
 			}
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 			LOGGER.error("user already exists. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,e.getMessage());
 			LOGGER.error("Internal server error. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
 		}
 
@@ -111,11 +111,11 @@ public class CustomerDetailsController {
 			if (customerDetailsVo != null)
 				response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
 			else
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INVALID_USER);
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INVALID_USER);
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
 		}
 		return response;
 	}

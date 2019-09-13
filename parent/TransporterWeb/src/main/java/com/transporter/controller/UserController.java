@@ -40,13 +40,13 @@ public class UserController {
 			if (!StringUtils.isBlank(updateProfilePicture)) {
 				response = RestUtils.wrapObjectForSuccess(updateProfilePicture);
 			} else {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						WebConstants.NOT_UPDATED);
 			}
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 			LOGGER.error("Update profile picture error, mobile number : " + mobileNumber + " exception is : "
 					+ e.getMessage());
@@ -64,11 +64,11 @@ public class UserController {
 			if (!StringUtils.isBlank(success)) {
 				response = RestUtils.wrapObjectForSuccess(success);
 			} else {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						"not updated");
 			}
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					"internal server error");
 			LOGGER.error("fcm token not updated for the user : " + id + " exception is : " + e.getMessage());
 		}
@@ -91,7 +91,7 @@ public class UserController {
 			response = RestUtils.wrapObjectForSuccess(userVo);
 			
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 			LOGGER.error("Internal user not updated for the user : "+id +" exception is : "+e.getMessage());
 		}
 		return response;

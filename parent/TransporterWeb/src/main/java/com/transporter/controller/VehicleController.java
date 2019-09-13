@@ -41,14 +41,14 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 			}
 			else
 			{
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 				LOGGER.error("Vehicle not registered"+vehicleDetailsVo.getVehicleNum());
 			}
 		} catch(BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 			LOGGER.error("Vehicle already exists :"+vehicleDetailsVo.getVehicleNum() +" exception : "+be.getErrorMsg());
 		} catch(Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, null, e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
 			LOGGER.error("Vehicle not registered"+vehicleDetailsVo.getVehicleNum() +" exception : "+e.getMessage());
 		}
 		
@@ -63,7 +63,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 			VehicleDetailsVo updateVechile = vehicleService.updateVehicleDetails(vehicleDetailsVo);
 		 
 			if (updateVechile == null) {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
 			} else {
 				response = RestUtils.wrapObjectForSuccess(updateVechile);

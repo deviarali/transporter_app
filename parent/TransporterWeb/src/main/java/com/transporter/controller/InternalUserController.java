@@ -36,14 +36,14 @@ public class InternalUserController {
 			if(!StringUtils.isBlank(created)) {
 				response = RestUtils.wrapObjectForSuccess(created);
 			} else {
-				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,"internal server error");
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,"internal server error");
 				LOGGER.error("Internal server error. Mobile number : "+internalUserDetailsVo.getUser().getMobileNumber());
 			}
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, be.getErrorCode(), be.getErrorMsg());
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 			LOGGER.error("Internal user not created. Mobile number : "+internalUserDetailsVo.getUser().getMobileNumber());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,e.getMessage());
 			LOGGER.error("Internal server error. Mobile number : "+internalUserDetailsVo.getUser().getMobileNumber());
 		}
 		return response;

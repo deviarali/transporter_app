@@ -26,7 +26,7 @@ public class GoodsTypeController {
 		if (goodsTypeList != null && goodsTypeList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(goodsTypeList);
 		} else {
-			response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR, WebConstants.NO_DATA_FOUND);
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.NO_DATA_FOUND);
 		}
 		return response;
 	}
