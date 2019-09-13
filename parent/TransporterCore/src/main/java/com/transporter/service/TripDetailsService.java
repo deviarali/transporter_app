@@ -13,6 +13,4 @@ public interface TripDetailsService {
 
 	List<TripDetails> getTripHistory(int id, int tripstatus);
 
-	String checkVehicleAvailability(String lattitude, String longitude);
-
 }
