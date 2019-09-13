@@ -3,17 +3,12 @@ package com.transporter.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.constants.WebConstants;
-import com.transporter.model.CancelReasons;
-import com.transporter.model.VehicleType;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.VehicleTypeService;
 import com.transporter.utils.RestUtils;

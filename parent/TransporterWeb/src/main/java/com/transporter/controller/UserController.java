@@ -2,6 +2,7 @@ package com.transporter.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.model.User;
@@ -37,7 +37,7 @@ public class UserController {
 		String mobileNumber = req.getParameter("mobileNumber");
 		try {
 			String updateProfilePicture = userService.updateProfilePicture(multipartFile, mobileNumber);
-			if (!StringUtils.isNullOrEmpty(updateProfilePicture)) {
+			if (!StringUtils.isBlank(updateProfilePicture)) {
 				response = RestUtils.wrapObjectForSuccess(updateProfilePicture);
 			} else {
 				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,
@@ -61,7 +61,7 @@ public class UserController {
 		CommonResponse response = null;
 		try {
 			String success = userService.updateFcmToken(id, fcmToken);
-			if (!StringUtils.isNullOrEmpty(success)) {
+			if (!StringUtils.isBlank(success)) {
 				response = RestUtils.wrapObjectForSuccess(success);
 			} else {
 				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,

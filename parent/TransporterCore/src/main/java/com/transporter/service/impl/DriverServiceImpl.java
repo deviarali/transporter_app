@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysql.jdbc.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.DriverDao;
 import com.transporter.enums.UserRoleEnum;
@@ -90,8 +90,8 @@ public class DriverServiceImpl implements DriverService{
 		}
 		String generateFilePathAndStoreForAdhar = transporterUtility.generateFilePathAndStore(adharMultiPart, "driver");
 		String generateFilePathAndStoreForDl = transporterUtility.generateFilePathAndStore(dlMultiPart, "driver");
-		if (!(StringUtils.isNullOrEmpty(generateFilePathAndStoreForAdhar))
-				|| !(StringUtils.isNullOrEmpty(generateFilePathAndStoreForDl))) {
+		if (!(StringUtils.isBlank(generateFilePathAndStoreForAdhar))
+				|| !(StringUtils.isBlank(generateFilePathAndStoreForDl))) {
 			int updated = driverDao.updateDriverDocuments(userId, generateFilePathAndStoreForAdhar,
 					generateFilePathAndStoreForDl);
 			if (updated != 0) {

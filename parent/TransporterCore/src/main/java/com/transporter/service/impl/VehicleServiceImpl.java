@@ -11,11 +11,9 @@ import com.transporter.dao.VehicleDetailsDao;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.DriverDetails;
-import com.transporter.model.User;
 import com.transporter.model.VehicleDetails;
-import com.transporter.response.CommonResponse;
+import com.transporter.model.VehicleType;
 import com.transporter.service.VehicleService;
-import com.transporter.utils.RestUtils;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehicleDetailsVo;
 
@@ -29,13 +27,13 @@ public class VehicleServiceImpl implements VehicleService {
 
 	@Autowired
 	private VehicleDetailsDao vehicleDetailsDao;
-	
+
 	@Override
 	@Transactional
 	public String registerVehicle(VehicleDetailsVo vehicleDetailsVo) {
-		 String response = null;
+		String response = null;
 		VehicleDetails details = vehicleDetailsDao.isVehicleExists(vehicleDetailsVo.getVehicleNum());
-		if(null != details) {
+		if (null != details) {
 			new BusinessException(ErrorCodes.VEHICLEEXISTS.name(), ErrorCodes.VEHICLEEXISTS.value());
 		}
 		VehicleDetails vehicleDetails = new VehicleDetails();
@@ -48,13 +46,14 @@ public class VehicleServiceImpl implements VehicleService {
 		vehicleDetails.setVehicleColor(vehicleDetailsVo.getVehicleColor());
 		vehicleDetails.setVehicleModel(vehicleDetailsVo.getVehicleModel());
 		vehicleDetails.setVehicleNum(vehicleDetailsVo.getVehicleNum());
-		vehicleDetails.setVehicleType(vehicleDetailsVo.getVehicleType());
-		 vehicleDetailsDao.save(vehicleDetails);
-		if(vehicleDetails.getId()>0)
-		{
+		VehicleType type = new VehicleType();
+		type.setId(vehicleDetailsVo.getVehicleType().getId());
+		vehicleDetails.setVehicleType(type);
+		vehicleDetailsDao.save(vehicleDetails);
+		if (vehicleDetails.getId() > 0) {
 			return response = WebConstants.SUCCESS;
 		}
-			return response;
+		return response;
 	}
 
 	@Override
@@ -64,30 +63,28 @@ public class VehicleServiceImpl implements VehicleService {
 		VehicleDetails vehicleDetailsExist = isVehilceExistById(vehicleDetailsVo.getId());
 		if (vehicleDetailsExist == null) {
 			throw new BusinessException(ErrorCodes.VEHICLENOTFOUND.name(), ErrorCodes.VEHICLENOTFOUND.value());
-		}
-		else
-		{
+		} else {
 			vehicleDetailsExist.setId(vehicleDetailsVo.getId());
 			vehicleDetailsExist.setVehicleColor(vehicleDetailsVo.getVehicleColor());
 			vehicleDetailsExist.setVehicleModel(vehicleDetailsVo.getVehicleModel());
-			vehicleDetailsExist.setVehicleType(vehicleDetailsVo.getVehicleType());
+			VehicleType type = new VehicleType();
+			type.setId(vehicleDetailsVo.getVehicleType().getId());
+			vehicleDetailsExist.setVehicleType(type);
 			vehicleDetailsExist.setVehicleNum(vehicleDetailsExist.getVehicleNum());
-			try{
-			vehicleDetailsDao.saveOrUpdate(vehicleDetailsExist);
-			}
-			catch(Exception e)
-			{
+			try {
+				vehicleDetailsDao.saveOrUpdate(vehicleDetailsExist);
+			} catch (Exception e) {
 				throw new BusinessException(ErrorCodes.VSAVE.name(), ErrorCodes.VSAVE.value());
 			}
-			
+
 		}
 		return vehicleDetailsVo;
-	
+
 	}
 
 	@Override
 	public VehicleDetails isVehilceExistById(int vehicleId) {
 		return vehicleDetailsDao.isVehicleExistById(vehicleId);
 	}
-	
+
 }

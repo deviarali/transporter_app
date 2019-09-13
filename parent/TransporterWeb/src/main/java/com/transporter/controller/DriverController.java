@@ -1,5 +1,6 @@
 package com.transporter.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.response.CommonResponse;
@@ -39,7 +39,7 @@ public class DriverController {
 
 		try {
 			String saved = driverService.registerDriver(driverDetailsVo);
-			if(!StringUtils.isNullOrEmpty(saved)) {
+			if(!StringUtils.isBlank(saved)) {
 				response = RestUtils.wrapObjectForSuccess(saved);
 				LOGGER.info("Driver registered successfully");
 			}
@@ -76,7 +76,7 @@ public class DriverController {
 		CommonResponse response = null;
 		try {
 			String updated = driverService.updateDriverDocuments(userId, adharMultiPart, dlMultiPart);
-			if (!StringUtils.isNullOrEmpty(updated)) {
+			if (!StringUtils.isBlank(updated)) {
 				response = RestUtils.wrapObjectForSuccess(updated);
 			} else {
 				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,

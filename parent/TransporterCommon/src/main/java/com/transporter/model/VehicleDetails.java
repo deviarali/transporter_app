@@ -1,20 +1,29 @@
 package com.transporter.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-
-import com.transporter.vo.UserVo;
-import com.transporter.vo.VehicleDetailsVo;
-
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.transporter.vo.VehicleDetailsVo;
 
 /**
  * The persistent class for the vehicledetails database table.
  * 
  */
 @Entity
-@Table(name="vehicledetails")
+@Table(name = "vehicledetails")
 public class VehicleDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -23,40 +32,41 @@ public class VehicleDetails implements Serializable {
 	private int id;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="created_on")
+	@Column(name = "created_on")
 	private Date createdOn;
 
-	@Column(name="vehicle_color")
+	@Column(name = "vehicle_color")
 	private String vehicleColor;
 
 	@Lob
-	@Column(name="vehicle_documents")
+	@Column(name = "vehicle_documents")
 	private String vehicleDocuments;
 
-	@Column(name="vehicle_model")
+	@Column(name = "vehicle_model")
 	private String vehicleModel;
 
-	@Column(name="vehicle_num")
+	@Column(name = "vehicle_num")
 	private String vehicleNum;
 
-	@Column(name="vehicle_type")
-	private String vehicleType;
+	@ManyToOne
+	@JoinColumn(name = "vehicle_type_id")
+	private VehicleType vehicleType;
 
 	@Lob
-	@Column(name="vehicle_verification_pending_reason")
+	@Column(name = "vehicle_verification_pending_reason")
 	private String vehicleVerificationPendingReason;
 
-	@Column(name="vehicle_verification_status")
+	@Column(name = "vehicle_verification_status")
 	private int vehicleVerificationStatus;
 
-	@Column(name="created_by")
+	@Column(name = "created_by")
 	private int createdBy;
 
 	@OneToOne
-	@JoinColumn(name="driver_id")
+	@JoinColumn(name = "driver_id")
 	private DriverDetails driverDetails;
 
-	@Column(name="verified_by")
+	@Column(name = "verified_by")
 	private String verifiedBy;
 
 	public VehicleDetails() {
@@ -110,11 +120,11 @@ public class VehicleDetails implements Serializable {
 		this.vehicleNum = vehicleNum;
 	}
 
-	public String getVehicleType() {
+	public VehicleType getVehicleType() {
 		return vehicleType;
 	}
 
-	public void setVehicleType(String vehicleType) {
+	public void setVehicleType(VehicleType vehicleType) {
 		this.vehicleType = vehicleType;
 	}
 
@@ -133,8 +143,6 @@ public class VehicleDetails implements Serializable {
 	public void setVehicleVerificationStatus(int vehicleVerificationStatus) {
 		this.vehicleVerificationStatus = vehicleVerificationStatus;
 	}
-
-	
 
 	public int getCreatedBy() {
 		return createdBy;
@@ -161,15 +169,15 @@ public class VehicleDetails implements Serializable {
 	}
 
 	public static VehicleDetailsVo convertModelToVo(VehicleDetails vehicleDetails) {
-		if(vehicleDetails == null)
+		if (vehicleDetails == null)
 			return null;
 		VehicleDetailsVo vehicleDetailsVo = new VehicleDetailsVo();
 		vehicleDetailsVo.setId(vehicleDetails.getId());
 		vehicleDetailsVo.setVehicleColor(vehicleDetails.getVehicleColor());
 		vehicleDetailsVo.setVehicleModel(vehicleDetails.getVehicleModel());
 		vehicleDetailsVo.setVehicleNum(vehicleDetails.getVehicleNum());
-		vehicleDetailsVo.setVehicleType(vehicleDetails.getVehicleType());
+		vehicleDetailsVo.setVehicleType(VehicleType.convertModelToVo(vehicleDetails.getVehicleType()));
 		return vehicleDetailsVo;
 	}
-	
+
 }

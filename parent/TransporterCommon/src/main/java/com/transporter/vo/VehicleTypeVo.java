@@ -1,12 +1,6 @@
 package com.transporter.vo;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 public class VehicleTypeVo {
 

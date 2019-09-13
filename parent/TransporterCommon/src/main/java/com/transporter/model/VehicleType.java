@@ -7,41 +7,43 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.transporter.vo.VehicleTypeVo;
+
 @Entity
 @Table(name = "vehicletype")
 public class VehicleType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(name = "capacity")
 	private int capacity;
-	
+
 	@Column(name = "size")
 	private int size;
-	
-	@Column(name="vehicle_name")
+
+	@Column(name = "vehicle_name")
 	private String vehicleName;
-	
+
 	@Column(name = "created_by")
 	private String createdBy;
-	
+
 	@Column(name = "selected_vehicle_url")
 	private String selectedVehicleUrl;
-	
+
 	@Column(name = "height")
 	private int height;
-	
+
 	@Column(name = "width")
 	private int width;
-	
+
 	@Column(name = "length")
 	private int length;
-	
+
 	@Column(name = "unselected_vehicle_url")
 	private String unselectedVehicleUrl;
-	
-	@Column(name="price")
+
+	@Column(name = "price")
 	private Double price;
 
 	public int getId() {
@@ -67,9 +69,7 @@ public class VehicleType {
 	public void setSize(int size) {
 		this.size = size;
 	}
-	
-	
-	
+
 	public String getVehicleName() {
 		return vehicleName;
 	}
@@ -133,9 +133,21 @@ public class VehicleType {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	
-	
-	
-	
-	
+
+	public static VehicleTypeVo convertModelToVo(VehicleType vehicleType) {
+		if(vehicleType == null)
+			return null;
+		VehicleTypeVo vehicleTypeVo = new VehicleTypeVo();
+		vehicleTypeVo.setId(vehicleType.getId());
+		vehicleTypeVo.setCapacity(vehicleType.getCapacity());
+		vehicleTypeVo.setSize(vehicleType.getSize());
+		vehicleTypeVo.setVehicleName(vehicleType.getVehicleName());
+		vehicleTypeVo.setCreatedBy(vehicleType.getCreatedBy());
+		vehicleTypeVo.setHeight(vehicleType.getHeight());
+		vehicleTypeVo.setLength(vehicleType.getLength());
+		vehicleTypeVo.setSelectedVehicleUrl(vehicleType.getSelectedVehicleUrl());
+		vehicleTypeVo.setWidth(vehicleType.getWidth());
+		vehicleTypeVo.setPrice(vehicleType.getPrice());
+		return vehicleTypeVo;
+	}
 }

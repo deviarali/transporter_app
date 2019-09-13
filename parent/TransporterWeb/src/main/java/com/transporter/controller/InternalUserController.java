@@ -1,5 +1,6 @@
 package com.transporter.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.response.CommonResponse;
@@ -33,7 +33,7 @@ public class InternalUserController {
 		CommonResponse response = null;
 		try {
 			String created = internalUserService.createInternalUser(internalUserDetailsVo);
-			if(!StringUtils.isNullOrEmpty(created)) {
+			if(!StringUtils.isBlank(created)) {
 				response = RestUtils.wrapObjectForSuccess(created);
 			} else {
 				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,"internal server error");

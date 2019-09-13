@@ -3,6 +3,7 @@ package com.transporter.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.CommonConstants;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
@@ -41,7 +41,7 @@ public class CustomerDetailsController {
 		CommonResponse response = null;
 		try {
 			String created = customerDetailsService.registerCustomer(customerDetailsVo);
-			if(!StringUtils.isNullOrEmpty(created)) {
+			if(!StringUtils.isBlank(created)) {
 				response = RestUtils.wrapObjectForSuccess(created);
 			} else {
 				response = RestUtils.wrapObjectForFailure(WebConstants.FAILURE, WebConstants.WEB_RESPONSE_ERROR,"internal server error");
@@ -125,11 +125,11 @@ public class CustomerDetailsController {
 		if (customerDetailsVo == null) {
 			map.put("All", CommonConstants.ALL_FIELDS_REQUIRED);
 		} else {
-			if (StringUtils.isNullOrEmpty(customerDetailsVo.getUser().getFirstName())) {
+			if (StringUtils.isBlank(customerDetailsVo.getUser().getFirstName())) {
 				map.put("firstName", CommonConstants.FIRST_NAME_EMPTY);
 			}
-			if (StringUtils.isNullOrEmpty(customerDetailsVo.getUser().getMobileNumber())
-					|| StringUtils.isEmptyOrWhitespaceOnly(customerDetailsVo.getUser().getMobileNumber())) {
+			if (StringUtils.isBlank(customerDetailsVo.getUser().getMobileNumber())
+					|| StringUtils.isBlank(customerDetailsVo.getUser().getMobileNumber())) {
 				map.put("mobileNumber", CommonConstants.MOBILE_NUMBER_EMPTY);
 			}
 		}

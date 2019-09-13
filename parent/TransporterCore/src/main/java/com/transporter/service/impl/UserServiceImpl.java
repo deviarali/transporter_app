@@ -2,12 +2,12 @@ package com.transporter.service.impl;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.UserDao;
 import com.transporter.enums.UserRoleEnum;
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
 		}
 		String generateFilePathAndStore = transporterUtility.generateFilePathAndStore(multipart, "profile");
-		if (!StringUtils.isNullOrEmpty(generateFilePathAndStore)) {
+		if (!StringUtils.isBlank(generateFilePathAndStore)) {
 			int updated = userDao.updateProfilePicture(mobileNumber, generateFilePathAndStore);
 			if (updated != 0) {
 				return generateFilePathAndStore;

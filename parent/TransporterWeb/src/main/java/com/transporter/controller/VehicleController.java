@@ -1,5 +1,6 @@
 package com.transporter.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mysql.jdbc.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
-import com.transporter.model.VehicleDetails;
 import com.transporter.response.CommonResponse;
-import com.transporter.service.DriverService;
 import com.transporter.service.VehicleService;
 import com.transporter.utils.RestUtils;
-import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehicleDetailsVo;
 
 /**
@@ -38,7 +35,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 
 		try {
 			String saved = vehicleService.registerVehicle(vehicleDetailsVo);
-			if(!StringUtils.isNullOrEmpty(saved)) {
+			if(!StringUtils.isBlank(saved)) {
 				response = RestUtils.wrapObjectForSuccess(saved);
 				LOGGER.info("Vehicle registered successfully");
 			}

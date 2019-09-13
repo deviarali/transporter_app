@@ -3,7 +3,6 @@ package com.transporter.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-
 /**
  * The persistent class for the vehicledetails database table.
  * 
@@ -23,7 +22,7 @@ public class VehicleDetailsVo implements Serializable {
 
 	private String vehicleNum;
 
-	private String vehicleType;
+	private VehicleTypeVo vehicleType;
 
 	private String vehicleVerificationPendingReason;
 
@@ -86,11 +85,11 @@ public class VehicleDetailsVo implements Serializable {
 		this.vehicleNum = vehicleNum;
 	}
 
-	public String getVehicleType() {
+	public VehicleTypeVo getVehicleType() {
 		return vehicleType;
 	}
 
-	public void setVehicleType(String vehicleType) {
+	public void setVehicleType(VehicleTypeVo vehicleType) {
 		this.vehicleType = vehicleType;
 	}
 

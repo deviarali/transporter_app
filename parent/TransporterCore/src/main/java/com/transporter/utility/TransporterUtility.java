@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mysql.jdbc.StringUtils;
 
 /**
  * @author Devappa.Arali
@@ -31,7 +31,7 @@ public class TransporterUtility {
 		String uniqueId = uuidString();
 		LOGGER.info("UploadFile "+ multipart.getOriginalFilename());
 		Date date = new Date();
-		if(StringUtils.isNullOrEmpty(typeOfUser)) {
+		if(StringUtils.isBlank(typeOfUser)) {
 			typeOfUser = "transporter";
 		}
 		String fileLocation = filePath  + typeOfUser + uniqueId + date.getTime();
