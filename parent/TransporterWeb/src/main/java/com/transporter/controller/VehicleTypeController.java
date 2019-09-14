@@ -3,16 +3,21 @@ package com.transporter.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
+import com.transporter.exceptions.BusinessException;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.VehicleTypeService;
 import com.transporter.utils.RestUtils;
+import com.transporter.utils.Utils;
 import com.transporter.vo.VehicleTypeVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 @RestController
 public class VehicleTypeController {
@@ -20,11 +25,11 @@ public class VehicleTypeController {
 	@Autowired
 	VehicleTypeService vehicleTypeService;
 
-	@RequestMapping(value = "display/getAllDisplayVehicle")
+	@RequestMapping(value = "vehicleType/getAllVehicleTypes")
 	public CommonResponse getAllDisplayVehicle() {
 
 		CommonResponse response = null;
-		List<VehicleTypeVo> displayVehicleList = vehicleTypeService.getAllDisplayVehicle();
+		List<VehicleTypeVo> displayVehicleList = vehicleTypeService.getAllVehicleTypes();
 		if (displayVehicleList != null && displayVehicleList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(displayVehicleList);
 		} else {
@@ -34,18 +39,24 @@ public class VehicleTypeController {
 		return response;
 	}
 	
-
-	@RequestMapping(value = "display/addDisplayVehicle",method = RequestMethod.POST)
-	public CommonResponse addDisplayVehicle(@RequestBody VehicleTypeVo displayVehicleVo) {
+	@RequestMapping(value = "vehicleType/addVehicleType",method = RequestMethod.POST)
+	public CommonResponse addVehicleType(@ModelAttribute VehicleTypeVo vehicleTypeVo) {
 
 		CommonResponse response = null;
-		VehicleTypeVo displayVehicle = vehicleTypeService.addDisplayVehicle(displayVehicleVo,null,null);
-		if (displayVehicle != null) {
-			response = RestUtils.wrapObjectForSuccess(displayVehicle);
-		} else {
+		try {
+			String saved = vehicleTypeService.addVehicleType(vehicleTypeVo);
+			if (!Utils.isNullOrEmpty(saved)) {
+				response = RestUtils.wrapObjectForSuccess(saved);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.VEHICLE_TYPE_NOT_SAVED);
+			}
+		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
-					WebConstants.VEHICLE_FAILED_TO_DISPLAY);
-
+					WebConstants.VEHICLE_TYPE_NOT_SAVED);
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
 		return response;
 	}
@@ -60,10 +71,26 @@ public class VehicleTypeController {
 			response = RestUtils.wrapObjectForSuccess(displayVehicle);
 		} else {
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
-					WebConstants.VEHICLE_FAILED_TO_DISPLAY);
+					WebConstants.VEHICLE_TYPE_NOT_UPDATED);
 
 		}
 		return response;
 	}
+	
+	 @RequestMapping(value="vehicle/fetchVehiclesByOrder")
+		public CommonResponse fetchVehiclesByOrder(@RequestBody VehiclesByOrderRequest vehiclesByOrderRequest) {
+	    	CommonResponse response = null;
+	    	try {
+		    	List<VehiclesByOrderResponse> orderResponse = vehicleTypeService.fetchVehiclesByOrder(vehiclesByOrderRequest);
+		    	if(!Utils.isNullOrEmpty(orderResponse)) {
+		    		response = RestUtils.wrapObjectForSuccess(orderResponse);
+		    	} else {
+		    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.VEHICLES_NOT_AVAILABLE);
+		    	}
+	    	} catch (Exception e) {
+	    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+	    	}
+	    	return response;
+	    }
 
 }

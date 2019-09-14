@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -76,20 +77,16 @@ public class DriverDetails implements Serializable {
 	@Column(name="transport_type")
 	private String transportType;
 
-	//bi-directional many-to-one association to User
-	@OneToOne
-	@JoinColumn(name="created_by")
-	private User createdBy;
+	@Column(name="created_by")
+	private int createdBy;
 
 	//bi-directional many-to-one association to User
 	@OneToOne
 	@JoinColumn(name="user_id")
 	private User user;
 
-	//bi-directional many-to-one association to User
-	@OneToOne
-	@JoinColumn(name="verified_by")
-	private User verifedBy;
+	@Column(name="verified_by")
+	private int verifedBy;
 
 	@Column(name = "current_lattitude")
 	private Double currentLattitude;
@@ -102,6 +99,9 @@ public class DriverDetails implements Serializable {
 	
 	@Column(name = "driving_licence_picture_url")
 	private String drivingLicencePictureUrl;
+	
+	@OneToOne(mappedBy = "driverDetails", fetch = FetchType.EAGER)
+	private VehicleDetails vehicleDetails;
 
 	public DriverDetails() {
 	}
@@ -218,14 +218,6 @@ public class DriverDetails implements Serializable {
 		this.transportType = transportType;
 	}
 
-	public User getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
-	}
-
 	public User getUser() {
 		return user;
 	}
@@ -234,15 +226,6 @@ public class DriverDetails implements Serializable {
 		this.user = user;
 	}
 
-	public User getVerifedBy() {
-		return verifedBy;
-	}
-
-	public void setVerifedBy(User verifedBy) {
-		this.verifedBy = verifedBy;
-	}
-
-	
 	public Double getCurrentLattitude() {
 		return currentLattitude;
 	}
@@ -273,6 +256,30 @@ public class DriverDetails implements Serializable {
 
 	public void setDrivingLicencePictureUrl(String drivingLicencePictureUrl) {
 		this.drivingLicencePictureUrl = drivingLicencePictureUrl;
+	}
+
+	public int getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(int createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public int getVerifedBy() {
+		return verifedBy;
+	}
+
+	public void setVerifedBy(int verifedBy) {
+		this.verifedBy = verifedBy;
+	}
+
+	public VehicleDetails getVehicleDetails() {
+		return vehicleDetails;
+	}
+
+	public void setVehicleDetails(VehicleDetails vehicleDetails) {
+		this.vehicleDetails = vehicleDetails;
 	}
 
 	public static DriverDetailsVo convertModelToVo(DriverDetails driverDetails) {

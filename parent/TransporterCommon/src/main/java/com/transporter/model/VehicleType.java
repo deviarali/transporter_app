@@ -12,12 +12,13 @@ import com.transporter.vo.VehicleTypeVo;
 @Entity
 @Table(name = "vehicletype")
 public class VehicleType {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name = "capacity")
-	private int capacity;
+	private double capacity;
 
 	@Column(name = "size")
 	private int size;
@@ -54,11 +55,11 @@ public class VehicleType {
 		this.id = id;
 	}
 
-	public int getCapacity() {
+	public double getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacity(int capacity) {
+	public void setCapacity(double capacity) {
 		this.capacity = capacity;
 	}
 
@@ -146,6 +147,7 @@ public class VehicleType {
 		vehicleTypeVo.setHeight(vehicleType.getHeight());
 		vehicleTypeVo.setLength(vehicleType.getLength());
 		vehicleTypeVo.setSelectedVehicleUrl(vehicleType.getSelectedVehicleUrl());
+		vehicleTypeVo.setUnselectedVehicleUrl(vehicleType.getUnselectedVehicleUrl());
 		vehicleTypeVo.setWidth(vehicleType.getWidth());
 		vehicleTypeVo.setPrice(vehicleType.getPrice());
 		return vehicleTypeVo;

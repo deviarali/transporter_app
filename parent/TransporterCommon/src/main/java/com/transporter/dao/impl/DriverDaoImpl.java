@@ -1,6 +1,9 @@
 package com.transporter.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.transporter.dao.DriverDao;
 import com.transporter.model.DriverDetails;
 import com.transporter.model.TripDetails;
+import com.transporter.vo.VehiclesByOrderRequest;
 
 /**
  * @author Devappa.Arali
@@ -73,6 +77,57 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 			driverDetails.add(details);
 		}
 		System.out.println("list : "+driverDetails);
+		return driverDetails;
+	}
+	
+	/*@Override
+	public List<DriverDetails> checkVehicleAvailability(String lattitude, String longitude, double distance ) {
+		List<DriverDetails> driverDetails = null;
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "FROM DriverDetails dd, ( 3959 * ACOS( COS( RADIANS(:lattitude) ) * COS( RADIANS( dd.current_lattitude ) ) \r\n" + 
+				"    * COS( RADIANS( dd.current_longitude ) - RADIANS(:longitude) ) + SIN( RADIANS(:lattitude) ) * SIN(RADIANS(dd.current_lattitude)) ) ) AS distance \r\n" + 
+				"where dd.on_road=1\r\n" + 
+				"HAVING distance < :distance\r\n" + 
+				"ORDER BY distance"+","+" nativeQuery = true";
+	
+		SQLQuery sqlQuery2 = session.createSQLQuery(sqlQuery);
+		sqlQuery2.setDouble("lattitude", Double.valueOf(lattitude));
+		sqlQuery2.setDouble("longitude", Double.valueOf(longitude));
+		sqlQuery2.setDouble("distance", distance);	
+		List<Object[]> empData = sqlQuery2.list();
+		for(Object[] obj : empData) {
+			DriverDetails details = new DriverDetails();
+			details.setId(Integer.valueOf(obj[0].toString()));
+			details.setDriverName(obj[1].toString());
+			driverDetails.add(details);
+		}
+		Query query = session.createQuery(sqlQuery);
+		query.list();
+		System.out.println("list : "+driverDetails);
+		return driverDetails;
+	}*/
+
+	@Override
+	public List<DriverDetails> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest) {
+		List<DriverDetails> driverDetails = new ArrayList<DriverDetails>();
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "select id, driver_name, ( 3959 * ACOS( COS( RADIANS(:lattitude) ) * COS( RADIANS( dd.current_lattitude ) ) \r\n" + 
+				"    * COS( RADIANS( dd.current_longitude ) - RADIANS(:longitude) ) + SIN( RADIANS(:lattitude) ) * SIN(RADIANS(dd.current_lattitude)) ) ) AS distance \r\n" + 
+				"FROM driverdetails dd where dd.on_road=1\r\n" + 
+				"HAVING distance < :distance\r\n" + 
+				"ORDER BY distance";
+		
+		SQLQuery sqlQuery2 = session.createSQLQuery(sqlQuery);
+		sqlQuery2.setDouble("lattitude", Double.valueOf(vehiclesByOrderRequest.getLattitude()));
+		sqlQuery2.setDouble("longitude", Double.valueOf(vehiclesByOrderRequest.getLongitude()));
+		sqlQuery2.setDouble("distance", vehiclesByOrderRequest.getSurroundingDistances());	
+		List<Object[]> empData = sqlQuery2.list();
+		for(Object[] obj : empData) {
+			DriverDetails details = new DriverDetails();
+			details.setId(Integer.valueOf(obj[0].toString()));
+			details.setDriverName(obj[1].toString());
+			driverDetails.add(details);
+		}
 		return driverDetails;
 	}
 }

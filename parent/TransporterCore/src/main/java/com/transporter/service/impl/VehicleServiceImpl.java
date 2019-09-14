@@ -34,7 +34,7 @@ public class VehicleServiceImpl implements VehicleService {
 		String response = null;
 		VehicleDetails details = vehicleDetailsDao.isVehicleExists(vehicleDetailsVo.getVehicleNum());
 		if (null != details) {
-			new BusinessException(ErrorCodes.VEHICLEEXISTS.name(), ErrorCodes.VEHICLEEXISTS.value());
+			throw new BusinessException(ErrorCodes.VEHICLEEXISTS.name(), ErrorCodes.VEHICLEEXISTS.value());
 		}
 		VehicleDetails vehicleDetails = new VehicleDetails();
 		vehicleDetails.setCreatedBy(Integer.parseInt(vehicleDetailsVo.getCreatedBy()));
@@ -86,6 +86,12 @@ public class VehicleServiceImpl implements VehicleService {
 	@Override
 	public VehicleDetails isVehilceExistById(int vehicleId) {
 		return vehicleDetailsDao.isVehicleExistById(vehicleId);
+	}
+
+	@Override
+	public VehicleDetails getVehicleByDriverId(int driverId) {
+		VehicleDetails vehicleDetails = vehicleDetailsDao.getVehicleByDriverId(driverId);
+		return vehicleDetails;
 	}
 
 }

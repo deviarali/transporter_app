@@ -1,8 +1,12 @@
 package com.transporter.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 /**
  * @author Devappa.Arali
@@ -22,5 +26,7 @@ public interface DriverService {
 	DriverDetailsVo updateDriverAddress(DriverDetailsVo driverDetailsVo);
 	
 	String checkVehicleAvailability(String lattitude, String longitude);
+
+	List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest);
 
 }

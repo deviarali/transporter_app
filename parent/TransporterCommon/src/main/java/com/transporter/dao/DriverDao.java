@@ -3,6 +3,7 @@ package com.transporter.dao;
 import java.util.List;
 
 import com.transporter.model.DriverDetails;
+import com.transporter.vo.VehiclesByOrderRequest;
 
 /**
  * @author Devappa.Arali
@@ -19,5 +20,7 @@ public interface DriverDao extends GenericDao {
 	DriverDetails findById(int driverId);
 	
 	List<DriverDetails> checkVehicleAvailability(String lattitude, String longitude, double distance);
+
+	List<DriverDetails> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest);
 
 }

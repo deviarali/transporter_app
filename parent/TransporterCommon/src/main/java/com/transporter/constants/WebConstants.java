@@ -15,6 +15,8 @@ public class WebConstants {
 	public static final String NO_DATA_FOUND = "No data found";
 	public static final String NOT_UPDATED = "Not updated";
 	public static final String VEHICLE_NOT_UPDATED = "Vehicle Not Found";
-	public static final String VEHICLE_FAILED_TO_DISPLAY ="Failed to add display";
+	public static final String VEHICLE_TYPE_NOT_SAVED ="Vehicle type not saved";
+	public static final String VEHICLE_TYPE_NOT_UPDATED ="Vehicle type not updated";
+	public static final String VEHICLES_NOT_AVAILABLE = "Vehicles not available";
 	
 }

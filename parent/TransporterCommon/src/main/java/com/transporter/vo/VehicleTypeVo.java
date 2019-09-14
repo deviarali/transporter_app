@@ -6,7 +6,7 @@ public class VehicleTypeVo {
 
 	private int id;
 
-	private int capacity;
+	private double capacity;
 
 	private int size;
 	
@@ -38,11 +38,11 @@ public class VehicleTypeVo {
 		this.id = id;
 	}
 
-	public int getCapacity() {
+	public double getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacity(int capacity) {
+	public void setCapacity(double capacity) {
 		this.capacity = capacity;
 	}
 

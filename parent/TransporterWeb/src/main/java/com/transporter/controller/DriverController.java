@@ -1,5 +1,7 @@
 package com.transporter.controller;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,10 @@ import com.transporter.exceptions.BusinessException;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.DriverService;
 import com.transporter.utils.RestUtils;
+import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 /**
  * @author Devappa.Arali
@@ -132,5 +137,20 @@ public class DriverController {
         response = RestUtils.wrapObjectForSuccess(check);
         return response;
     }
-
+    
+   /* @RequestMapping(value="driver/fetchVehiclesByOrder")
+	public CommonResponse fetchVehiclesByOrder(@RequestBody VehiclesByOrderRequest vehiclesByOrderRequest) {
+    	CommonResponse response = null;
+    	try {
+	    	List<VehiclesByOrderResponse> orderResponse = driverService.fetchVehiclesByOrder(vehiclesByOrderRequest);
+	    	if(!Utils.isNullOrEmpty(orderResponse)) {
+	    		response = RestUtils.wrapObjectForSuccess(orderResponse);
+	    	} else {
+	    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.VEHICLES_NOT_AVAILABLE);
+	    	}
+    	} catch (Exception e) {
+    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+    	}
+    	return response;
+    }*/
 }

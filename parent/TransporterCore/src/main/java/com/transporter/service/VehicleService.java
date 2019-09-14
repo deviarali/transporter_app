@@ -15,6 +15,8 @@ public interface VehicleService {
 	VehicleDetailsVo updateVehicleDetails(VehicleDetailsVo vehicleDetailsVo);
 	
 	VehicleDetails isVehilceExistById(int vehicleId);
+
+	VehicleDetails getVehicleByDriverId(int id);
 	
 	
 	

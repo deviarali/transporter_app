@@ -13,6 +13,8 @@ public interface VehicleDetailsDao extends GenericDao {
 	VehicleDetails isVehicleExists(String vehicleNum);
 	
 	VehicleDetails isVehicleExistById(int id);
+
+	VehicleDetails getVehicleByDriverId(int driverId);
 	
 
 }

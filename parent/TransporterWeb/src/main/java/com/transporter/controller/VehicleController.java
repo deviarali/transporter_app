@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
@@ -48,7 +49,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 			LOGGER.error("Vehicle already exists :"+vehicleDetailsVo.getVehicleNum() +" exception : "+be.getErrorMsg());
 		} catch(Exception e) {
-			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
 			LOGGER.error("Vehicle not registered"+vehicleDetailsVo.getVehicleNum() +" exception : "+e.getMessage());
 		}
 		

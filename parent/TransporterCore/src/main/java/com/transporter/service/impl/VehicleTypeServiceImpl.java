@@ -1,5 +1,6 @@
 package com.transporter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -8,25 +9,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.transporter.constants.WebConstants;
 import com.transporter.dao.CancelReasonDao;
-import com.transporter.dao.VehcileTypeDao;
+import com.transporter.dao.VehicleTypeDao;
+import com.transporter.exceptions.BusinessException;
+import com.transporter.exceptions.ErrorCodes;
+import com.transporter.model.DriverDetails;
+import com.transporter.model.VehicleDetails;
 import com.transporter.model.VehicleType;
 import com.transporter.service.VehicleTypeService;
 import com.transporter.utility.TransporterUtility;
+import com.transporter.utils.Utils;
 import com.transporter.vo.VehicleTypeVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 @Service
 public class VehicleTypeServiceImpl implements VehicleTypeService {
 
 	@Autowired
-	private VehcileTypeDao vehcileTypeDao;
+	private VehicleTypeDao vehcileTypeDao;
 	
 	@Autowired
 	TransporterUtility transporterUtility;
 
 	@Override
-	public List<VehicleTypeVo> getAllDisplayVehicle() {
-		List<VehicleTypeVo> displayVehicleList = vehcileTypeDao.getAllDisplayVehicle();
+	public List<VehicleTypeVo> getAllVehicleTypes() {
+		List<VehicleTypeVo> displayVehicleList = vehcileTypeDao.getAllVehicleTypes();
 		return displayVehicleList;
 	}
 
@@ -58,33 +67,53 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 
 	@Override
 	@Transactional
-	public VehicleTypeVo addDisplayVehicle(VehicleTypeVo displayVehicleVo,MultipartFile multipartFile1,MultipartFile multipartFile2) {
-		VehicleTypeVo displayVehicle = null;
-		if (displayVehicleVo != null) {
-			displayVehicle = new VehicleTypeVo();
-			displayVehicle.setCapacity(displayVehicleVo.getCapacity());
-			displayVehicle.setVehicleName(displayVehicleVo.getVehicleName());
-			displayVehicle.setPrice(displayVehicleVo.getPrice());
-			displayVehicle.setCreatedBy(displayVehicleVo.getCreatedBy());
-			displayVehicle.setHeight(displayVehicleVo.getHeight());
-			displayVehicle.setLength(displayVehicleVo.getLength());
-		
-			displayVehicle.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(displayVehicle.getSelectedVehicle(),"vehicle"));
-			displayVehicle.setSize(displayVehicleVo.getSize());
-			displayVehicle.setUnselectedVehicleUrl(transporterUtility.generateFilePathAndStore(displayVehicle.getUnSelectedVehicle(), "vehicle"));
-			displayVehicle.setWidth(displayVehicleVo.getWidth());
-			vehcileTypeDao.save(displayVehicle);
+	public String addVehicleType(VehicleTypeVo vehicleTypeVo) {
+		String response = null;
+		if (vehicleTypeVo != null) {
+			VehicleType vehicleType = new VehicleType();
+			vehicleType.setCapacity(vehicleTypeVo.getCapacity());
+			vehicleType.setVehicleName(vehicleTypeVo.getVehicleName());
+			vehicleType.setPrice(vehicleTypeVo.getPrice());
+			vehicleType.setCreatedBy(vehicleTypeVo.getCreatedBy());
+			vehicleType.setHeight(vehicleTypeVo.getHeight());
+			vehicleType.setLength(vehicleTypeVo.getLength());
+			vehicleType.setSize(vehicleTypeVo.getSize());
+			vehicleType.setWidth(vehicleTypeVo.getWidth());
+			vehicleType.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getSelectedVehicle(),"vehicle"));
+			vehicleType.setUnselectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getUnSelectedVehicle(), "vehicle"));
+			try {
+				vehcileTypeDao.save(vehicleType);
+				response = WebConstants.SUCCESS;
+			} catch (Exception e) {
+				throw new BusinessException(ErrorCodes.NOTSAVED.name(), ErrorCodes.NOTSAVED.value());
+			}
 		}
-		if (displayVehicle != null) {
-			return displayVehicle;
-		} else
-			return null;
+		return response;
 	}
 
 	@Override
 	public VehicleType deleteDisplayVehicle(VehicleType displayVehicle) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest) {
+		List<VehiclesByOrderResponse> orderResponse = new ArrayList<VehiclesByOrderResponse>();
+		List<VehicleType> vehicleTypeList = vehcileTypeDao.fetchVehiclesByOrder(vehiclesByOrderRequest);
+		if(!Utils.isNullOrEmpty(vehicleTypeList)) {
+			for(VehicleType vehicleType : vehicleTypeList) {
+				VehiclesByOrderResponse response = new VehiclesByOrderResponse();
+				response.setVehicleType(vehicleType.getId());
+				response.setVehicleName(vehicleType.getVehicleName());
+				response.setVehicleSelectedUrl(vehicleType.getSelectedVehicleUrl());
+				response.setVehicleUnSelecetedUrl(vehicleType.getUnselectedVehicleUrl());
+				response.setPrice(vehicleType.getPrice()*vehiclesByOrderRequest.getDistance());
+				orderResponse.add(response);
+			}
+		}
+		return orderResponse;
 	}
 
 }

@@ -19,13 +19,17 @@ import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.DriverDetails;
 import com.transporter.model.TripDetails;
 import com.transporter.model.User;
+import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.service.DriverService;
 import com.transporter.service.UserService;
+import com.transporter.service.VehicleService;
 import com.transporter.utility.TransporterUtility;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 /**
  * @author Devappa.Arali
@@ -46,6 +50,9 @@ public class DriverServiceImpl implements DriverService {
 	
 	@Autowired
 	private TransporterPushNotifications transporterPushNotifications;
+	
+	@Autowired
+	private VehicleService vehicleService;
 	
 	@Value("${distance.cover}")
 	private double distanceCover;
@@ -68,9 +75,7 @@ public class DriverServiceImpl implements DriverService {
 		driverDetails.setDriverName(userVo.getFirstName());
 		driverDetails.setDriverVerificationStatus("pending");
 		driverDetails.setOnRoad(0);
-		User userCreatedBy = new User();
-		userCreatedBy.setId(driverDetailsVo.getCreatedBy().getId());
-		driverDetails.setCreatedBy(userCreatedBy);
+		driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
 		driverDetails.setUser(user);
 		driverDao.save(driverDetails);
 		if(driverDetails.getId() > 0) {
@@ -154,5 +159,24 @@ public class DriverServiceImpl implements DriverService {
 			response  = transporterPushNotifications.pushNotifications(devicesToken);
 		}
 		return response;
+	}
+
+	@Override
+	@Transactional
+	public List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest) {
+		List<VehiclesByOrderResponse> orderResponse = new ArrayList<VehiclesByOrderResponse>();
+		vehiclesByOrderRequest.setSurroundingDistances(distanceCover);
+		List<DriverDetails> driverDetailsList = driverDao.fetchVehiclesByOrder(vehiclesByOrderRequest);
+		for(DriverDetails details : driverDetailsList) {
+			DriverDetails details2 = (DriverDetails) driverDao.get(DriverDetails.class, details.getId());
+			VehiclesByOrderResponse response = new VehiclesByOrderResponse();
+			VehicleDetails vehicle = vehicleService.getVehicleByDriverId(details2.getId());
+			response.setVehicleType(vehicle.getVehicleType().getId());
+			response.setVehicleSelectedUrl(vehicle.getVehicleType().getSelectedVehicleUrl());
+			response.setVehicleUnSelecetedUrl(vehicle.getVehicleType().getUnselectedVehicleUrl());
+			response.setPrice(vehicle.getVehicleType().getPrice()*vehiclesByOrderRequest.getDistance());
+			orderResponse.add(response);
+		}
+		return orderResponse;
 	}
 }
