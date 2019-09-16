@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
+import com.transporter.exceptions.ErrorCodes;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.DriverService;
 import com.transporter.utils.RestUtils;
@@ -67,9 +68,13 @@ public class DriverController {
 		CommonResponse response = null;
 		try {
 			String updated = driverService.updateLattitudeAndLongitude(id, lattitude, longitude);
-			response = RestUtils.wrapObjectForSuccess(updated);
-		} catch (BusinessException be) {
-			LOGGER.error("not updated");
+			if(!Utils.isNullOrEmpty(updated)) {
+				response = RestUtils.wrapObjectForSuccess(updated);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.NOT_UPDATED);
+			}
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
 		return response;
 	}

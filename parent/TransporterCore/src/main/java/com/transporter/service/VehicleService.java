@@ -1,6 +1,10 @@
 package com.transporter.service;
 
+import java.util.List;
+
 import com.transporter.model.VehicleDetails;
+import com.transporter.vo.FetchSelectedVehiclesRequest;
+import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleDetailsVo;
 
 /**
@@ -17,6 +21,11 @@ public interface VehicleService {
 	VehicleDetails isVehilceExistById(int vehicleId);
 
 	VehicleDetails getVehicleByDriverId(int id);
+
+	int updateLattitudeAndLongitude(int id, String lattitude, String longitude);
+
+	List<FetchSelectedVehiclesResponse> fetchSelectedVehicles(
+			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);
 	
 	
 	

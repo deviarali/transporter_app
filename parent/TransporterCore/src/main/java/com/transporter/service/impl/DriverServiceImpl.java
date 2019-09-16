@@ -54,8 +54,8 @@ public class DriverServiceImpl implements DriverService {
 	@Autowired
 	private VehicleService vehicleService;
 	
-	@Value("${distance.cover}")
-	private double distanceCover;
+	@Value("${surrounding.area}")
+	private double surrounding;
 	
 	@Override
 	@Transactional
@@ -90,7 +90,8 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public String updateLattitudeAndLongitude(int id, String lattitude, String longitude) {
 		String response = null;
-		int updated = driverDao.updateLattitudeAndLongitude(id, lattitude, longitude);
+		//int updated = driverDao.updateLattitudeAndLongitude(id, lattitude, longitude);
+		int updated = vehicleService.updateLattitudeAndLongitude(id, lattitude, longitude);
 		if(updated == 1) {
 			response = WebConstants.SUCCESS;
 		}
@@ -149,7 +150,7 @@ public class DriverServiceImpl implements DriverService {
 	@Override
 	@Transactional
 	public String checkVehicleAvailability(String lattitude, String longitude) {
-		List<DriverDetails> driverDetailsList = driverDao.checkVehicleAvailability(lattitude, longitude, distanceCover);
+		List<DriverDetails> driverDetailsList = driverDao.checkVehicleAvailability(lattitude, longitude, surrounding);
 		
 		String response = null;
 		if(null != driverDetailsList && !driverDetailsList.isEmpty()) {
@@ -165,7 +166,7 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest) {
 		List<VehiclesByOrderResponse> orderResponse = new ArrayList<VehiclesByOrderResponse>();
-		vehiclesByOrderRequest.setSurroundingDistances(distanceCover);
+		vehiclesByOrderRequest.setSurroundingDistances(surrounding);
 		List<DriverDetails> driverDetailsList = driverDao.fetchVehiclesByOrder(vehiclesByOrderRequest);
 		for(DriverDetails details : driverDetailsList) {
 			DriverDetails details2 = (DriverDetails) driverDao.get(DriverDetails.class, details.getId());

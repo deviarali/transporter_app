@@ -62,8 +62,12 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	}
 	
 	@Override
-	public int generateOtp(String mobile) {
-		return userService.generateOtp(mobile);
+	public int generateOtp(String mobileNumber) {
+		UserVo userExists = userService.isUserExists(mobileNumber);
+		if(null != userExists) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
+		}
+		return userService.generateOtp(mobileNumber);
 	}
 
 	@Override

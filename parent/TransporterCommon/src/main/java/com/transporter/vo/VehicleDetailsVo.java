@@ -3,6 +3,8 @@ package com.transporter.vo;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+
 /**
  * The persistent class for the vehicledetails database table.
  * 
@@ -33,6 +35,10 @@ public class VehicleDetailsVo implements Serializable {
 	private DriverDetailsVo driverDetails;
 
 	private String verifiedBy;
+	
+	private Double currentLattitude;
+	
+	private Double currentLongitude;
 
 	public VehicleDetailsVo() {
 	}
@@ -131,6 +137,26 @@ public class VehicleDetailsVo implements Serializable {
 
 	public void setVerifiedBy(String verifiedBy) {
 		this.verifiedBy = verifiedBy;
+	}
+
+	public final Double getCurrentLattitude() {
+		return currentLattitude;
+	}
+
+	public final void setCurrentLattitude(Double currentLattitude) {
+		this.currentLattitude = currentLattitude;
+	}
+
+	public final Double getCurrentLongitude() {
+		return currentLongitude;
+	}
+
+	public final void setCurrentLongitude(Double currentLongitude) {
+		this.currentLongitude = currentLongitude;
+	}
+
+	public final void setVehicleTypeVo(VehicleTypeVo vehicleTypeVo) {
+		this.vehicleTypeVo = vehicleTypeVo;
 	}
 
 }

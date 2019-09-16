@@ -9,7 +9,7 @@ public interface CustomerDetailsService {
 
 	UserVo isUserExists(CustomerDetailsVo customerDetailsVo);
 
-	int generateOtp(String mobile);
+	int generateOtp(String mobileNumber);
 
 	CustomerDetailsVo validateOtp(String mobile, String otp);
 

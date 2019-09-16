@@ -1,5 +1,7 @@
 package com.transporter.controller;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,9 @@ import com.transporter.exceptions.BusinessException;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.VehicleService;
 import com.transporter.utils.RestUtils;
+import com.transporter.utils.Utils;
+import com.transporter.vo.FetchSelectedVehiclesRequest;
+import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleDetailsVo;
 
 /**
@@ -69,7 +74,24 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 			} else {
 				response = RestUtils.wrapObjectForSuccess(updateVechile);
 			}
-			return response;
-		
+			return response;	
 	}
+	
+	@RequestMapping(value = "vehicle/fetchSelectedVehicles", method = RequestMethod.POST)
+	public CommonResponse fetchSelectedVehicles(@RequestBody FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
+		CommonResponse response = null;
+		try {
+			List<FetchSelectedVehiclesResponse> responseList = vehicleService.fetchSelectedVehicles(fetchSelectedVehiclesRequest);
+			if(!Utils.isNullOrEmpty(responseList)) {
+				response = RestUtils.wrapObjectForSuccess(responseList);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.VEHICLES_NOT_AVAILABLE);
+			}
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
+		return response;
+	}
+	
+	
 }

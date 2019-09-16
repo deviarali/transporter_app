@@ -1,7 +1,9 @@
 package com.transporter.dao;
 
-import com.transporter.model.User;
+import java.util.List;
+
 import com.transporter.model.VehicleDetails;
+import com.transporter.vo.FetchSelectedVehiclesRequest;
 
 /**
  * @author Devappa.Arali
@@ -15,6 +17,10 @@ public interface VehicleDetailsDao extends GenericDao {
 	VehicleDetails isVehicleExistById(int id);
 
 	VehicleDetails getVehicleByDriverId(int driverId);
-	
+
+	int updateLattitudeAndLongitude(int id, String lattitude, String longitude);
+
+	List<VehicleDetails> fetchSelectedVehicles(
+			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);	
 
 }

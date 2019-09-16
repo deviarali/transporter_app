@@ -94,12 +94,18 @@ public class CustomerDetailsController {
 	@RequestMapping(value = "customer/generateOtp", method = RequestMethod.POST)
 	public CommonResponse generateOtp(@RequestParam String mobileNumber) {
 		CommonResponse response = null;
-		int generated = customerDetailsService.generateOtp(mobileNumber);
-		if (generated != 0)
-			response = RestUtils.wrapObjectForSuccess("success");
-		else
-			response = RestUtils.wrapObjectForFailure("Otp not generated, invalid user", "error",
-					WebConstants.WEB_RESPONSE_ERROR);
+		try {
+			int generated = customerDetailsService.generateOtp(mobileNumber);
+			if (generated != 0)
+				response = RestUtils.wrapObjectForSuccess("success");
+			else
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
 		return response;
 	}
 

@@ -68,6 +68,12 @@ public class VehicleDetails implements Serializable {
 
 	@Column(name = "verified_by")
 	private String verifiedBy;
+	
+	@Column(name = "current_lattitude")
+	private Double currentLattitude;
+	
+	@Column(name = "current_longitude")
+	private Double currentLongitude;
 
 	public VehicleDetails() {
 	}
@@ -168,6 +174,22 @@ public class VehicleDetails implements Serializable {
 		this.verifiedBy = verifiedBy;
 	}
 
+	public final Double getCurrentLattitude() {
+		return currentLattitude;
+	}
+
+	public final void setCurrentLattitude(Double currentLattitude) {
+		this.currentLattitude = currentLattitude;
+	}
+
+	public final Double getCurrentLongitude() {
+		return currentLongitude;
+	}
+
+	public final void setCurrentLongitude(Double currentLongitude) {
+		this.currentLongitude = currentLongitude;
+	}
+
 	public static VehicleDetailsVo convertModelToVo(VehicleDetails vehicleDetails) {
 		if (vehicleDetails == null)
 			return null;
@@ -177,6 +199,8 @@ public class VehicleDetails implements Serializable {
 		vehicleDetailsVo.setVehicleModel(vehicleDetails.getVehicleModel());
 		vehicleDetailsVo.setVehicleNum(vehicleDetails.getVehicleNum());
 		vehicleDetailsVo.setVehicleType(VehicleType.convertModelToVo(vehicleDetails.getVehicleType()));
+		vehicleDetailsVo.setCurrentLattitude(vehicleDetails.getCurrentLattitude());
+		vehicleDetailsVo.setCurrentLongitude(vehicleDetails.getCurrentLongitude());
 		return vehicleDetailsVo;
 	}
 

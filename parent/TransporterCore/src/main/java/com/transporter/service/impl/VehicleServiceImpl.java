@@ -1,8 +1,11 @@
 package com.transporter.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +17,10 @@ import com.transporter.model.DriverDetails;
 import com.transporter.model.VehicleDetails;
 import com.transporter.model.VehicleType;
 import com.transporter.service.VehicleService;
+import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.FetchSelectedVehiclesRequest;
+import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleDetailsVo;
 
 /**
@@ -27,6 +33,9 @@ public class VehicleServiceImpl implements VehicleService {
 
 	@Autowired
 	private VehicleDetailsDao vehicleDetailsDao;
+	
+	@Value("${surrounding.area}")
+	private double surroundingDistance;
 
 	@Override
 	@Transactional
@@ -92,6 +101,40 @@ public class VehicleServiceImpl implements VehicleService {
 	public VehicleDetails getVehicleByDriverId(int driverId) {
 		VehicleDetails vehicleDetails = vehicleDetailsDao.getVehicleByDriverId(driverId);
 		return vehicleDetails;
+	}
+
+	@Override
+	public int updateLattitudeAndLongitude(int id, String lattitude, String longitude) {
+		return vehicleDetailsDao.updateLattitudeAndLongitude(id, lattitude, longitude);
+	}
+
+	@Override
+	@Transactional
+	public List<FetchSelectedVehiclesResponse> fetchSelectedVehicles(
+			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
+		fetchSelectedVehiclesRequest.setSurroudingDistance(surroundingDistance);
+		List<VehicleDetails> responseIdsList = vehicleDetailsDao.fetchSelectedVehicles(fetchSelectedVehiclesRequest);
+		List<VehicleDetails> vehiclesList = new ArrayList<VehicleDetails>();
+		List<FetchSelectedVehiclesResponse> response = new ArrayList<>();
+		if(!Utils.isNullOrEmpty(responseIdsList)) {
+			for(VehicleDetails vehicleDetails : responseIdsList) {
+				vehiclesList.add( (VehicleDetails) vehicleDetailsDao.get(VehicleDetails.class, vehicleDetails.getId()));
+			}
+		}
+		
+		if(!Utils.isNullOrEmpty(vehiclesList)) {
+			for(VehicleDetails vehicleDetails : vehiclesList) {
+				FetchSelectedVehiclesResponse fetchResponse = new FetchSelectedVehiclesResponse();
+				fetchResponse.setVehicleId(vehicleDetails.getId());
+				fetchResponse.setVehicleType(vehicleDetails.getVehicleType().getId());
+				fetchResponse.setDriverId(vehicleDetails.getDriverDetails().getId());
+				fetchResponse.setLattitude(vehicleDetails.getCurrentLattitude());
+				fetchResponse.setLongitude(vehicleDetails.getCurrentLongitude());
+				response.add(fetchResponse);
+				
+			}
+		}
+		return response;
 	}
 
 }
