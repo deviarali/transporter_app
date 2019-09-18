@@ -63,7 +63,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public UserVo validateOtp(String mobile, String otp) {
-
 		User user = userDao.validateOtp(mobile, otp);
 		return User.convertModelToVo(user);
 	}

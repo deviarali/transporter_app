@@ -4,20 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import org.apache.commons.lang3.StringUtils;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.DriverDao;
 import com.transporter.enums.UserRoleEnum;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.DriverDetails;
-import com.transporter.model.TripDetails;
 import com.transporter.model.User;
 import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
@@ -41,28 +40,28 @@ public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private DriverDao driverDao;
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private TransporterUtility transporterUtility;
-	
+
 	@Autowired
 	private TransporterPushNotifications transporterPushNotifications;
-	
+
 	@Autowired
 	private VehicleService vehicleService;
-	
+
 	@Value("${surrounding.area}")
 	private double surrounding;
-	
+
 	@Override
 	@Transactional
 	public String registerDriver(DriverDetailsVo driverDetailsVo) {
 		String response = null;
 		UserVo userExists = userService.isUserExists(driverDetailsVo.getUser().getMobileNumber());
-		if(null != userExists) {
+		if (null != userExists) {
 			throw new BusinessException(ErrorCodes.MOEXISTS.name(), ErrorCodes.MOEXISTS.value());
 		}
 		UserVo userVo = driverDetailsVo.getUser();
@@ -78,7 +77,7 @@ public class DriverServiceImpl implements DriverService {
 		driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
 		driverDetails.setUser(user);
 		driverDao.save(driverDetails);
-		if(driverDetails.getId() > 0) {
+		if (driverDetails.getId() > 0) {
 			response = WebConstants.SUCCESS;
 		} else {
 			throw new BusinessException(ErrorCodes.NOTSAVED.name(), ErrorCodes.NOTSAVED.value());
@@ -90,9 +89,10 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public String updateLattitudeAndLongitude(int id, String lattitude, String longitude) {
 		String response = null;
-		//int updated = driverDao.updateLattitudeAndLongitude(id, lattitude, longitude);
+		// int updated = driverDao.updateLattitudeAndLongitude(id, lattitude,
+		// longitude);
 		int updated = vehicleService.updateLattitudeAndLongitude(id, lattitude, longitude);
-		if(updated == 1) {
+		if (updated == 1) {
 			response = WebConstants.SUCCESS;
 		}
 		return response;
@@ -146,18 +146,19 @@ public class DriverServiceImpl implements DriverService {
 		driverDao.saveOrUpdate(driverDetails);
 		return DriverDetails.convertModelToVo(driverDetails);
 	}
-	
+
 	@Override
 	@Transactional
 	public String checkVehicleAvailability(String lattitude, String longitude) {
 		List<DriverDetails> driverDetailsList = driverDao.checkVehicleAvailability(lattitude, longitude, surrounding);
-		
+
 		String response = null;
-		if(null != driverDetailsList && !driverDetailsList.isEmpty()) {
+		if (null != driverDetailsList && !driverDetailsList.isEmpty()) {
 			List<String> devicesToken = new ArrayList<String>();
 			devicesToken.add(driverDetailsList.get(0).getUser().getFcmToken());
-			//String devicesToken[] = {"euRR9XSIZCE:APA91bEWht_WfZjySzUCiKDTaQbNNP8smnx7snHy3jeIAFvxVVZqRmsU1ffvjuDBhFEOiXSjMW-UteYXPeECuv8Il6h4SfGWdGnj3KJbgYJLgscs-4f_N7Lxbp72umt_JYak_Q20Bh7V"};
-			response  = transporterPushNotifications.pushNotifications(devicesToken);
+			// String devicesToken[] =
+			// {"euRR9XSIZCE:APA91bEWht_WfZjySzUCiKDTaQbNNP8smnx7snHy3jeIAFvxVVZqRmsU1ffvjuDBhFEOiXSjMW-UteYXPeECuv8Il6h4SfGWdGnj3KJbgYJLgscs-4f_N7Lxbp72umt_JYak_Q20Bh7V"};
+			response = transporterPushNotifications.pushNotifications(devicesToken);
 		}
 		return response;
 	}
@@ -168,16 +169,38 @@ public class DriverServiceImpl implements DriverService {
 		List<VehiclesByOrderResponse> orderResponse = new ArrayList<VehiclesByOrderResponse>();
 		vehiclesByOrderRequest.setSurroundingDistances(surrounding);
 		List<DriverDetails> driverDetailsList = driverDao.fetchVehiclesByOrder(vehiclesByOrderRequest);
-		for(DriverDetails details : driverDetailsList) {
+		for (DriverDetails details : driverDetailsList) {
 			DriverDetails details2 = (DriverDetails) driverDao.get(DriverDetails.class, details.getId());
 			VehiclesByOrderResponse response = new VehiclesByOrderResponse();
 			VehicleDetails vehicle = vehicleService.getVehicleByDriverId(details2.getId());
 			response.setVehicleType(vehicle.getVehicleType().getId());
 			response.setVehicleSelectedUrl(vehicle.getVehicleType().getSelectedVehicleUrl());
 			response.setVehicleUnSelecetedUrl(vehicle.getVehicleType().getUnselectedVehicleUrl());
-			response.setPrice(vehicle.getVehicleType().getPrice()*vehiclesByOrderRequest.getDistance());
+			response.setPrice(vehicle.getVehicleType().getPrice() * vehiclesByOrderRequest.getDistance());
 			orderResponse.add(response);
 		}
 		return orderResponse;
+	}
+
+	@Override
+	public int generateOtp(String mobileNumber) {
+		UserVo userExists = userService.isUserExists(mobileNumber);
+		if (null == userExists) {
+			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
+		}
+		return userService.generateOtp(mobileNumber);
+	}
+
+	@Override
+	@Transactional
+	public DriverDetailsVo validateOtp(String mobileNumber, String otp) {
+		DriverDetailsVo driverDetailsVo = null;
+		UserVo userVo = userService.validateOtp(mobileNumber, otp);
+		if (userVo == null) {
+			throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
+		}
+		DriverDetails driverDetailsByUserId = driverDao.getDriverDetailsByUserId(userVo.getId());
+		driverDetailsVo = DriverDetails.convertModelToVo(driverDetailsByUserId);
+		return driverDetailsVo;
 	}
 }

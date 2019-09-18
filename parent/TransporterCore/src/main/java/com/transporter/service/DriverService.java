@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehiclesByOrderRequest;
 import com.transporter.vo.VehiclesByOrderResponse;
@@ -28,5 +29,9 @@ public interface DriverService {
 	String checkVehicleAvailability(String lattitude, String longitude);
 
 	List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest);
+
+	int generateOtp(String mobileNumber);
+
+	DriverDetailsVo validateOtp(String mobileNumber, String otp);
 
 }

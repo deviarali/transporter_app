@@ -1,12 +1,11 @@
 package com.transporter.controller;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,14 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
-import com.transporter.exceptions.ErrorCodes;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.DriverService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
+import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.DriverDetailsVo;
-import com.transporter.vo.VehiclesByOrderRequest;
-import com.transporter.vo.VehiclesByOrderResponse;
 
 /**
  * @author Devappa.Arali
@@ -158,4 +155,40 @@ public class DriverController {
     	}
     	return response;
     }*/
+    
+    @PostMapping("/driver/generateOtp")
+	public CommonResponse generateOtp(@RequestParam String mobileNumber) {
+		CommonResponse response = null;
+		try {
+			int generated = driverService.generateOtp(mobileNumber);
+			if (generated == 1)
+				response = RestUtils.wrapObjectForSuccess("success");
+			else
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
+		return response;
+	}
+    
+    @PostMapping("/driver/validateOtp")
+	public CommonResponse validateOtp(@RequestParam String mobileNumber, @RequestParam String otp) {
+		CommonResponse response = null;
+		try {
+			DriverDetailsVo driverDetailsVo = driverService.validateOtp(mobileNumber, otp);
+			if (driverDetailsVo != null)
+				response = RestUtils.wrapObjectForSuccess(driverDetailsVo);
+			else
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INVALID_USER);
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
+		}
+		return response;
+	}
+    
 }

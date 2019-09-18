@@ -3,18 +3,13 @@ package com.transporter.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.DriverDao;
 import com.transporter.model.DriverDetails;
-import com.transporter.model.TripDetails;
 import com.transporter.vo.VehiclesByOrderRequest;
 
 /**
@@ -129,5 +124,15 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 			driverDetails.add(details);
 		}
 		return driverDetails;
+	}
+
+	@Override
+	public DriverDetails getDriverDetailsByUserId(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "From DriverDetails dd where dd.user.id= :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", id);
+		Object uniqueResult = query.uniqueResult();
+		return (DriverDetails) uniqueResult;
 	}
 }

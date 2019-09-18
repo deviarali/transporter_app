@@ -23,4 +23,6 @@ public interface DriverDao extends GenericDao {
 
 	List<DriverDetails> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest);
 
+	DriverDetails getDriverDetailsByUserId(int id);
+
 }
