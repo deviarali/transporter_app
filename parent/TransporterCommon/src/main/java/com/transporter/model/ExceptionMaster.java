@@ -26,6 +26,9 @@ public class ExceptionMaster implements Serializable {
 
 	@Column(name="notify_email")
 	private String notifyEmail;
+	
+	@Column(name = "enable_notification")
+	private int enableNotification;
 
 	public ExceptionMaster() {
 	}
@@ -60,5 +63,13 @@ public class ExceptionMaster implements Serializable {
 
 	public void setNotifyEmail(String notifyEmail) {
 		this.notifyEmail = notifyEmail;
+	}
+
+	public final int getEnableNotification() {
+		return enableNotification;
+	}
+
+	public final void setEnableNotification(int enableNotification) {
+		this.enableNotification = enableNotification;
 	}
 }

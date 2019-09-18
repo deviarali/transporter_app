@@ -8,9 +8,13 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.transporter.model.ExceptionMaster;
+import com.transporter.service.ExceptionService;
 
 
 /**
@@ -23,6 +27,9 @@ public class TransporterUtility {
 	
 	@Value("${file.path}")
 	private String filePath;
+	
+	@Autowired
+	private ExceptionService exceptionService;
 	
 	private static final Logger LOGGER = LoggerFactory
 	        .getLogger(TransporterUtility.class);
@@ -50,6 +57,11 @@ public class TransporterUtility {
 	
 	private String uuidString() {
 		return UUID.randomUUID().toString();
+	}
+	
+	public ExceptionMaster getExceptionMasterByType(String exceptionType) {
+
+		return exceptionService.getExceptionMasterByType(exceptionType);
 	}
 
 }

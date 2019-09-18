@@ -13,7 +13,8 @@ public enum ErrorCodes
 	INVALIDOTP("Invalid otp"),
 	UNFOUND("User not found, please register"),
 	VEHICLENOTFOUND("Vehicle not exit"),
-	VSAVE("Vehicle Details  not saved");
+	VSAVE("Vehicle Details  not saved"),
+	CNFOUND("Customer not found, please register");
 	
 	
 	private final String value;

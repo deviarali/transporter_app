@@ -44,7 +44,7 @@ public class CustomerDetailsController {
 			if(!StringUtils.isBlank(created)) {
 				response = RestUtils.wrapObjectForSuccess(created);
 			} else {
-				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,"internal server error");
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 				LOGGER.error("customer not created. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
 			}
 		} catch (BusinessException be) {
@@ -96,7 +96,7 @@ public class CustomerDetailsController {
 		CommonResponse response = null;
 		try {
 			int generated = customerDetailsService.generateOtp(mobileNumber);
-			if (generated != 0)
+			if (generated == 1)
 				response = RestUtils.wrapObjectForSuccess("success");
 			else
 				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
