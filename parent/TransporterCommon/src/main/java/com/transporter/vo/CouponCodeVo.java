@@ -75,57 +75,5 @@ public class CouponCodeVo implements Serializable {
 	public void setCouponCodeExpireDate(String couponCodeExpireDate) {
 		this.couponCodeExpireDate = couponCodeExpireDate;
 	}
-	
-
-	/*
-	 * public CouponCodeVo() { super(); }
-	 * 
-	 * public int getCouponCodeId() { return couponCodeId; }
-	 * 
-	 * public CouponCodeVo setCouponCodeId(int couponCodeId) { this.couponCodeId =
-	 * couponCodeId; return this; }
-	 * 
-	 * public String getCouponCodeName() { return couponCodeName; }
-	 * 
-	 * public CouponCodeVo setCouponCodeName(String couponCodeName) {
-	 * this.couponCodeName = couponCodeName; return this; }
-	 * 
-	 * public double getCouponCodeDiscountPercent() { return
-	 * couponCodeDiscountPercent; }
-	 * 
-	 * public CouponCodeVo setCouponCodeDiscountPercent(double
-	 * couponCodeDiscountPercent) { this.couponCodeDiscountPercent =
-	 * couponCodeDiscountPercent; return this; }
-	 * 
-	 * public double getCouponCodeMaxDiscount() { return couponCodeMaxDiscount; }
-	 * 
-	 * public CouponCodeVo setCouponCodeMaxDiscount(double couponCodeMaxDiscount) {
-	 * this.couponCodeMaxDiscount = couponCodeMaxDiscount; return this; }
-	 * 
-	 * public boolean isActive() { return isActive; }
-	 * 
-	 * public CouponCodeVo setActive(boolean isActive) { this.isActive = isActive;
-	 * return this; }
-	 * 
-	 * public boolean isDeleted() { return isDeleted; }
-	 * 
-	 * public CouponCodeVo setDeleted(boolean isDeleted) { this.isDeleted =
-	 * isDeleted; return this; }
-	 * 
-	 * public String getCouponCodeCreatedAt() { return couponCodeCreatedAt; }
-	 * 
-	 * public CouponCodeVo setCouponCodeCreatedAt(String couponCodeCreatedAt) {
-	 * this.couponCodeCreatedAt = couponCodeCreatedAt; return this; }
-	 * 
-	 * public String getCouponCodeUpdatedAt() { return couponCodeUpdatedAt; }
-	 * 
-	 * public CouponCodeVo setCouponCodeUpdatedAt(String couponCodeUpdatedAt) {
-	 * this.couponCodeUpdatedAt = couponCodeUpdatedAt; return this; }
-	 * 
-	 * public String getCouponCode() { return couponCode; }
-	 * 
-	 * public CouponCodeVo setCouponCode(String couponCode) { this.couponCode =
-	 * couponCode; return this; }
-	 */
 
 }

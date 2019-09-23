@@ -121,9 +121,12 @@ public class CouponCodeController {
 		try {
 			int res = couponCodeService.deleteCouponCode(couponCodeId);
 			if (res != 0) {
-				response = RestUtils.wrapObjectForSuccess(
-						GenericSuccessMessage.Builder.newInstance().setCode(HttpStatus.OK.toString())
-								.setMessage("Coupon delete successfully").setStatus(ErrorCodes.SUCCESS.value()));
+				GenericSuccessMessage successMessage = GenericSuccessMessage.Builder.newInstance()
+						.setCode(HttpStatus.OK.value())
+						.setMessage("Coupon delete successfully")
+						.setStatus(ErrorCodes.SUCCESS.value())
+						.build();
+				response = RestUtils.wrapObjectForSuccess(successMessage);
 			} else {
 				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						"couln't delete coupon code");

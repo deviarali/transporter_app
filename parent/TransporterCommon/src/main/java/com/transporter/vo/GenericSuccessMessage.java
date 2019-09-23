@@ -2,7 +2,7 @@ package com.transporter.vo;
 
 public class GenericSuccessMessage {
 
-	private final String code;
+	private final int code;
 	private final String status;
 	private final String Message;
 
@@ -13,7 +13,7 @@ public class GenericSuccessMessage {
 		this.Message = builder.Message;
 	}
 
-	public String getCode() {
+	public int getCode() {
 		return code;
 	}
 
@@ -26,7 +26,7 @@ public class GenericSuccessMessage {
 	}
 
 	public static class Builder {
-		private String code;
+		private int code;
 		private String status;
 		private String Message;
 
@@ -37,7 +37,7 @@ public class GenericSuccessMessage {
 		private Builder() {
 		}
 
-		public Builder setCode(String code) {
+		public Builder setCode(int code) {
 			this.code = code;
 			return this;
 		}
