@@ -2,7 +2,8 @@ package com.transporter.service;
 
 import java.util.List;
 
-import com.transporter.model.TripDetails;
+import com.transporter.vo.TripDetailsHistoryVo;
+import com.transporter.vo.TripDetailsVo;
 
 /**
  * @author Devappa.Arali
@@ -11,6 +12,6 @@ import com.transporter.model.TripDetails;
 
 public interface TripDetailsService {
 
-	List<TripDetails> getTripHistory(int id, int tripstatus);
+	List<TripDetailsHistoryVo> getTripHistory(int id, int tripstatus);
 
 }

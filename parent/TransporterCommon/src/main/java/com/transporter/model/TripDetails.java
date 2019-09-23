@@ -16,15 +16,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import com.transporter.vo.TripDetailsVo;
 
 /**
  * The persistent class for the tripdetails database table.
  * 
  */
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 @Entity
-@Table(name="tripdetails")
+@Table(name = "tripdetails")
 public class TripDetails implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,88 +32,88 @@ public class TripDetails implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="amount")
+	@Column(name = "amount")
 	private String amount;
 
-	@Column(name="amount_to_app")
+	@Column(name = "amount_to_app")
 	private String amountToApp;
 
-	@Column(name="amount_to_driver")
+	@Column(name = "amount_to_driver")
 	private String amountToDriver;
 
-	@Column(name="canceled_reason")
+	@Column(name = "canceled_reason")
 	private String canceledReason;
 
-	@Column(name="cancelledamount_from_customer")
+	@Column(name = "cancelledamount_from_customer")
 	private String cancelledamountFromCustomer;
 
-	@Column(name="cancelledamount_from_driver")
+	@Column(name = "cancelledamount_from_driver")
 	private String cancelledamountFromDriver;
 
-	@Column(name="cancelledamount_status")
+	@Column(name = "cancelledamount_status")
 	private byte cancelledamountStatus;
 
-	@Column(name="cash_mode")
+	@Column(name = "cash_mode")
 	private String cashMode;
 
-	@Column(name="deliveryperson_mobile")
+	@Column(name = "deliveryperson_mobile")
 	private String deliverypersonMobile;
 
-	@Column(name="deliveryperson_name")
+	@Column(name = "deliveryperson_name")
 	private String deliverypersonName;
 
-	@Column(name="destination_location")
+	@Column(name = "destination_location")
 	private String destinationLocation;
 
-	@Column(name="goods_size")
+	@Column(name = "goods_size")
 	private String goodsSize;
 
-	@Column(name="goods_type")
+	@Column(name = "goods_type")
 	private String goodsType;
 
-	@Column(name="pickup_location")
+	@Column(name = "pickup_location")
 	private String pickupLocation;
 
-	@Column(name="pickupperson_mobile")
+	@Column(name = "pickupperson_mobile")
 	private String pickuppersonMobile;
 
-	@Column(name="pickupperson_name")
+	@Column(name = "pickupperson_name")
 	private String pickuppersonName;
 
-	@Column(name="ratings")
+	@Column(name = "ratings")
 	private String ratings;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="trip_endtime")
+	@Column(name = "trip_endtime")
 	private Date tripEndtime;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="trip_starttime")
+	@Column(name = "trip_starttime")
 	private Date tripStarttime;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="trip_time")
+	@Column(name = "trip_time")
 	private Date tripTime;
 
-	@Column(name="tripend_otp")
+	@Column(name = "tripend_otp")
 	private String tripendOtp;
 
-	@Column(name="tripstart_otp")
+	@Column(name = "tripstart_otp")
 	private String tripstartOtp;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="driver_id")
+	// bi-directional many-to-one association to User
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "driver_id")
 	private DriverDetails driverDetails;
 
-	//bi-directional many-to-one association to User
+	// bi-directional many-to-one association to User
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="customer_id")
+	@JoinColumn(name = "customer_id")
 	private CustomerDetails customerDetails;
 
-	//bi-directional many-to-one association to Deliverystatus
+	// bi-directional many-to-one association to Deliverystatus
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="trip_status")
+	@JoinColumn(name = "trip_status")
 	private DeliveryStatus deliveryStatus;
 
 	public TripDetails() {
@@ -327,5 +327,29 @@ public class TripDetails implements Serializable {
 		this.deliveryStatus = deliveryStatus;
 	}
 
+	public static TripDetailsVo convertTOVo(TripDetails tripDetails) {
+		TripDetailsVo tripDetailsVo = new TripDetailsVo();
+		tripDetailsVo.setId(tripDetails.getId());
+		tripDetailsVo.setAmount(tripDetails.getAmount());
+		tripDetailsVo.setAmountToApp(tripDetails.getAmountToApp());
+		tripDetailsVo.setAmountToDriver(tripDetails.getAmountToDriver());
+		tripDetailsVo.setCanceledReason(tripDetails.getCanceledReason());
+		tripDetailsVo.setCancelledamountFromCustomer(tripDetails.getCancelledamountFromCustomer());
+		tripDetailsVo.setCancelledamountFromDriver(tripDetails.getCancelledamountFromDriver());
+		tripDetailsVo.setCancelledamountStatus(tripDetails.getCancelledamountStatus());
+		tripDetailsVo.setCashMode(tripDetails.getCashMode());
+		tripDetailsVo.setDeliverypersonMobile(tripDetails.getDeliverypersonMobile());
+		tripDetailsVo.setDeliverypersonName(tripDetails.getDeliverypersonName());
+		tripDetailsVo.setDestinationLocation(tripDetails.getDestinationLocation());
+		tripDetailsVo.setGoodsType(tripDetails.getGoodsType());
+		tripDetailsVo.setGoodsSize(tripDetails.getGoodsSize());
+		tripDetailsVo.setPickupLocation(tripDetails.getPickupLocation());
+		tripDetailsVo.setRatings(tripDetails.getRatings());
+		tripDetailsVo.setTripTime(tripDetails.getTripTime());
+		tripDetailsVo.setTripStarttime(tripDetails.getTripStarttime());
+		tripDetailsVo.setTripEndtime(tripDetails.getTripEndtime());
+		tripDetailsVo.setDriverDetailsVo(DriverDetails.convertModelToVo(tripDetails.getDriverDetails()));
+		return tripDetailsVo;
+	}
 
 }
