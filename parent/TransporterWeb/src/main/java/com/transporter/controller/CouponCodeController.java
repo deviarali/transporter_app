@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ErrorCoded;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
+import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.CouponCode;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.CouponCodeService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.CouponCodeVo;
 import com.transporter.vo.CustomerDetailsVo;
+import com.transporter.vo.GenericSuccessMessage;
 
 @RestController
 public class CouponCodeController {
@@ -117,7 +121,9 @@ public class CouponCodeController {
 		try {
 			int res = couponCodeService.deleteCouponCode(couponCodeId);
 			if (res != 0) {
-				response = RestUtils.wrapObjectForSuccess("deleted successfully");
+				response = RestUtils.wrapObjectForSuccess(
+						GenericSuccessMessage.Builder.newInstance().setCode(HttpStatus.OK.toString())
+								.setMessage("Coupon delete successfully").setStatus(ErrorCodes.SUCCESS.value()));
 			} else {
 				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						"couln't delete coupon code");

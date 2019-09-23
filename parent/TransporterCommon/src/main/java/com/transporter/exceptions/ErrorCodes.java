@@ -14,7 +14,8 @@ public enum ErrorCodes
 	UNFOUND("User not found, please register"),
 	VEHICLENOTFOUND("Vehicle not exit"),
 	VSAVE("Vehicle Details  not saved"),
-	CNFOUND("Customer not found, please register");
+	CNFOUND("Customer not found, please register"),
+	SUCCESS("success");
 	
 	
 	private final String value;
