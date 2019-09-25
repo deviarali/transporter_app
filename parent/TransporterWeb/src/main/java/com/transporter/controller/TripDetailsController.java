@@ -2,7 +2,6 @@ package com.transporter.controller;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,13 +31,8 @@ public class TripDetailsController {
 			@RequestParam(name = "fromDate", required = false) String fromDate,
 			@RequestParam(name = "toDate", required = false) String toDate) {
 		CommonResponse response = null;
-		if (tripstatus == 6) {
-			if (StringUtils.isBlank(fromDate) && StringUtils.isBlank(toDate)) {
-				response = RestUtils.wrapObjectForFailure("Dates can not be empty", "error",
-						WebConstants.WEB_RESPONSE_ERROR);
-			}
-		}
-		List<TripDetailsHistoryVo> tripHistoryList = tripDetailsService.getTripHistory(id, tripstatus);
+		
+		List<TripDetailsHistoryVo> tripHistoryList = tripDetailsService.getTripHistory(id, tripstatus,fromDate,toDate);
 		if (tripHistoryList != null && tripHistoryList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(tripHistoryList);
 		} else {
