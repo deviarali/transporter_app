@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
@@ -77,7 +76,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 			return response;	
 	}
 	
-	@RequestMapping(value = "vehicle/fetchSelectedVehicles", method = RequestMethod.POST)
+	@RequestMapping(value = "/vehicle/fetchSelectedVehicles", method = RequestMethod.POST)
 	public CommonResponse fetchSelectedVehicles(@RequestBody FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
 		CommonResponse response = null;
 		try {

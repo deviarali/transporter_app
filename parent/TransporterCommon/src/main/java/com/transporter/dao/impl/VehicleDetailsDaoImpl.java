@@ -3,15 +3,14 @@ package com.transporter.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.persistence.EntityManager;
 
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.VehicleDetailsDao;
-import com.transporter.model.DriverDetails;
 import com.transporter.model.VehicleDetails;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 
@@ -23,6 +22,9 @@ import com.transporter.vo.FetchSelectedVehiclesRequest;
 @Repository
 public class VehicleDetailsDaoImpl extends GenericDaoImpl implements VehicleDetailsDao {
 
+	@Autowired
+    EntityManager em;
+	
 	@Override
 	public VehicleDetails isVehicleExists(String vehicleNum) {
 		VehicleDetails vehicleDetails = null;
@@ -67,28 +69,55 @@ public class VehicleDetailsDaoImpl extends GenericDaoImpl implements VehicleDeta
 		return query.executeUpdate();
 	}
 
+	/*
+	 * @Override public List<VehicleDetails>
+	 * fetchSelectedVehicles(FetchSelectedVehiclesRequest
+	 * fetchSelectedVehiclesRequest) { List<VehicleDetails> vehicleDetailsLIst = new
+	 * ArrayList<VehicleDetails>(); Session session =
+	 * sessionFactory.getCurrentSession(); String sqlQuery =
+	 * "select *, ( 3959 * ACOS( COS( RADIANS(:lattitude) ) * COS( RADIANS( vd.current_lattitude ) ) \r\n"
+	 * +
+	 * "    * COS( RADIANS( vd.current_longitude ) - RADIANS(:longitude) ) + SIN( RADIANS(:lattitude) ) * SIN(RADIANS(vd.current_lattitude)) ) ) AS distance \r\n"
+	 * +
+	 * "FROM vehicledetails vd INNER JOIN driverdetails dr ON (vd.driver_id = dr.id AND dr.driver_verification_status = 'completed') WHERE vd.vehicle_type = :vehicleType AND  vd.vehicle_verification_status=1\r\n"
+	 * + "HAVING distance < :distance \r\n" + "ORDER BY distance";
+	 * 
+	 * SQLQuery sqlQuery2 = session.createSQLQuery(sqlQuery);
+	 * sqlQuery2.setDouble("lattitude",
+	 * fetchSelectedVehiclesRequest.getLattitude());
+	 * sqlQuery2.setDouble("longitude",
+	 * fetchSelectedVehiclesRequest.getLongitude()); sqlQuery2.setDouble("distance",
+	 * fetchSelectedVehiclesRequest.getSurroudingDistance());
+	 * sqlQuery2.setInteger("vehicleType",
+	 * fetchSelectedVehiclesRequest.getVehicleType()); List<Object[]> empData =
+	 * sqlQuery2.list(); for(Object[] obj : empData) { VehicleDetails details = new
+	 * VehicleDetails(); details.setId(Integer.valueOf(obj[0].toString()));
+	 * vehicleDetailsLIst.add(details); }
+	 * System.out.println("list : "+vehicleDetailsLIst); return vehicleDetailsLIst;
+	 * }
+	 */
+	
 	@Override
 	public List<VehicleDetails> fetchSelectedVehicles(FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
 		List<VehicleDetails> vehicleDetailsLIst = new ArrayList<VehicleDetails>();
-		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "select *, ( 3959 * ACOS( COS( RADIANS(:lattitude) ) * COS( RADIANS( vd.current_lattitude ) ) \r\n" + 
-				"    * COS( RADIANS( vd.current_longitude ) - RADIANS(:longitude) ) + SIN( RADIANS(:lattitude) ) * SIN(RADIANS(vd.current_lattitude)) ) ) AS distance \r\n" + 
-				"FROM vehicledetails vd WHERE vd.vehicle_type = :vehicleType AND  vd.vehicle_verification_status=1\r\n" + 
-				"HAVING distance < :distance \r\n" + 
-				"ORDER BY distance";
-	
-		SQLQuery sqlQuery2 = session.createSQLQuery(sqlQuery);
-		sqlQuery2.setDouble("lattitude", fetchSelectedVehiclesRequest.getLattitude());
-		sqlQuery2.setDouble("longitude", fetchSelectedVehiclesRequest.getLongitude());
-		sqlQuery2.setDouble("distance", fetchSelectedVehiclesRequest.getSurroudingDistance());
-		sqlQuery2.setInteger("vehicleType", fetchSelectedVehiclesRequest.getVehicleType());
-		List<Object[]> empData = sqlQuery2.list();
-		for(Object[] obj : empData) {
+
+		javax.persistence.Query sqlQuery2 = em.createNativeQuery(
+				"select vd.id as id, ( 3959 * ACOS( COS( RADIANS(:lattitude) ) * COS( RADIANS( vd.current_lattitude ) ) \r\n"
+						+ "  * COS( RADIANS( vd.current_longitude ) - RADIANS(:longitude) ) + SIN( RADIANS(:lattitude) ) * SIN(RADIANS(vd.current_lattitude)) ) ) AS distance \r\n"
+						+ "FROM vehicledetails vd INNER JOIN driverdetails dr ON (vd.driver_id = dr.id AND dr.driver_verification_status = 'completed') WHERE vd.vehicle_type = :vehicleType AND  vd.vehicle_verification_status=1\r\n"
+						+ "HAVING distance < :distance \r\n" + "ORDER BY distance");
+
+		sqlQuery2.setParameter("lattitude", fetchSelectedVehiclesRequest.getLattitude());
+		sqlQuery2.setParameter("longitude", fetchSelectedVehiclesRequest.getLongitude());
+		sqlQuery2.setParameter("distance", fetchSelectedVehiclesRequest.getSurroudingDistance());
+		sqlQuery2.setParameter("vehicleType", fetchSelectedVehiclesRequest.getVehicleType());
+		List<Object[]> resultList = sqlQuery2.getResultList();
+
+		for (Object[] obj : resultList) {
 			VehicleDetails details = new VehicleDetails();
-			details.setId(Integer.valueOf(obj[0].toString()));
+			details.setId((int) obj[0]);
 			vehicleDetailsLIst.add(details);
 		}
-		System.out.println("list : "+vehicleDetailsLIst);
 		return vehicleDetailsLIst;
 	}
 }
