@@ -3,12 +3,14 @@ package com.transporter.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.transporter.model.TripDetails;
 import com.transporter.repo.TripDetailsRepo;
 import com.transporter.service.TripDetailsService;
+import com.transporter.utils.DateTimeUtils;
 import com.transporter.vo.TripDetailsHistoryVo;
 
 /**
@@ -23,12 +25,22 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	TripDetailsRepo tripDetailsRepo;
 
 	@Override
-	public List<TripDetailsHistoryVo> getTripHistory(int id, int tripstatus) {
-		List<TripDetails> history = tripDetailsRepo.getHistory(id, tripstatus);
+	public List<TripDetailsHistoryVo> getTripHistory(int id, int tripstatus, String fromDate, String toDate) {
+		String fromTripStart = null;
+		String toTripStart = null;
+		List<TripDetails> history = null;
+		if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
+			fromTripStart = DateTimeUtils.convertToTimestamp(fromDate);
+			toTripStart = DateTimeUtils.convertToTimestamp(toDate);
+			history = tripDetailsRepo.getHistory(id, tripstatus, fromTripStart, toTripStart);
+		} else {
+			history = tripDetailsRepo.getHistoryByStatus(id, tripstatus);
+		}
+
 		List<TripDetailsHistoryVo> tripDetailsHistoryVos = new ArrayList<>();
 		history.forEach(data -> {
 			TripDetailsHistoryVo tripDetailsHistory = new TripDetailsHistoryVo();
-			
+
 			tripDetailsHistory.setId(data.getId());
 			tripDetailsHistory.setAmount(data.getAmount());
 			tripDetailsHistory.setAmountToApp(data.getAmountToApp());
@@ -49,7 +61,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetailsHistory.setTripStarttime(data.getTripStarttime());
 			tripDetailsHistory.setTripEndtime(data.getTripEndtime());
 			tripDetailsHistory.setDriverName(data.getDriverDetails().getDriverName());
-			tripDetailsHistory.setVehicleName(data.getDriverDetails().getVehicleDetails().getVehicleType().getVehicleName());
+			tripDetailsHistory
+					.setVehicleName(data.getDriverDetails().getVehicleDetails().getVehicleType().getVehicleName());
 			tripDetailsHistoryVos.add(tripDetailsHistory);
 		});
 		return tripDetailsHistoryVos;

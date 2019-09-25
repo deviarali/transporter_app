@@ -1664,6 +1664,22 @@ public class DateTimeUtils {
 		date = calendar.getTime();
 		return date;
 	}
+
+	public static String convertToTimestamp(String date) {
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date utilDate = null;
+		String formatedDate = "";
+		try {
+			utilDate = format.parse(date);
+			formatedDate = new SimpleDateFormat("yyyy-MM-dd").format(utilDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return formatedDate;
+	}
+
 	/* Converter nº de working days entre duas datas.
 $$jourstotal = $$dtfin - $$dtdebut + 1  ; 
 $$int        = $$jourstotal / 7
