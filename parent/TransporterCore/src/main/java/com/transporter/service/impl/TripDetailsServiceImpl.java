@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
+import com.transporter.fcm.NotificationBuilder;
+import com.transporter.fcm.NotificationType;
+import com.transporter.fcm.PushNotificationBean;
 import com.transporter.model.DeliveryStatus;
 import com.transporter.model.TripDetails;
+import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.repo.TripDetailsRepo;
 import com.transporter.service.TripDetailsService;
 import com.transporter.utils.DateTimeUtils;
@@ -29,6 +33,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Autowired
 	TripDetailsRepo tripDetailsRepo;
+	
+	@Autowired
+	TransporterPushNotifications transporterPushNotifications;
 
 	@Override
 	public List<TripDetailsHistoryVo> getTripHistory(int id, int tripstatus, String fromDate, String toDate) {
@@ -113,10 +120,15 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetails.setCanceledReason(deliveryStatusVo.getDeliverystatus());
 			tripDetails.setDeliveryStatus(deliveryStatus);
 			tripDetails = tripDetailsRepo.save(tripDetails);
+			
 			if (tripDetails != null) {
 				if (deliveryStatusId == 3) {
+					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by customer");
+					transporterPushNotifications.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean);
 					return "Trip cancled by customer";
 				} else {
+					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by driver");
+					transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean);
 					return "Trip cancled by driver";
 				}
 			}

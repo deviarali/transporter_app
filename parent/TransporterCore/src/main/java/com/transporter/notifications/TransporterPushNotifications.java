@@ -45,7 +45,7 @@ public class TransporterPushNotifications {
 		return response;
 	}
 
-	public String senPushNotification(Object devicesToken, PushNotificationBean bean) {
+	public String sendPushNotification(Object devicesToken, PushNotificationBean bean) {
 		String response = null;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
