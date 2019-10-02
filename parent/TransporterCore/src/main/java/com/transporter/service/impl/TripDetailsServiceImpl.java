@@ -3,10 +3,15 @@ package com.transporter.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.transporter.exceptions.BusinessException;
+import com.transporter.exceptions.ErrorCodes;
+import com.transporter.model.DeliveryStatus;
 import com.transporter.model.TripDetails;
 import com.transporter.repo.TripDetailsRepo;
 import com.transporter.service.TripDetailsService;
@@ -66,5 +71,33 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetailsHistoryVos.add(tripDetailsHistory);
 		});
 		return tripDetailsHistoryVos;
+	}
+
+	@Override
+	@Transactional
+	public TripDetails updateTripRatings(int tripId, String ratings) {
+
+		if (ratings.equals("0.00") || ratings.equals("0.0") || ratings.equals("0")) {
+			throw new BusinessException(ErrorCodes.INVALIDRATING.toString());
+		}
+		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
+		if (tripDetails != null) {
+			tripDetails.setRatings(ratings);
+			tripDetails = tripDetailsRepo.save(tripDetails);
+		}
+		return tripDetails;
+	}
+
+	@Override
+	@Transactional
+	public TripDetails updateTripStatus(int tripId, int deliveryStatusId) {
+		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
+		if (tripDetails != null) {
+			DeliveryStatus deliveryStatus = new DeliveryStatus();
+			deliveryStatus.setId(deliveryStatusId);
+			tripDetails.setDeliveryStatus(deliveryStatus);
+			tripDetails = tripDetailsRepo.save(tripDetails);
+		}
+		return tripDetails;
 	}
 }

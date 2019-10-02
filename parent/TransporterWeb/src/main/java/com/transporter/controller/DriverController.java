@@ -20,7 +20,6 @@ import com.transporter.response.CommonResponse;
 import com.transporter.service.DriverService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
-import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.DriverDetailsVo;
 
 /**
@@ -30,48 +29,51 @@ import com.transporter.vo.DriverDetailsVo;
 
 @RestController
 public class DriverController {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DriverController.class);
-	
+
 	@Autowired
 	private DriverService driverService;
-	
+
 	@RequestMapping(value = "driver/registerDriver", method = RequestMethod.POST)
 	public CommonResponse registerDriver(@RequestBody DriverDetailsVo driverDetailsVo) {
 		CommonResponse response = null;
 
 		try {
 			String saved = driverService.registerDriver(driverDetailsVo);
-			if(!StringUtils.isBlank(saved)) {
+			if (!StringUtils.isBlank(saved)) {
 				response = RestUtils.wrapObjectForSuccess(saved);
 				LOGGER.info("Driver registered successfully");
 			}
-		} catch(BusinessException be) {
+		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
-			LOGGER.error("Driver not registered for mobile number :"+driverDetailsVo.getUser().getMobileNumber() +" exception : "+be.getErrorMsg());
-		} catch(Exception e) {
+			LOGGER.error("Driver not registered for mobile number :" + driverDetailsVo.getUser().getMobileNumber()
+					+ " exception : " + be.getErrorMsg());
+		} catch (Exception e) {
 			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
-			LOGGER.error("Driver not registered for mobile number :"+driverDetailsVo.getUser().getMobileNumber() +" exception : "+e.getMessage());
+			LOGGER.error("Driver not registered for mobile number :" + driverDetailsVo.getUser().getMobileNumber()
+					+ " exception : " + e.getMessage());
 		}
-		
+
 		return response;
 	}
-	
+
 	@RequestMapping(value = "driver/updateLattitudeAndLongitude", method = RequestMethod.POST)
-	public CommonResponse updateLattitudeAndLongitude(
-			@RequestParam(value = "id", required = true) int id, 
+	public CommonResponse updateLattitudeAndLongitude(@RequestParam(value = "id", required = true) int id,
 			@RequestParam(value = "lattitude", required = true) String lattitude,
 			@RequestParam(value = "longitude", required = true) String longitude) {
 		CommonResponse response = null;
 		try {
 			String updated = driverService.updateLattitudeAndLongitude(id, lattitude, longitude);
-			if(!Utils.isNullOrEmpty(updated)) {
+			if (!Utils.isNullOrEmpty(updated)) {
 				response = RestUtils.wrapObjectForSuccess(updated);
 			} else {
-				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.NOT_UPDATED);
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.NOT_UPDATED);
 			}
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
 		return response;
 	}
@@ -94,8 +96,7 @@ public class DriverController {
 		} catch (Exception e) {
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
-			LOGGER.error(
-					"Update Driver documents error, User id : " + userId + " exception is : " + e.getMessage());
+			LOGGER.error("Update Driver documents error, User id : " + userId + " exception is : " + e.getMessage());
 		}
 		return response;
 	}
@@ -117,7 +118,7 @@ public class DriverController {
 		}
 		return response;
 	}
-	
+
 	@PutMapping(value = "/driver/updateDriverDetails")
 	public CommonResponse updateDriverAddress(@RequestBody DriverDetailsVo driverDetailsVo) {
 		CommonResponse response = null;
@@ -130,33 +131,31 @@ public class DriverController {
 		}
 		return response;
 	}
-	
-    @RequestMapping(value = "driver/checkVehicleAvailability", method = RequestMethod.POST)
-    public CommonResponse checkVehicleAvailability(
-            @RequestParam(name = "lattitude")String lattitude, @RequestParam(name = "longitude")String longitude) {
-        CommonResponse response = null;
-        String check = driverService.checkVehicleAvailability(lattitude, longitude);
-        response = RestUtils.wrapObjectForSuccess(check);
-        return response;
-    }
-    
-   /* @RequestMapping(value="driver/fetchVehiclesByOrder")
-	public CommonResponse fetchVehiclesByOrder(@RequestBody VehiclesByOrderRequest vehiclesByOrderRequest) {
-    	CommonResponse response = null;
-    	try {
-	    	List<VehiclesByOrderResponse> orderResponse = driverService.fetchVehiclesByOrder(vehiclesByOrderRequest);
-	    	if(!Utils.isNullOrEmpty(orderResponse)) {
-	    		response = RestUtils.wrapObjectForSuccess(orderResponse);
-	    	} else {
-	    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.VEHICLES_NOT_AVAILABLE);
-	    	}
-    	} catch (Exception e) {
-    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
-    	}
-    	return response;
-    }*/
-    
-    @PostMapping("/driver/generateOtp")
+
+	@RequestMapping(value = "driver/checkVehicleAvailability", method = RequestMethod.POST)
+	public CommonResponse checkVehicleAvailability(@RequestParam(name = "lattitude") String lattitude,
+			@RequestParam(name = "longitude") String longitude) {
+		CommonResponse response = null;
+		String check = driverService.checkVehicleAvailability(lattitude, longitude);
+		response = RestUtils.wrapObjectForSuccess(check);
+		return response;
+	}
+
+	/*
+	 * @RequestMapping(value="driver/fetchVehiclesByOrder") public CommonResponse
+	 * fetchVehiclesByOrder(@RequestBody VehiclesByOrderRequest
+	 * vehiclesByOrderRequest) { CommonResponse response = null; try {
+	 * List<VehiclesByOrderResponse> orderResponse =
+	 * driverService.fetchVehiclesByOrder(vehiclesByOrderRequest);
+	 * if(!Utils.isNullOrEmpty(orderResponse)) { response =
+	 * RestUtils.wrapObjectForSuccess(orderResponse); } else { response =
+	 * RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+	 * WebConstants.VEHICLES_NOT_AVAILABLE); } } catch (Exception e) { response =
+	 * RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+	 * WebConstants.INTERNAL_SERVER_ERROR_MESSAGE); } return response; }
+	 */
+
+	@PostMapping("/driver/generateOtp")
 	public CommonResponse generateOtp(@RequestParam String mobileNumber) {
 		CommonResponse response = null;
 		try {
@@ -169,12 +168,13 @@ public class DriverController {
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
 		return response;
 	}
-    
-    @PostMapping("/driver/validateOtp")
+
+	@PostMapping("/driver/validateOtp")
 	public CommonResponse validateOtp(@RequestParam String mobileNumber, @RequestParam String otp) {
 		CommonResponse response = null;
 		try {
@@ -182,7 +182,8 @@ public class DriverController {
 			if (driverDetailsVo != null)
 				response = RestUtils.wrapObjectForSuccess(driverDetailsVo);
 			else
-				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INVALID_USER);
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.INVALID_USER);
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
@@ -190,5 +191,5 @@ public class DriverController {
 		}
 		return response;
 	}
-    
+
 }

@@ -15,6 +15,7 @@ public enum ErrorCodes
 	VEHICLENOTFOUND("Vehicle not exit"),
 	VSAVE("Vehicle Details  not saved"),
 	CNFOUND("Customer not found, please register"),
+	INVALIDRATING("Rating can not be zero"),
 	SUCCESS("success");
 	
 	

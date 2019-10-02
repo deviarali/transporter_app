@@ -13,8 +13,9 @@ import com.transporter.model.TripDetails;
 public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 
 	@Query(value = "SELECT * from tripdetails m WHERE m.customer_id =:id and m.trip_status =:tripstatus and cast(m.trip_starttime as date) BETWEEN :fromTripStart and :toTripStart ", nativeQuery = true)
-	List<TripDetails> getHistory(@Param(value = "id") int id, @Param(value = "tripstatus") int tripstatus, @Param(value = "fromTripStart") String fromTripStart, @Param(value = "toTripStart") String toTripStart);
-	
+	List<TripDetails> getHistory(@Param(value = "id") int id, @Param(value = "tripstatus") int tripstatus,
+			@Param(value = "fromTripStart") String fromTripStart, @Param(value = "toTripStart") String toTripStart);
+
 	@Query("SELECT m from TripDetails m WHERE m.customerDetails.id =?1 and m.deliveryStatus.id=?2")
 	List<TripDetails> getHistoryByStatus(int id, int tripstatus);
 
