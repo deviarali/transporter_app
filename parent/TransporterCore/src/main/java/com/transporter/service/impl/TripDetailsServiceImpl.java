@@ -16,6 +16,7 @@ import com.transporter.model.TripDetails;
 import com.transporter.repo.TripDetailsRepo;
 import com.transporter.service.TripDetailsService;
 import com.transporter.utils.DateTimeUtils;
+import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.TripDetailsHistoryVo;
 
 /**
@@ -97,7 +98,31 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			deliveryStatus.setId(deliveryStatusId);
 			tripDetails.setDeliveryStatus(deliveryStatus);
 			tripDetails = tripDetailsRepo.save(tripDetails);
+		} else {
+			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.toString());
 		}
 		return tripDetails;
+	}
+
+	@Override
+	public String updateTripCancelledStatus(int tripId, int deliveryStatusId, DeliveryStatusVo deliveryStatusVo) {
+		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
+		if (tripDetails != null) {
+			DeliveryStatus deliveryStatus = new DeliveryStatus();
+			deliveryStatus.setId(deliveryStatusId);
+			tripDetails.setCanceledReason(deliveryStatusVo.getDeliverystatus());
+			tripDetails.setDeliveryStatus(deliveryStatus);
+			tripDetails = tripDetailsRepo.save(tripDetails);
+			if (tripDetails != null) {
+				if (deliveryStatusId == 3) {
+					return "Trip cancled by customer";
+				} else {
+					return "Trip cancled by driver";
+				}
+			}
+		} else {
+			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.toString());
+		}
+		return "Trip details not found";
 	}
 }

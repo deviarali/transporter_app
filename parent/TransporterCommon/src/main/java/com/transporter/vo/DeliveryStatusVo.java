@@ -2,7 +2,6 @@ package com.transporter.vo;
 
 import java.io.Serializable;
 
-
 /**
  * The persistent class for the deliverystatus database table.
  * 
@@ -10,7 +9,6 @@ import java.io.Serializable;
 public class DeliveryStatusVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
 	private int id;
 
 	private String deliverystatus;

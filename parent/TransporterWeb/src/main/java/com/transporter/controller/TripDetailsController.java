@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import com.transporter.model.TripDetails;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
+import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.TripDetailsHistoryVo;
 
 /**
@@ -72,6 +74,25 @@ public class TripDetailsController {
 			TripDetails updateTripstatus = tripDetailsService.updateTripStatus(tripId, deliveryStatusId);
 			if (updateTripstatus != null) {
 				response = RestUtils.wrapObjectForSuccess("Riding status updated sucessfully");
+			} else {
+				response = RestUtils.wrapObjectForFailure("Trip details not found", "error",
+						WebConstants.WEB_RESPONSE_ERROR);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return response;
+	}
+
+	@PutMapping(value = "/trip/{tripId}/cancelStatus/{deliveryStatusId}")
+	public CommonResponse updateTripCancelledStatus(@PathVariable("tripId") int tripId,
+			@PathVariable("deliveryStatusId") int deliveryStatusId, @RequestBody DeliveryStatusVo deliveryStatusVo) {
+		CommonResponse response = null;
+		try {
+			String updateTripstatus = tripDetailsService.updateTripCancelledStatus(tripId, deliveryStatusId,
+					deliveryStatusVo);
+			if (updateTripstatus != null) {
+				response = RestUtils.wrapObjectForSuccess(updateTripstatus);
 			} else {
 				response = RestUtils.wrapObjectForFailure("Trip details not found", "error",
 						WebConstants.WEB_RESPONSE_ERROR);

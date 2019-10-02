@@ -16,6 +16,7 @@ public enum ErrorCodes
 	VSAVE("Vehicle Details  not saved"),
 	CNFOUND("Customer not found, please register"),
 	INVALIDRATING("Rating can not be zero"),
+	TRIPDETAILSNOTFOUND("Trip details not found"),
 	SUCCESS("success");
 	
 	

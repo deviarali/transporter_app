@@ -3,6 +3,7 @@ package com.transporter.service;
 import java.util.List;
 
 import com.transporter.model.TripDetails;
+import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.TripDetailsHistoryVo;
 
 /**
@@ -17,5 +18,7 @@ public interface TripDetailsService {
 	TripDetails updateTripRatings(int tripId, String ratings);
 
 	TripDetails updateTripStatus(int tripId, int deliveryStatusId);
+
+	String updateTripCancelledStatus(int tripId, int deliveryStatusId, DeliveryStatusVo deliveryStatusVo);
 
 }
