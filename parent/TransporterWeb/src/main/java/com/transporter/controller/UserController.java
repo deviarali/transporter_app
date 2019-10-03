@@ -2,6 +2,7 @@ package com.transporter.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import com.transporter.model.User;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.UserService;
 import com.transporter.utils.RestUtils;
+import com.transporter.utils.TikaServerValidationUtils;
 import com.transporter.vo.UserVo;
 
 @RestController
@@ -31,11 +33,14 @@ public class UserController {
 	private UserService userService;
 
 	@RequestMapping(value = "user/updateProfilePicture")
-	public CommonResponse updateProfilePicture(HttpServletRequest req,
-			@RequestParam(name = "file") MultipartFile multipartFile) {
+	public CommonResponse updateProfilePicture(HttpServletRequest req, @RequestParam(name = "file") MultipartFile multipartFile) {
 		CommonResponse response = null;
+		
 		String mobileNumber = req.getParameter("mobileNumber");
 		try {
+			
+			TikaServerValidationUtils.validateImageFile(multipartFile.getInputStream());
+			
 			String updateProfilePicture = userService.updateProfilePicture(multipartFile, mobileNumber);
 			if (!StringUtils.isBlank(updateProfilePicture)) {
 				response = RestUtils.wrapObjectForSuccess(updateProfilePicture);
