@@ -24,7 +24,7 @@ public class TripDetailsHistoryVo implements Serializable {
 
 	private String cancelledamountFromDriver;
 
-	private byte cancelledamountStatus;
+	private int cancelledamountStatus;
 
 	private String cashMode;
 
@@ -112,11 +112,11 @@ public class TripDetailsHistoryVo implements Serializable {
 		this.cancelledamountFromDriver = cancelledamountFromDriver;
 	}
 
-	public byte getCancelledamountStatus() {
+	public int getCancelledamountStatus() {
 		return cancelledamountStatus;
 	}
 
-	public void setCancelledamountStatus(byte cancelledamountStatus) {
+	public void setCancelledamountStatus(int cancelledamountStatus) {
 		this.cancelledamountStatus = cancelledamountStatus;
 	}
 

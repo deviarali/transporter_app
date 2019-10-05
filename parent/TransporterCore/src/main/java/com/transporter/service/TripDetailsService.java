@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.transporter.model.TripDetails;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.TripDetailsHistoryVo;
+import com.transporter.vo.TripDetailsVo;
 
 /**
  * @author Devappa.Arali
@@ -20,5 +22,7 @@ public interface TripDetailsService {
 	TripDetails updateTripStatus(int tripId, int deliveryStatusId);
 
 	String updateTripCancelledStatus(int tripId, int deliveryStatusId, DeliveryStatusVo deliveryStatusVo);
+
+	public DriverDetailsVo confirmBooking(TripDetailsVo tripDetailsVo);
 
 }

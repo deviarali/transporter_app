@@ -109,7 +109,7 @@ public class VehicleDetailsDaoImpl extends GenericDaoImpl implements VehicleDeta
 
 		sqlQuery2.setParameter("lattitude", fetchSelectedVehiclesRequest.getLattitude());
 		sqlQuery2.setParameter("longitude", fetchSelectedVehiclesRequest.getLongitude());
-		sqlQuery2.setParameter("distance", fetchSelectedVehiclesRequest.getSurroudingDistance());
+		sqlQuery2.setParameter("distance", fetchSelectedVehiclesRequest.getSurroundingDistance());
 		sqlQuery2.setParameter("vehicleType", fetchSelectedVehiclesRequest.getVehicleType());
 		List<Object[]> resultList = sqlQuery2.getResultList();
 

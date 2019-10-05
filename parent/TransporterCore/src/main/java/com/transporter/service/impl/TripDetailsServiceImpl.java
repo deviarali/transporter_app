@@ -1,27 +1,42 @@
 package com.transporter.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
+import com.transporter.enums.DeliveryStatusEnum;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.fcm.NotificationBuilder;
 import com.transporter.fcm.NotificationType;
 import com.transporter.fcm.PushNotificationBean;
+import com.transporter.model.CustomerDetails;
 import com.transporter.model.DeliveryStatus;
+import com.transporter.model.DriverDetails;
 import com.transporter.model.TripDetails;
+import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.repo.TripDetailsRepo;
+import com.transporter.service.CustomerDetailsService;
+import com.transporter.service.DriverService;
 import com.transporter.service.TripDetailsService;
+import com.transporter.service.UserService;
+import com.transporter.service.VehicleService;
 import com.transporter.utils.DateTimeUtils;
+import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.TripDetailsHistoryVo;
+import com.transporter.vo.TripDetailsVo;
 
 /**
  * @author Devappa.Arali
@@ -35,7 +50,22 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	TripDetailsRepo tripDetailsRepo;
 	
 	@Autowired
+	VehicleService vehicleService;
+	
+	@Autowired
+	CustomerDetailsService customerDetailsService;
+	
+	@Autowired
+	DriverService driverService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
 	TransporterPushNotifications transporterPushNotifications;
+	
+	@Value("${surrounding.area}")
+	private double surroundingDistance;
 
 	@Override
 	public List<TripDetailsHistoryVo> getTripHistory(int id, int tripstatus, String fromDate, String toDate) {
@@ -59,12 +89,12 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetailsHistory.setAmountToApp(data.getAmountToApp());
 			tripDetailsHistory.setAmountToDriver(data.getAmountToDriver());
 			tripDetailsHistory.setCanceledReason(data.getCanceledReason());
-			tripDetailsHistory.setCancelledamountFromCustomer(data.getCancelledamountFromCustomer());
-			tripDetailsHistory.setCancelledamountFromDriver(data.getCancelledamountFromDriver());
-			tripDetailsHistory.setCancelledamountStatus(data.getCancelledamountStatus());
+			tripDetailsHistory.setCancelledamountFromCustomer(data.getCancelledAmountFromCustomer());
+			tripDetailsHistory.setCancelledamountFromDriver(data.getCancelledAmountFromDriver());
+			tripDetailsHistory.setCancelledamountStatus(data.getCancelledAmountStatus());
 			tripDetailsHistory.setCashMode(data.getCashMode());
-			tripDetailsHistory.setDeliverypersonMobile(data.getDeliverypersonMobile());
-			tripDetailsHistory.setDeliverypersonName(data.getDeliverypersonName());
+			tripDetailsHistory.setDeliverypersonMobile(data.getDeliveryPersonMobile());
+			tripDetailsHistory.setDeliverypersonName(data.getDeliveryPersonName());
 			tripDetailsHistory.setDestinationLocation(data.getDestinationLocation());
 			tripDetailsHistory.setGoodsType(data.getGoodsType());
 			tripDetailsHistory.setGoodsSize(data.getGoodsSize());
@@ -136,5 +166,50 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.toString());
 		}
 		return "Trip details not found";
+	}
+	
+	public DriverDetailsVo confirmBooking(TripDetailsVo tripDetailsVo) {
+		DriverDetailsVo driverDetailsVo = null;
+		Gson gson = new Gson();
+		FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest = new FetchSelectedVehiclesRequest();
+		fetchSelectedVehiclesRequest.setLattitude(tripDetailsVo.getLattitude());
+		fetchSelectedVehiclesRequest.setLongitude(tripDetailsVo.getLongitude());
+		fetchSelectedVehiclesRequest.setSurroundingDistance(surroundingDistance);
+		fetchSelectedVehiclesRequest.setVehicleType(tripDetailsVo.getVehicleType());
+		List<VehicleDetails> vehicleDetailsList = vehicleService.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest);
+		if(Utils.isNullOrEmpty(vehicleDetailsList)) {
+			throw new BusinessException(ErrorCodes.VEHICLENOTFOUND.name(), ErrorCodes.VEHICLENOTFOUND.value());
+		}
+		CustomerDetails details = customerDetailsService.findCustomerById(tripDetailsVo.getCustomerId());
+		String bookingBody = "Customer name : "+details.getUser().getFirstName() +" "+" Customer mobile number : "+details.getUser().getMobileNumber();
+		PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingBody);
+		String dnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), bean);
+		
+		DriverDetails driverDetails = driverService.findDriverById(vehicleDetailsList.get(0).getDriverDetails().getId());
+		String bookingCustomerBody = "Driver name : "+driverDetails.getUser().getFirstName() +" "+" Driver mobile number : "+driverDetails.getUser().getMobileNumber();
+		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingCustomerBody);
+		String cnResponse = transporterPushNotifications.sendPushNotification(driverDetails.getUser().getFcmToken(), customerBean);
+		
+		TripDetails tripDetails = gson.fromJson(gson.toJson(tripDetailsVo), TripDetails.class);	
+		CustomerDetails customerDetails = new CustomerDetails();
+		customerDetails.setId(tripDetailsVo.getCustomerId());
+		tripDetails.setCustomerDetails(customerDetails);
+		DriverDetails driverDetails2 = new DriverDetails();
+		driverDetails2.setId(tripDetailsVo.getDriverId());
+		tripDetails.setDriverDetails(driverDetails2);
+		DeliveryStatus deliveryStatus = new DeliveryStatus();
+		deliveryStatus.setId(DeliveryStatusEnum.PENDING.getId());
+		tripDetails.setDeliveryStatus(deliveryStatus);
+		tripDetails.setTripTime(new Date());
+		tripDetails.setTripStartOtp(userService.generateOtp());
+		TripDetails details2 = tripDetailsRepo.save(tripDetails);
+		if(details2.getId() > 0) {
+			driverDetailsVo = new DriverDetailsVo();
+			driverDetailsVo.setId(driverDetails2.getId());
+			driverDetailsVo.setDrivername(driverDetails.getUser().getFirstName());
+			driverDetailsVo.setMobileNumber(driverDetails.getUser().getMobileNumber());
+			driverDetailsVo.setTripStartOtp(tripDetails.getTripStartOtp());
+		}
+		return driverDetailsVo;
 	}
 }

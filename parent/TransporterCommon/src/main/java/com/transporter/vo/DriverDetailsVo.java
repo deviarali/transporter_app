@@ -56,6 +56,10 @@ public class DriverDetailsVo implements Serializable {
 	private String adharcardPictureUrl;
 	
 	private String drivingLicencePictureUrl;
+	
+	private String mobileNumber;
+	
+	private String tripStartOtp;
 
 	public DriverDetailsVo() {
 	}
@@ -242,6 +246,22 @@ public class DriverDetailsVo implements Serializable {
 
 	public void setDrivingLicencePictureUrl(String drivingLicencePictureUrl) {
 		this.drivingLicencePictureUrl = drivingLicencePictureUrl;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getTripStartOtp() {
+		return tripStartOtp;
+	}
+
+	public void setTripStartOtp(String tripStartOtp) {
+		this.tripStartOtp = tripStartOtp;
 	}
 
 }

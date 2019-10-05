@@ -20,6 +20,7 @@ import com.transporter.model.DriverDetails;
 import com.transporter.model.User;
 import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
+import com.transporter.repo.DriverDetailsRepo;
 import com.transporter.service.DriverService;
 import com.transporter.service.UserService;
 import com.transporter.service.VehicleService;
@@ -43,6 +44,9 @@ public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private DriverDetailsRepo driverDetailsRepo;
 
 	@Autowired
 	private TransporterUtility transporterUtility;
@@ -202,5 +206,10 @@ public class DriverServiceImpl implements DriverService {
 		DriverDetails driverDetailsByUserId = driverDao.getDriverDetailsByUserId(userVo.getId());
 		driverDetailsVo = DriverDetails.convertModelToVo(driverDetailsByUserId);
 		return driverDetailsVo;
+	}
+
+	@Override
+	public DriverDetails findDriverById(int driverId) {
+		return driverDetailsRepo.findOne(driverId);
 	}
 }

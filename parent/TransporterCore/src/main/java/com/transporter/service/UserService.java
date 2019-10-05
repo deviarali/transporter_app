@@ -24,5 +24,7 @@ public interface UserService {
 	public User findById(int id);
 
 	public User updateInternalUser(UserVo userVo, int id);
+	
+	public String generateOtp();
 
 }

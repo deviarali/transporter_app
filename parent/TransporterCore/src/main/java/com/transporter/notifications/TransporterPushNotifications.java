@@ -2,6 +2,8 @@ package com.transporter.notifications;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +20,8 @@ public class TransporterPushNotifications {
 
 	@Value("${android.fcm.url}")
 	private String androidFcmUrl;
+	
+	private static final Logger LOG = LoggerFactory.getLogger(TransporterPushNotifications.class);
 
 	public String pushNotifications(Object devicesToken) {
 		String response = null;
@@ -34,13 +38,17 @@ public class TransporterPushNotifications {
 			msg.put("notificationType", "Ganesh");
 
 			json.put("data", msg);
-			json.put("registration_ids", devicesToken);
+			json.put("to", devicesToken);
 
 			HttpEntity<String> httpEntity = new HttpEntity<String>(json.toString(), httpHeaders);
 			response = restTemplate.postForObject(androidFcmUrl, httpEntity, String.class);
 			System.out.println(response);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			System.out.println("Log json"+e.getMessage());
+			System.out.println("Response "+response);
+		} catch (Exception e) {
+			System.out.println("Log Exception "+e.getMessage());
+			System.out.println("Response "+response);
 		}
 		return response;
 	}
@@ -53,15 +61,45 @@ public class TransporterPushNotifications {
 			httpHeaders.set("Authorization", "key=" + androidFcmKey);
 			httpHeaders.set("Content-Type", "application/json");
 			JSONObject json = new JSONObject();
-			json.put("data", bean.toString());
-			json.put("registration_ids", devicesToken);
+			if(null != bean.getData()) {
+				json.put("data", buildDataObject(bean));
+			}		
+			if(null != bean.getNotification()) {
+				json.put("notification", buildNotificationObject(bean));
+			}
+			json.put("to", devicesToken);
 
 			HttpEntity<String> httpEntity = new HttpEntity<String>(json.toString(), httpHeaders);
 			response = restTemplate.postForObject(androidFcmUrl, httpEntity, String.class);
 			System.out.println(response);
 		} catch (JSONException e) {
-			e.printStackTrace();
+			LOG.error("Exception in push notification json "+e.getMessage());
 		}
 		return response;
+	}
+
+	private JSONObject buildDataObject(PushNotificationBean bean) {
+		JSONObject dataObject = new JSONObject();
+		try {
+			dataObject.put("title", bean.getData().getTitle());
+			dataObject.put("body", bean.getData().getBody());
+			dataObject.put("notificationType", bean.getData().getNotificationType());
+			dataObject.put("message", bean.getData().getMessage());
+		} catch (JSONException e) {
+			LOG.error("Exception in push notification data object "+e.getMessage());
+		}
+		return dataObject;
+	}
+	
+	private JSONObject buildNotificationObject(PushNotificationBean bean) {
+		JSONObject notificationObject = new JSONObject();
+		try {
+			notificationObject.put("title", bean.getNotification().getTitle());
+			notificationObject.put("notificationType", bean.getNotification().getNotificationType());
+			notificationObject.put("message", bean.getNotification().getMessage());
+		} catch (JSONException e) {
+			LOG.error("Exception in push notification notification object "+e.getMessage());
+		}
+		return notificationObject;
 	}
 }

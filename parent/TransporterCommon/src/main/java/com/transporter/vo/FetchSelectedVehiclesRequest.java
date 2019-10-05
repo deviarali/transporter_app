@@ -4,7 +4,7 @@ public class FetchSelectedVehiclesRequest {
 	private int vehicleType;
 	private double lattitude;
 	private double longitude;
-	private double surroudingDistance;
+	private double surroundingDistance;
 	public final int getVehicleType() {
 		return vehicleType;
 	}
@@ -23,10 +23,10 @@ public class FetchSelectedVehiclesRequest {
 	public final void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public final double getSurroudingDistance() {
-		return surroudingDistance;
+	public final double getSurroundingDistance() {
+		return surroundingDistance;
 	}
-	public final void setSurroudingDistance(double surroudingDistance) {
-		this.surroudingDistance = surroudingDistance;
+	public final void setSurroundingDistance(double surroundingDistance) {
+		this.surroundingDistance = surroundingDistance;
 	}
 }

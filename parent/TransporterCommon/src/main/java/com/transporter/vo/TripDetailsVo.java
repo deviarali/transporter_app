@@ -21,17 +21,17 @@ public class TripDetailsVo implements Serializable {
 
 	private String canceledReason;
 
-	private String cancelledamountFromCustomer;
+	private String cancelledAmountFromCustomer;
 
-	private String cancelledamountFromDriver;
+	private String cancelledAmountFromDriver;
 
-	private byte cancelledamountStatus;
+	private int cancelledAmountStatus;
 
 	private String cashMode;
 
-	private String deliverypersonMobile;
+	private String deliveryPersonMobile;
 
-	private String deliverypersonName;
+	private String deliveryPersonName;
 
 	private String destinationLocation;
 
@@ -41,9 +41,9 @@ public class TripDetailsVo implements Serializable {
 
 	private String pickupLocation;
 
-	private String pickuppersonMobile;
+	private String pickupPersonMobile;
 
-	private String pickuppersonName;
+	private String pickupPersonName;
 
 	private String ratings;
 
@@ -53,21 +53,31 @@ public class TripDetailsVo implements Serializable {
 
 	private Date tripTime;
 
-	private String tripendOtp;
+	private String tripEndOtp;
 
-	private String tripstartOtp;
+	private String tripStartOtp;
 
-	private DriverDetailsVo driverDetailsVo;
+	private DriverDetailsVo driverDetails;
 
-	private CustomerDetailsVo customerDetailsVo;
+	private CustomerDetailsVo customerDetails;
 
-	private DeliveryStatusVo deliveryStatusVo;
+	private DeliveryStatusVo deliveryStatus;
+	
+	private int customerId;
+	
+	private int driverId;
+	
+	private double lattitude;
+	
+	private double longitude;
+	
+	private int vehicleType;
 
 	public TripDetailsVo() {
 	}
 
 	public int getId() {
-		return this.id;
+		return id;
 	}
 
 	public void setId(int id) {
@@ -75,7 +85,7 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public String getAmount() {
-		return this.amount;
+		return amount;
 	}
 
 	public void setAmount(String amount) {
@@ -83,7 +93,7 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public String getAmountToApp() {
-		return this.amountToApp;
+		return amountToApp;
 	}
 
 	public void setAmountToApp(String amountToApp) {
@@ -91,7 +101,7 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public String getAmountToDriver() {
-		return this.amountToDriver;
+		return amountToDriver;
 	}
 
 	public void setAmountToDriver(String amountToDriver) {
@@ -99,63 +109,63 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public String getCanceledReason() {
-		return this.canceledReason;
+		return canceledReason;
 	}
 
 	public void setCanceledReason(String canceledReason) {
 		this.canceledReason = canceledReason;
 	}
 
-	public String getCancelledamountFromCustomer() {
-		return this.cancelledamountFromCustomer;
+	public String getCancelledAmountFromCustomer() {
+		return cancelledAmountFromCustomer;
 	}
 
-	public void setCancelledamountFromCustomer(String cancelledamountFromCustomer) {
-		this.cancelledamountFromCustomer = cancelledamountFromCustomer;
+	public void setCancelledAmountFromCustomer(String cancelledAmountFromCustomer) {
+		this.cancelledAmountFromCustomer = cancelledAmountFromCustomer;
 	}
 
-	public String getCancelledamountFromDriver() {
-		return this.cancelledamountFromDriver;
+	public String getCancelledAmountFromDriver() {
+		return cancelledAmountFromDriver;
 	}
 
-	public void setCancelledamountFromDriver(String cancelledamountFromDriver) {
-		this.cancelledamountFromDriver = cancelledamountFromDriver;
+	public void setCancelledAmountFromDriver(String cancelledAmountFromDriver) {
+		this.cancelledAmountFromDriver = cancelledAmountFromDriver;
 	}
 
-	public byte getCancelledamountStatus() {
-		return this.cancelledamountStatus;
+	public int getCancelledAmountStatus() {
+		return cancelledAmountStatus;
 	}
 
-	public void setCancelledamountStatus(byte cancelledamountStatus) {
-		this.cancelledamountStatus = cancelledamountStatus;
+	public void setCancelledAmountStatus(int cancelledAmountStatus) {
+		this.cancelledAmountStatus = cancelledAmountStatus;
 	}
 
 	public String getCashMode() {
-		return this.cashMode;
+		return cashMode;
 	}
 
 	public void setCashMode(String cashMode) {
 		this.cashMode = cashMode;
 	}
 
-	public String getDeliverypersonMobile() {
-		return this.deliverypersonMobile;
+	public String getDeliveryPersonMobile() {
+		return deliveryPersonMobile;
 	}
 
-	public void setDeliverypersonMobile(String deliverypersonMobile) {
-		this.deliverypersonMobile = deliverypersonMobile;
+	public void setDeliveryPersonMobile(String deliveryPersonMobile) {
+		this.deliveryPersonMobile = deliveryPersonMobile;
 	}
 
-	public String getDeliverypersonName() {
-		return this.deliverypersonName;
+	public String getDeliveryPersonName() {
+		return deliveryPersonName;
 	}
 
-	public void setDeliverypersonName(String deliverypersonName) {
-		this.deliverypersonName = deliverypersonName;
+	public void setDeliveryPersonName(String deliveryPersonName) {
+		this.deliveryPersonName = deliveryPersonName;
 	}
 
 	public String getDestinationLocation() {
-		return this.destinationLocation;
+		return destinationLocation;
 	}
 
 	public void setDestinationLocation(String destinationLocation) {
@@ -163,7 +173,7 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public String getGoodsSize() {
-		return this.goodsSize;
+		return goodsSize;
 	}
 
 	public void setGoodsSize(String goodsSize) {
@@ -171,7 +181,7 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public String getGoodsType() {
-		return this.goodsType;
+		return goodsType;
 	}
 
 	public void setGoodsType(String goodsType) {
@@ -179,31 +189,31 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public String getPickupLocation() {
-		return this.pickupLocation;
+		return pickupLocation;
 	}
 
 	public void setPickupLocation(String pickupLocation) {
 		this.pickupLocation = pickupLocation;
 	}
 
-	public String getPickuppersonMobile() {
-		return this.pickuppersonMobile;
+	public String getPickupPersonMobile() {
+		return pickupPersonMobile;
 	}
 
-	public void setPickuppersonMobile(String pickuppersonMobile) {
-		this.pickuppersonMobile = pickuppersonMobile;
+	public void setPickupPersonMobile(String pickupPersonMobile) {
+		this.pickupPersonMobile = pickupPersonMobile;
 	}
 
-	public String getPickuppersonName() {
-		return this.pickuppersonName;
+	public String getPickupPersonName() {
+		return pickupPersonName;
 	}
 
-	public void setPickuppersonName(String pickuppersonName) {
-		this.pickuppersonName = pickuppersonName;
+	public void setPickupPersonName(String pickupPersonName) {
+		this.pickupPersonName = pickupPersonName;
 	}
 
 	public String getRatings() {
-		return this.ratings;
+		return ratings;
 	}
 
 	public void setRatings(String ratings) {
@@ -211,7 +221,7 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public Date getTripEndtime() {
-		return this.tripEndtime;
+		return tripEndtime;
 	}
 
 	public void setTripEndtime(Date tripEndtime) {
@@ -219,7 +229,7 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public Date getTripStarttime() {
-		return this.tripStarttime;
+		return tripStarttime;
 	}
 
 	public void setTripStarttime(Date tripStarttime) {
@@ -227,52 +237,92 @@ public class TripDetailsVo implements Serializable {
 	}
 
 	public Date getTripTime() {
-		return this.tripTime;
+		return tripTime;
 	}
 
 	public void setTripTime(Date tripTime) {
 		this.tripTime = tripTime;
 	}
 
-	public String getTripendOtp() {
-		return this.tripendOtp;
+	public String getTripEndOtp() {
+		return tripEndOtp;
 	}
 
-	public void setTripendOtp(String tripendOtp) {
-		this.tripendOtp = tripendOtp;
+	public void setTripEndOtp(String tripEndOtp) {
+		this.tripEndOtp = tripEndOtp;
 	}
 
-	public String getTripstartOtp() {
-		return this.tripstartOtp;
+	public String getTripStartOtp() {
+		return tripStartOtp;
 	}
 
-	public void setTripstartOtp(String tripstartOtp) {
-		this.tripstartOtp = tripstartOtp;
+	public void setTripStartOtp(String tripStartOtp) {
+		this.tripStartOtp = tripStartOtp;
 	}
 
-	public DriverDetailsVo getDriverDetailsVo() {
-		return driverDetailsVo;
+	public DriverDetailsVo getDriverDetails() {
+		return driverDetails;
 	}
 
-	public void setDriverDetailsVo(DriverDetailsVo driverDetailsVo) {
-		this.driverDetailsVo = driverDetailsVo;
+	public void setDriverDetails(DriverDetailsVo driverDetails) {
+		this.driverDetails = driverDetails;
 	}
 
-	public CustomerDetailsVo getCustomerDetailsVo() {
-		return customerDetailsVo;
+	public CustomerDetailsVo getCustomerDetails() {
+		return customerDetails;
 	}
 
-	public void setCustomerDetailsVo(CustomerDetailsVo customerDetailsVo) {
-		this.customerDetailsVo = customerDetailsVo;
+	public void setCustomerDetails(CustomerDetailsVo customerDetails) {
+		this.customerDetails = customerDetails;
 	}
 
-	public DeliveryStatusVo getDeliveryStatusVo() {
-		return deliveryStatusVo;
+	public DeliveryStatusVo getDeliveryStatus() {
+		return deliveryStatus;
 	}
 
-	public void setDeliveryStatusVo(DeliveryStatusVo deliveryStatusVo) {
-		this.deliveryStatusVo = deliveryStatusVo;
+	public void setDeliveryStatus(DeliveryStatusVo deliveryStatus) {
+		this.deliveryStatus = deliveryStatus;
 	}
 
+	public int getCustomerId() {
+		return customerId;
+	}
 
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public int getDriverId() {
+		return driverId;
+	}
+
+	public void setDriverId(int driverId) {
+		this.driverId = driverId;
+	}
+
+	public double getLattitude() {
+		return lattitude;
+	}
+
+	public void setLattitude(double lattitude) {
+		this.lattitude = lattitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public int getVehicleType() {
+		return vehicleType;
+	}
+
+	public void setVehicleType(int vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	
 }

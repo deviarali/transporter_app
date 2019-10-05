@@ -26,6 +26,8 @@ public interface VehicleService {
 
 	List<FetchSelectedVehiclesResponse> fetchSelectedVehicles(
 			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);
+
+	List<VehicleDetails> fetchSelectedVehiclesToConfirmOrder(FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);
 	
 	
 	

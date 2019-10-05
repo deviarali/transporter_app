@@ -18,7 +18,9 @@ import com.transporter.response.CommonResponse;
 import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.TripDetailsHistoryVo;
+import com.transporter.vo.TripDetailsVo;
 
 /**
  * @author Devappa.Arali
@@ -46,6 +48,22 @@ public class TripDetailsController {
 					WebConstants.WEB_RESPONSE_ERROR);
 		}
 
+		return response;
+	}
+	
+	@RequestMapping(value = "trip/confirmBooking", method = RequestMethod.POST)
+	public CommonResponse confirmBooking(@RequestBody TripDetailsVo tripDetailsVo) {
+		CommonResponse response = null;
+		try {
+			DriverDetailsVo driverDetailsVo = tripDetailsService.confirmBooking(tripDetailsVo);
+			if(null != driverDetailsVo) {
+				response = RestUtils.wrapObjectForSuccess(driverDetailsVo);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
 		return response;
 	}
 

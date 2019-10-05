@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.transporter.model.DriverDetails;
 import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehiclesByOrderRequest;
@@ -33,5 +34,7 @@ public interface DriverService {
 	int generateOtp(String mobileNumber);
 
 	DriverDetailsVo validateOtp(String mobileNumber, String otp);
+
+	DriverDetails findDriverById(int driverId);
 
 }

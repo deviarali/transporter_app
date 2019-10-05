@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
 	public String generateOtp() {
 		return "55555";
 	}

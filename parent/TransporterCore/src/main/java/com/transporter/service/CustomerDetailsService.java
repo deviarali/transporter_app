@@ -1,5 +1,6 @@
 package com.transporter.service;
 
+import com.transporter.model.CustomerDetails;
 import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.UserVo;
 
@@ -16,5 +17,7 @@ public interface CustomerDetailsService {
 	CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo);
 
 	CustomerDetailsVo updateUserProfile(UserVo userVo);
+
+	public CustomerDetails findCustomerById(int customerId);
 
 }

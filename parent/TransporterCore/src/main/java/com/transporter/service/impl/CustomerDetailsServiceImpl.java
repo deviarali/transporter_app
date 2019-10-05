@@ -12,6 +12,7 @@ import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.CustomerDetails;
 import com.transporter.model.User;
+import com.transporter.repo.CustomerDetailsRepo;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.service.UserService;
 import com.transporter.vo.CustomerDetailsVo;
@@ -29,6 +30,9 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private CustomerDetailsRepo customerDetailsRepo;
 	
 	@Override
 	@Transactional
@@ -117,6 +121,11 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		customerDetails.setDateofbirth(userVo.getCustomerDetails().getDateofbirth());
 		customerDetailsDao.saveOrUpdate(customerDetails);
 		return CustomerDetails.convertModelToVO(customerDetails);
+	}
+
+	@Override
+	public CustomerDetails findCustomerById(int customerId) {
+		return customerDetailsRepo.findOne(customerId);
 	}
 
 }

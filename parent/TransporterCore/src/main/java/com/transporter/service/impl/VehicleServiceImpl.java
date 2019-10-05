@@ -16,6 +16,7 @@ import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.DriverDetails;
 import com.transporter.model.VehicleDetails;
 import com.transporter.model.VehicleType;
+import com.transporter.repo.VehicleDetailsRepo;
 import com.transporter.service.VehicleService;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
@@ -33,6 +34,9 @@ public class VehicleServiceImpl implements VehicleService {
 
 	@Autowired
 	private VehicleDetailsDao vehicleDetailsDao;
+	
+	@Autowired
+	private VehicleDetailsRepo vehicleDetailsRepo;
 	
 	@Value("${surrounding.area}")
 	private double surroundingDistance;
@@ -112,7 +116,7 @@ public class VehicleServiceImpl implements VehicleService {
 	@Transactional
 	public List<FetchSelectedVehiclesResponse> fetchSelectedVehicles(
 			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
-		fetchSelectedVehiclesRequest.setSurroudingDistance(surroundingDistance);
+		fetchSelectedVehiclesRequest.setSurroundingDistance(surroundingDistance);
 		List<VehicleDetails> responseIdsList = vehicleDetailsDao.fetchSelectedVehicles(fetchSelectedVehiclesRequest);
 		List<VehicleDetails> vehiclesList = new ArrayList<VehicleDetails>();
 		List<FetchSelectedVehiclesResponse> response = new ArrayList<>();
@@ -135,6 +139,14 @@ public class VehicleServiceImpl implements VehicleService {
 			}
 		}
 		return response;
+	}
+
+	@Override
+	public List<VehicleDetails> fetchSelectedVehiclesToConfirmOrder(
+			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
+		return vehicleDetailsRepo.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest.getLattitude(), 
+				fetchSelectedVehiclesRequest.getLongitude(), fetchSelectedVehiclesRequest.getSurroundingDistance(), 
+				fetchSelectedVehiclesRequest.getVehicleType());
 	}
 
 }
