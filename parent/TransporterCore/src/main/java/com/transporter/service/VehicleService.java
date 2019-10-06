@@ -6,6 +6,8 @@ import com.transporter.model.VehicleDetails;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleDetailsVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 /**
  * @author Devappa.Arali
@@ -28,6 +30,8 @@ public interface VehicleService {
 			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);
 
 	List<VehicleDetails> fetchSelectedVehiclesToConfirmOrder(FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);
+
+	List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest);
 	
 	
 	

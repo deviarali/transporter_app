@@ -17,7 +17,9 @@ public enum ErrorCodes
 	CNFOUND("Customer not found, please register"),
 	INVALIDRATING("Rating can not be zero"),
 	TRIPDETAILSNOTFOUND("Trip details not found"),
-	SUCCESS("success");
+	SUCCESS("success"),
+	DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING("Push notification error for driver, while booking"),
+	TRIPDETAILSNOTSAVED("Trip details are not saved");
 	
 	
 	private final String value;

@@ -77,21 +77,5 @@ public class VehicleTypeController {
 		}
 		return response;
 	}
-	
-	@RequestMapping(value="vehicle/fetchVehiclesByOrder", method = RequestMethod.POST)
-	public CommonResponse fetchVehiclesByOrder(@RequestBody VehiclesByOrderRequest vehiclesByOrderRequest) {
-    	CommonResponse response = null;
-    	try {
-	    	List<VehiclesByOrderResponse> orderResponse = vehicleTypeService.fetchVehiclesByOrder(vehiclesByOrderRequest);
-	    	if(!Utils.isNullOrEmpty(orderResponse)) {
-	    		response = RestUtils.wrapObjectForSuccess(orderResponse);
-	    	} else {
-	    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.VEHICLES_NOT_AVAILABLE);
-	    	}
-    	} catch (Exception e) {
-    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
-    	}
-    	return response;
-    }
 
 }

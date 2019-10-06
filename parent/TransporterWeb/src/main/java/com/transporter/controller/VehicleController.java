@@ -20,6 +20,8 @@ import com.transporter.utils.Utils;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleDetailsVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 /**
  * @author Devappa.Arali
@@ -76,6 +78,22 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 			return response;	
 	}
 	
+	@RequestMapping(value="vehicle/fetchVehiclesByOrder", method = RequestMethod.POST)
+	public CommonResponse fetchVehiclesByOrder(@RequestBody VehiclesByOrderRequest vehiclesByOrderRequest) {
+    	CommonResponse response = null;
+    	try {
+	    	List<VehiclesByOrderResponse> orderResponse = vehicleService.fetchVehiclesByOrder(vehiclesByOrderRequest);
+	    	if(!Utils.isNullOrEmpty(orderResponse)) {
+	    		response = RestUtils.wrapObjectForSuccess(orderResponse);
+	    	} else {
+	    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.VEHICLES_NOT_AVAILABLE);
+	    	}
+    	} catch (Exception e) {
+    		response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+    	}
+    	return response;
+    }
+	
 	@RequestMapping(value = "/vehicle/fetchSelectedVehicles", method = RequestMethod.POST)
 	public CommonResponse fetchSelectedVehicles(@RequestBody FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
 		CommonResponse response = null;
@@ -91,6 +109,4 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 		}
 		return response;
 	}
-	
-	
 }

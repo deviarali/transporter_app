@@ -29,6 +29,10 @@ public class VehicleTypeVo {
 	private MultipartFile selectedVehicle;
 	
 	private MultipartFile unSelectedVehicle;
+	
+	private Double perKm;
+	
+	private Double minKm;
 
 	public int getId() {
 		return id;
@@ -132,6 +136,22 @@ public class VehicleTypeVo {
 
 	public void setUnSelectedVehicle(MultipartFile unSelectedVehicle) {
 		this.unSelectedVehicle = unSelectedVehicle;
+	}
+
+	public double getPerKm() {
+		return perKm;
+	}
+
+	public void setPerKm(Double perKm) {
+		this.perKm = perKm;
+	}
+
+	public Double getMinKm() {
+		return minKm;
+	}
+
+	public void setMinKm(Double minKm) {
+		this.minKm = minKm;
 	}
 	
 }

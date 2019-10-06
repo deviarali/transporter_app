@@ -46,6 +46,12 @@ public class VehicleType {
 
 	@Column(name = "price")
 	private Double price;
+	
+	@Column(name = "perkm")
+	private Double perKm;
+	
+	@Column(name = "minkm")
+	private Double minKm;
 
 	public int getId() {
 		return id;
@@ -135,6 +141,22 @@ public class VehicleType {
 		this.price = price;
 	}
 
+	public double getPerKm() {
+		return perKm;
+	}
+
+	public void setPerKm(Double perKm) {
+		this.perKm = perKm;
+	}
+
+	public Double getMinKm() {
+		return minKm;
+	}
+
+	public void setMinKm(Double minKm) {
+		this.minKm = minKm;
+	}
+
 	public static VehicleTypeVo convertModelToVo(VehicleType vehicleType) {
 		if(vehicleType == null)
 			return null;
@@ -150,6 +172,8 @@ public class VehicleType {
 		vehicleTypeVo.setUnselectedVehicleUrl(vehicleType.getUnselectedVehicleUrl());
 		vehicleTypeVo.setWidth(vehicleType.getWidth());
 		vehicleTypeVo.setPrice(vehicleType.getPrice());
+		vehicleTypeVo.setPerKm(vehicleType.getPerKm());
+		vehicleTypeVo.setMinKm(vehicleType.getMinKm());
 		return vehicleTypeVo;
 	}
 }

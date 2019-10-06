@@ -7,6 +7,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,8 @@ import com.transporter.vo.TripDetailsVo;
 @Service
 public class TripDetailsServiceImpl implements TripDetailsService {
 
+	private static final Logger LOG = LoggerFactory.getLogger(TripDetailsServiceImpl.class);
+	
 	@Autowired
 	TripDetailsRepo tripDetailsRepo;
 	
@@ -184,12 +188,17 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		String bookingBody = "Customer name : "+details.getUser().getFirstName() +" "+" Customer mobile number : "+details.getUser().getMobileNumber();
 		PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingBody);
 		String dnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), bean);
+		if(Utils.isNullOrEmpty(dnResponse)) {
+			throw new BusinessException(ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.name(), ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.value());
+		}
 		
 		DriverDetails driverDetails = driverService.findDriverById(vehicleDetailsList.get(0).getDriverDetails().getId());
 		String bookingCustomerBody = "Driver name : "+driverDetails.getUser().getFirstName() +" "+" Driver mobile number : "+driverDetails.getUser().getMobileNumber();
 		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingCustomerBody);
 		String cnResponse = transporterPushNotifications.sendPushNotification(driverDetails.getUser().getFcmToken(), customerBean);
-		
+		if(Utils.isNullOrEmpty(cnResponse)) {
+			LOG.error("Notification error for customer, while booking");
+		}
 		TripDetails tripDetails = gson.fromJson(gson.toJson(tripDetailsVo), TripDetails.class);	
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setId(tripDetailsVo.getCustomerId());
@@ -209,6 +218,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			driverDetailsVo.setDrivername(driverDetails.getUser().getFirstName());
 			driverDetailsVo.setMobileNumber(driverDetails.getUser().getMobileNumber());
 			driverDetailsVo.setTripStartOtp(tripDetails.getTripStartOtp());
+		} else {
+			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTSAVED.name(), ErrorCodes.TRIPDETAILSNOTSAVED.value());
 		}
 		return driverDetailsVo;
 	}

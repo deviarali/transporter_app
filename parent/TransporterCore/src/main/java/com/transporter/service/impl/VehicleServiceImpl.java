@@ -18,11 +18,14 @@ import com.transporter.model.VehicleDetails;
 import com.transporter.model.VehicleType;
 import com.transporter.repo.VehicleDetailsRepo;
 import com.transporter.service.VehicleService;
+import com.transporter.service.VehicleTypeService;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleDetailsVo;
+import com.transporter.vo.VehiclesByOrderRequest;
+import com.transporter.vo.VehiclesByOrderResponse;
 
 /**
  * @author Devappa.Arali
@@ -37,6 +40,9 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	@Autowired
 	private VehicleDetailsRepo vehicleDetailsRepo;
+	
+	@Autowired
+	private VehicleTypeService vehicleTypeService;
 	
 	@Value("${surrounding.area}")
 	private double surroundingDistance;
@@ -147,6 +153,11 @@ public class VehicleServiceImpl implements VehicleService {
 		return vehicleDetailsRepo.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest.getLattitude(), 
 				fetchSelectedVehiclesRequest.getLongitude(), fetchSelectedVehiclesRequest.getSurroundingDistance(), 
 				fetchSelectedVehiclesRequest.getVehicleType());
+	}
+
+	@Override
+	public List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest) {
+		return vehicleTypeService.fetchVehiclesByOrder(vehiclesByOrderRequest);
 	}
 
 }

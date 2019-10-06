@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.tika.config.TikaConfig;
+/*import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
@@ -18,7 +18,7 @@ import org.springframework.web.accept.MediaTypeFileExtensionResolver;
 import org.xml.sax.SAXException;
 
 import com.mchange.v1.lang.BooleanUtils;
-import com.transporter.exception.TikaServerCustomException;
+import com.transporter.exception.TikaServerCustomException;*/
 
 /**
  * @author SHARAN A
@@ -28,7 +28,7 @@ public class TikaServerValidationUtils {
 
 	private static String MEDIA_TYPE_IMAGE = "image";
 
-	public static Boolean validateImageFile(File file) throws IOException, SAXException, TikaException {
+	/*public static Boolean validateImageFile(File file) throws IOException, SAXException, TikaException {
 
 		boolean isValiateSuccess = false;
 		TikaConfig tika = new TikaConfig();
@@ -67,5 +67,5 @@ public class TikaServerValidationUtils {
 
 		return isValiateSuccess;
 	}
-
+*/
 }

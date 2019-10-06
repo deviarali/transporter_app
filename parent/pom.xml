@@ -83,11 +83,11 @@
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-server -->
-		<dependency>
+		<!-- <dependency>
 		    <groupId>org.apache.tika</groupId>
 		    <artifactId>tika-server</artifactId>
 		    <version>1.22</version>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 </project>

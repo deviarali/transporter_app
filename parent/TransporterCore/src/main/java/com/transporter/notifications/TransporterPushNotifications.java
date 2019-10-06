@@ -74,6 +74,8 @@ public class TransporterPushNotifications {
 			System.out.println(response);
 		} catch (JSONException e) {
 			LOG.error("Exception in push notification json "+e.getMessage());
+		} catch (Exception e) {
+			LOG.error("Exception while sending push notifications "+e.getMessage());
 		}
 		return response;
 	}

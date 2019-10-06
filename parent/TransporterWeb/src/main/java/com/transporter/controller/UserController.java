@@ -2,7 +2,7 @@ package com.transporter.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.FileUtils;
+//import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class UserController {
 		String mobileNumber = req.getParameter("mobileNumber");
 		try {
 			
-			TikaServerValidationUtils.validateImageFile(multipartFile.getInputStream());
+		//	TikaServerValidationUtils.validateImageFile(multipartFile.getInputStream());
 			
 			String updateProfilePicture = userService.updateProfilePicture(multipartFile, mobileNumber);
 			if (!StringUtils.isBlank(updateProfilePicture)) {
