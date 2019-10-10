@@ -156,7 +156,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetails = tripDetailsRepo.save(tripDetails);
 			
 			if(deliveryStatusId == 3 || deliveryStatusId == 4) {
-				driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 1);
+				driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 0);
 			}
 			
 			if (tripDetails != null) {

@@ -104,7 +104,7 @@ public class DriverDetails implements Serializable {
 	private VehicleDetails vehicleDetails;
 	
 	@Column(name="riding_status")
-	private int ridingstatus;
+	private int ridingStatus;
 
 	public DriverDetails() {
 	}
@@ -285,12 +285,12 @@ public class DriverDetails implements Serializable {
 		this.vehicleDetails = vehicleDetails;
 	}
 	
-	public int getRidingstatus() {
-		return ridingstatus;
+	public int getRidingStatus() {
+		return ridingStatus;
 	}
 
-	public void setRidingstatus(int ridingstatus) {
-		this.ridingstatus = ridingstatus;
+	public void setRidingStatus(int ridingStatus) {
+		this.ridingStatus = ridingStatus;
 	}
 
 	public static DriverDetailsVo convertModelToVo(DriverDetails driverDetails) {
@@ -317,7 +317,7 @@ public class DriverDetails implements Serializable {
 		driverDetailsVo.setCurrentLongitude(driverDetails.getCurrentLongitude());
 		driverDetailsVo.setAdharcardPictureUrl(driverDetails.getAdharcardPictureUrl());
 		driverDetailsVo.setDrivingLicencePictureUrl(driverDetails.getDrivingLicencePictureUrl());
-		driverDetailsVo.setRidingStatus(driverDetails.getRidingstatus());
+		driverDetailsVo.setRidingStatus(driverDetails.getRidingStatus());
 		return driverDetailsVo;
 	}
 
