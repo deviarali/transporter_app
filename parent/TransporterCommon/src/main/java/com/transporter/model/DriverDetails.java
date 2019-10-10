@@ -311,8 +311,8 @@ public class DriverDetails implements Serializable {
 		driverDetailsVo.setOnRoad(driverDetails.getOnRoad());
 		driverDetailsVo.setRatings(driverDetails.getRatings());
 		driverDetailsVo.setTransportType(driverDetails.getTransportType());
-		/*driverDetailsVo.setTripDetailsVoList(driverDetailsCreatedBy.getTripDetailsList());
-		driverDetailsVo.setUser();*/
+		/*driverDetailsVo.setTripDetailsVoList(driverDetailsCreatedBy.getTripDetailsList());*/
+		driverDetailsVo.setUser(User.convertModelToVo(driverDetails.getUser()));
 		driverDetailsVo.setCurrentLattitude(driverDetails.getCurrentLattitude());
 		driverDetailsVo.setCurrentLongitude(driverDetails.getCurrentLongitude());
 		driverDetailsVo.setAdharcardPictureUrl(driverDetails.getAdharcardPictureUrl());
