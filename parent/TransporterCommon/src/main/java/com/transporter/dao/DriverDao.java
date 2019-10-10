@@ -25,4 +25,6 @@ public interface DriverDao extends GenericDao {
 
 	DriverDetails getDriverDetailsByUserId(int id);
 
+	void updateRidingStatus(int id, int status);
+
 }

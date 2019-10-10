@@ -155,7 +155,6 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public String checkVehicleAvailability(String lattitude, String longitude) {
 		List<DriverDetails> driverDetailsList = driverDao.checkVehicleAvailability(lattitude, longitude, surrounding);
-
 		String response = null;
 		if (null != driverDetailsList && !driverDetailsList.isEmpty()) {
 			List<String> devicesToken = new ArrayList<String>();
@@ -211,5 +210,15 @@ public class DriverServiceImpl implements DriverService {
 	@Override
 	public DriverDetails findDriverById(int driverId) {
 		return driverDetailsRepo.findOne(driverId);
+	}
+
+	@Override
+	public void updateRidingStatus(int id,int status) {
+		DriverDetails driverDetails = driverDao.findById(id);
+		if (driverDetails == null) {
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
+		}
+		driverDao.updateRidingStatus(id, status);
+		
 	}
 }

@@ -19,7 +19,9 @@ public enum ErrorCodes
 	TRIPDETAILSNOTFOUND("Trip details not found"),
 	SUCCESS("success"),
 	DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING("Push notification error for driver, while booking"),
-	TRIPDETAILSNOTSAVED("Trip details are not saved");
+	FCMTOKEN("FCM Token Missing"),
+	TRIPDETAILSNOTSAVED("Trip details are not saved"),
+	DRIVERNOTFOUND("Driver not found");
 	
 	
 	private final String value;

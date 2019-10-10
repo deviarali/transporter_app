@@ -155,12 +155,16 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetails.setDeliveryStatus(deliveryStatus);
 			tripDetails = tripDetailsRepo.save(tripDetails);
 			
+			if(deliveryStatusId == 3 || deliveryStatusId == 4) {
+				driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 1);
+			}
+			
 			if (tripDetails != null) {
 				if (deliveryStatusId == 3) {
 					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by customer");
 					transporterPushNotifications.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean);
 					return "Trip cancled by customer";
-				} else {
+				} else if(deliveryStatusId == 4) {
 					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by driver");
 					transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean);
 					return "Trip cancled by driver";
@@ -184,18 +188,25 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		if(Utils.isNullOrEmpty(vehicleDetailsList)) {
 			throw new BusinessException(ErrorCodes.VEHICLENOTFOUND.name(), ErrorCodes.VEHICLENOTFOUND.value());
 		}
+		
+		
 		CustomerDetails details = customerDetailsService.findCustomerById(tripDetailsVo.getCustomerId());
+		
+		DriverDetails driverDetails = driverService.findDriverById(vehicleDetailsList.get(0).getDriverDetails().getId());
+		if(driverDetails.getUser().getFcmToken() == null)
+		{
+			throw new BusinessException(ErrorCodes.FCMTOKEN.name(), ErrorCodes.FCMTOKEN.value());	
+		}
 		String bookingBody = "Customer name : "+details.getUser().getFirstName() +" "+" Customer mobile number : "+details.getUser().getMobileNumber();
 		PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingBody);
-		String dnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), bean);
+		String dnResponse = transporterPushNotifications.sendPushNotification(driverDetails.getUser().getFcmToken(), bean);
 		if(Utils.isNullOrEmpty(dnResponse)) {
 			throw new BusinessException(ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.name(), ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.value());
 		}
 		
-		DriverDetails driverDetails = driverService.findDriverById(vehicleDetailsList.get(0).getDriverDetails().getId());
 		String bookingCustomerBody = "Driver name : "+driverDetails.getUser().getFirstName() +" "+" Driver mobile number : "+driverDetails.getUser().getMobileNumber();
 		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingCustomerBody);
-		String cnResponse = transporterPushNotifications.sendPushNotification(driverDetails.getUser().getFcmToken(), customerBean);
+		String cnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), customerBean);
 		if(Utils.isNullOrEmpty(cnResponse)) {
 			LOG.error("Notification error for customer, while booking");
 		}
@@ -221,6 +232,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		} else {
 			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTSAVED.name(), ErrorCodes.TRIPDETAILSNOTSAVED.value());
 		}
+		driverService.updateRidingStatus(driverDetails2.getId(),1);
 		return driverDetailsVo;
 	}
 }

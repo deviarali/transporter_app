@@ -60,6 +60,8 @@ public class DriverDetailsVo implements Serializable {
 	private String mobileNumber;
 	
 	private String tripStartOtp;
+	
+	private int ridingStatus;
 
 	public DriverDetailsVo() {
 	}
@@ -264,4 +266,12 @@ public class DriverDetailsVo implements Serializable {
 		this.tripStartOtp = tripStartOtp;
 	}
 
+	public int getRidingStatus() {
+		return ridingStatus;
+	}
+
+	public void setRidingStatus(int ridingStatus) {
+		this.ridingStatus = ridingStatus;
+	}
+	
 }

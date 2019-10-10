@@ -37,4 +37,6 @@ public interface DriverService {
 
 	DriverDetails findDriverById(int driverId);
 
+	void updateRidingStatus(int id, int status);
+
 }

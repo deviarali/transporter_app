@@ -102,6 +102,9 @@ public class DriverDetails implements Serializable {
 	
 	@OneToOne(mappedBy = "driverDetails", fetch = FetchType.EAGER)
 	private VehicleDetails vehicleDetails;
+	
+	@Column(name="riding_status")
+	private int ridingstatus;
 
 	public DriverDetails() {
 	}
@@ -281,6 +284,14 @@ public class DriverDetails implements Serializable {
 	public void setVehicleDetails(VehicleDetails vehicleDetails) {
 		this.vehicleDetails = vehicleDetails;
 	}
+	
+	public int getRidingstatus() {
+		return ridingstatus;
+	}
+
+	public void setRidingstatus(int ridingstatus) {
+		this.ridingstatus = ridingstatus;
+	}
 
 	public static DriverDetailsVo convertModelToVo(DriverDetails driverDetails) {
 		if(driverDetails == null)
@@ -306,6 +317,7 @@ public class DriverDetails implements Serializable {
 		driverDetailsVo.setCurrentLongitude(driverDetails.getCurrentLongitude());
 		driverDetailsVo.setAdharcardPictureUrl(driverDetails.getAdharcardPictureUrl());
 		driverDetailsVo.setDrivingLicencePictureUrl(driverDetails.getDrivingLicencePictureUrl());
+		driverDetailsVo.setRidingStatus(driverDetails.getRidingstatus());
 		return driverDetailsVo;
 	}
 
