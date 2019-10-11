@@ -7,6 +7,7 @@
 package com.transporter.dao.impl;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -197,5 +198,13 @@ public class GenericDaoImpl implements GenericDao {
 		}
 
 	}
+
+    public static Object firstResult(Collection collection) {
+        if (collection.size() == 0) {
+            return null;
+        }
+
+        return collection.iterator().next();
+    }
 
 }
