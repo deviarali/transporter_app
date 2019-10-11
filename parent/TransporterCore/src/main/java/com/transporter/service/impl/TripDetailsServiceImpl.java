@@ -189,10 +189,12 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			throw new BusinessException(ErrorCodes.VEHICLENOTFOUND.name(), ErrorCodes.VEHICLENOTFOUND.value());
 		}
 		
-		
 		CustomerDetails details = customerDetailsService.findCustomerById(tripDetailsVo.getCustomerId());
 		
 		DriverDetails driverDetails = driverService.findDriverById(vehicleDetailsList.get(0).getDriverDetails().getId());
+		LOG.info("Driver details for trip " +"driver id "+driverDetails.getId() +" User id "+driverDetails.getUser().getId() + " Driver fcm "+driverDetails.getUser().getFcmToken());
+		LOG.debug("Driver details for trip " +"driver id "+driverDetails.getId() +" User id "+driverDetails.getUser().getId() + " Driver fcm "+driverDetails.getUser().getFcmToken());
+		LOG.error("Driver details for trip " +"driver id "+driverDetails.getId() +" User id "+driverDetails.getUser().getId() + " Driver fcm "+driverDetails.getUser().getFcmToken());
 		if(driverDetails.getUser().getFcmToken() == null)
 		{
 			throw new BusinessException(ErrorCodes.FCMTOKEN.name(), ErrorCodes.FCMTOKEN.value());	
