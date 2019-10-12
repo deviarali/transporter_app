@@ -290,7 +290,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			LOG.error("Notification error for customer, while booking");
 		}
 		
-		driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
+		//driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
 		tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
 		tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
 		tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
