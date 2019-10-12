@@ -2,18 +2,20 @@ package com.transporter.vo;
 
 public class TripDetailsConfirmResponse {
 	
-	private int id;
+	private int tripId;
 	private String driverMobileNumber;	
 	private String tripStartOtp;
 	private String driverName;
 	private String vehicleName;
 	private String vehicleNumber;
 	private String vehicleImage;
-	public int getId() {
-		return id;
+	private int driverId;
+	
+	public int getTripId() {
+		return tripId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setTripId(int tripId) {
+		this.tripId = tripId;
 	}
 	public String getDriverMobileNumber() {
 		return driverMobileNumber;
@@ -50,6 +52,12 @@ public class TripDetailsConfirmResponse {
 	}
 	public void setVehicleImage(String vehicleImage) {
 		this.vehicleImage = vehicleImage;
+	}
+	public int getDriverId() {
+		return driverId;
+	}
+	public void setDriverId(int driverId) {
+		this.driverId = driverId;
 	}
 		
 }

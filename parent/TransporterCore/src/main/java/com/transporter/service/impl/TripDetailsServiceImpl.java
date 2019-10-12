@@ -135,17 +135,32 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Override
 	@Transactional
-	public TripDetails updateTripStatus(int tripId, int deliveryStatusId) {
+	public String updateTripStatus(int tripId, int deliveryStatusId) {
+		String response = "success";
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
 		if (tripDetails != null) {
 			DeliveryStatus deliveryStatus = new DeliveryStatus();
 			deliveryStatus.setId(deliveryStatusId);
 			tripDetails.setDeliveryStatus(deliveryStatus);
 			tripDetails = tripDetailsRepo.save(tripDetails);
+			
+			if(deliveryStatusId == 3 || deliveryStatusId == 4) {
+				driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 0);
+			}
+			
+			if (tripDetails != null) {
+				if (deliveryStatusId == 3) {
+					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by customer");
+					transporterPushNotifications.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean, "driver");
+				} else if(deliveryStatusId == 4) {
+					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by driver");
+					transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
+				}
+			}
 		} else {
-			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.toString());
+			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(), ErrorCodes.TRIPDETAILSNOTFOUND.value());
 		}
-		return tripDetails;
+		return response;
 	}
 
 	@Override
@@ -261,13 +276,14 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	//	driverService.updateRidingStatus(driverDetails2.getId(),1);
 		if(details2.getId() > 0) {
 			tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
-			tripDetailsConfirmResponse.setId(driverDetails2.getId());
+			tripDetailsConfirmResponse.setDriverId(driverDetails2.getId());
 			tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
 			tripDetailsConfirmResponse.setDriverMobileNumber(driverDetails.getUser().getMobileNumber());
 			tripDetailsConfirmResponse.setTripStartOtp(tripDetails.getTripStartOtp());
 			tripDetailsConfirmResponse.setVehicleName(vehicleDetailsList.get(0).getVehicleModel());
 			tripDetailsConfirmResponse.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
 			tripDetailsConfirmResponse.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
+			tripDetailsConfirmResponse.setTripId(details2.getId());
 		} else {
 			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTSAVED.name(), ErrorCodes.TRIPDETAILSNOTSAVED.value());
 		}

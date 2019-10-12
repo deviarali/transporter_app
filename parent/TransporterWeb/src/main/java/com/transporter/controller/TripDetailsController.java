@@ -17,6 +17,7 @@ import com.transporter.model.TripDetails;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
+import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
@@ -88,19 +89,21 @@ public class TripDetailsController {
 	@PutMapping(value = "/trip/{tripId}/status/{deliveryStatusId}")
 	public CommonResponse updateTripStatus(@PathVariable("tripId") int tripId,
 			@PathVariable("deliveryStatusId") int deliveryStatusId) {
-		CommonResponse response = null;
+		CommonResponse commonResponse = null;
 		try {
-			TripDetails updateTripstatus = tripDetailsService.updateTripStatus(tripId, deliveryStatusId);
-			if (updateTripstatus != null) {
-				response = RestUtils.wrapObjectForSuccess("Riding status updated sucessfully");
+			String response = tripDetailsService.updateTripStatus(tripId, deliveryStatusId);
+			if (!Utils.isNullOrEmpty(response)) {
+				commonResponse = RestUtils.wrapObjectForSuccess(response);
 			} else {
-				response = RestUtils.wrapObjectForFailure("Trip details not found", "error",
+				commonResponse = RestUtils.wrapObjectForFailure(null, "error",
 						WebConstants.WEB_RESPONSE_ERROR);
 			}
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+			commonResponse = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			commonResponse = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
-		return response;
+		return commonResponse;
 	}
 
 	@PutMapping(value = "/trip/{tripId}/cancelStatus/{deliveryStatusId}")

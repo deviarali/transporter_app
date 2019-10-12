@@ -19,7 +19,7 @@ public interface TripDetailsService {
 
 	TripDetails updateTripRatings(int tripId, String ratings);
 
-	TripDetails updateTripStatus(int tripId, int deliveryStatusId);
+	String updateTripStatus(int tripId, int deliveryStatusId);
 
 	String updateTripCancelledStatus(int tripId, int deliveryStatusId, DeliveryStatusVo deliveryStatusVo);
 
