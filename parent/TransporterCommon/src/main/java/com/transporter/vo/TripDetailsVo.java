@@ -39,7 +39,7 @@ public class TripDetailsVo implements Serializable {
 
 	private String goodsType;
 
-	private String pickupLocation;
+	private String sourceLocation;
 
 	private String pickupPersonMobile;
 
@@ -67,13 +67,13 @@ public class TripDetailsVo implements Serializable {
 	
 	private int driverId;
 	
-	private double sourceLattitude;
+	private Double sourceLattitude;
 	
-	private double sourceLongitude;
+	private Double sourceLongitude;
 	
-	private double destinationLattitude;
+	private Double destinationLattitude;
 	
-	private double destinationLongitude;
+	private Double destinationLongitude;
 	
 	private String sourceLandmark;
 	
@@ -195,13 +195,13 @@ public class TripDetailsVo implements Serializable {
 	public void setGoodsType(String goodsType) {
 		this.goodsType = goodsType;
 	}
-
-	public String getPickupLocation() {
-		return pickupLocation;
+	
+	public String getSourceLocation() {
+		return sourceLocation;
 	}
 
-	public void setPickupLocation(String pickupLocation) {
-		this.pickupLocation = pickupLocation;
+	public void setSourceLocation(String sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 
 	public String getPickupPersonMobile() {
@@ -308,35 +308,35 @@ public class TripDetailsVo implements Serializable {
 		this.driverId = driverId;
 	}
 
-	public double getSourceLattitude() {
+	public Double getSourceLattitude() {
 		return sourceLattitude;
 	}
 
-	public void setSourceLattitude(double sourceLattitude) {
+	public void setSourceLattitude(Double sourceLattitude) {
 		this.sourceLattitude = sourceLattitude;
 	}
 
-	public double getSourceLongitude() {
+	public Double getSourceLongitude() {
 		return sourceLongitude;
 	}
 
-	public void setSourceLongitude(double sourceLongitude) {
+	public void setSourceLongitude(Double sourceLongitude) {
 		this.sourceLongitude = sourceLongitude;
 	}
 
-	public double getDestinationLattitude() {
+	public Double getDestinationLattitude() {
 		return destinationLattitude;
 	}
 
-	public void setDestinationLattitude(double destinationLattitude) {
+	public void setDestinationLattitude(Double destinationLattitude) {
 		this.destinationLattitude = destinationLattitude;
 	}
 
-	public double getDestinationLongitude() {
+	public Double getDestinationLongitude() {
 		return destinationLongitude;
 	}
 
-	public void setDestinationLongitude(double destinationLongitude) {
+	public void setDestinationLongitude(Double destinationLongitude) {
 		this.destinationLongitude = destinationLongitude;
 	}
 

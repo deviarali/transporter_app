@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.transporter.model.TripDetails;
 import com.transporter.vo.DeliveryStatusVo;
-import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
 import com.transporter.vo.TripDetailsVo;
 
@@ -23,6 +23,6 @@ public interface TripDetailsService {
 
 	String updateTripCancelledStatus(int tripId, int deliveryStatusId, DeliveryStatusVo deliveryStatusVo);
 
-	public DriverDetailsVo confirmBooking(TripDetailsVo tripDetailsVo);
+	public TripDetailsConfirmResponse confirmBooking(TripDetailsVo tripDetailsVo);
 
 }

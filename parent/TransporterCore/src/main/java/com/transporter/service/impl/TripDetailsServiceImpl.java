@@ -39,6 +39,7 @@ import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
+import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
 import com.transporter.vo.TripDetailsVo;
 
@@ -104,7 +105,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetailsHistory.setDestinationLocation(data.getDestinationLocation());
 			tripDetailsHistory.setGoodsType(data.getGoodsType());
 			tripDetailsHistory.setGoodsSize(data.getGoodsSize());
-			tripDetailsHistory.setPickupLocation(data.getPickupLocation());
+			tripDetailsHistory.setPickupLocation(data.getSourceLocation());
 			tripDetailsHistory.setRatings(data.getRatings());
 			tripDetailsHistory.setTripTime(data.getTripTime());
 			tripDetailsHistory.setTripStarttime(data.getTripStarttime());
@@ -180,8 +181,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	
 	@Override
 	@Transactional
-	public DriverDetailsVo confirmBooking(TripDetailsVo tripDetailsVo) {
-		DriverDetailsVo driverDetailsVo = null;
+	public TripDetailsConfirmResponse confirmBooking(TripDetailsVo tripDetailsVo) {
+		TripDetailsConfirmResponse tripDetailsConfirmResponse = null;
 		Gson gson = new Gson();
 		FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest = new FetchSelectedVehiclesRequest();
 		fetchSelectedVehiclesRequest.setLattitude(tripDetailsVo.getSourceLattitude());
@@ -202,34 +203,44 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			throw new BusinessException(ErrorCodes.FCMTOKEN.name(), ErrorCodes.FCMTOKEN.value());	
 		}
 		//String bookingBody = "Customer name : "+details.getUser().getFirstName() +" "+" Customer mobile number : "+details.getUser().getMobileNumber();
-		JSONObject jsonObjectC = new JSONObject();
+		JSONObject driverJsonObject = new JSONObject();
 		try {
-			jsonObjectC.put("customerName", details.getUser().getFirstName());
-			jsonObjectC.put("customerMobileNumber", details.getUser().getMobileNumber());
-		//	jsonObjectC.put("sourceLattitude", tripDetailsVo.getlo)
+			driverJsonObject.put("customerName", details.getUser().getFirstName());
+			driverJsonObject.put("customerMobileNumber", details.getUser().getMobileNumber());
+			driverJsonObject.put("sourceLattitude", tripDetailsVo.getSourceLattitude());
+			driverJsonObject.put("sourceLongitude", tripDetailsVo.getSourceLongitude());
+			driverJsonObject.put("destinationLattitude", tripDetailsVo.getDestinationLattitude());
+			driverJsonObject.put("destinationLongitude", tripDetailsVo.getDestinationLongitude());
+			driverJsonObject.put("sourceLandmark", tripDetailsVo.getSourceLandmark());
+			driverJsonObject.put("destinationLandmark", tripDetailsVo.getDestinationLandmark());
+			driverJsonObject.put("sourceLocation", tripDetailsVo.getSourceLocation());
+			driverJsonObject.put("destinationLocation", tripDetailsVo.getDestinationLocation());
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("Exception while creating driver json object "+e.getMessage());
 		}
-		PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", jsonObjectC.toString());
+		PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", driverJsonObject.toString());
 		String dnResponse = transporterPushNotifications.sendPushNotification(driverDetails.getUser().getFcmToken(), bean, "driver");
 		if(Utils.isNullOrEmpty(dnResponse)) {
 			throw new BusinessException(ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.name(), ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.value());
 		}
 		
+		String tripStartOtp = userService.generateOtp();
 	//	String bookingCustomerBody = "Driver name : "+driverDetails.getUser().getFirstName() +" "+" Driver mobile number : "+driverDetails.getUser().getMobileNumber();
-		JSONObject jsonObject = new JSONObject();
+		JSONObject customerJsonObject = new JSONObject();
 		try {
-			jsonObject.put("driverName", driverDetails.getUser().getFirstName());
-			jsonObject.put("driverMobileNumber", driverDetails.getUser().getMobileNumber());
+			customerJsonObject.put("driverName", driverDetails.getUser().getFirstName());
+			customerJsonObject.put("driverMobileNumber", driverDetails.getUser().getMobileNumber());
+			customerJsonObject.put("vehicleName", vehicleDetailsList.get(0).getVehicleModel());
+			customerJsonObject.put("vehicleNumber",  vehicleDetailsList.get(0).getVehicleNum());
+			customerJsonObject.put("vehicleImage",  vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
+			customerJsonObject.put("tripStartOtp",  tripStartOtp);
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.error("Exception while creating customer json object "+e.getMessage());
 		}
 		
-		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", jsonObject.toString());
+		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", customerJsonObject.toString());
 		String cnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), customerBean, "customer");
 		if(Utils.isNullOrEmpty(cnResponse)) {
 			LOG.error("Notification error for customer, while booking");
@@ -245,18 +256,21 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		deliveryStatus.setId(DeliveryStatusEnum.PENDING.getId());
 		tripDetails.setDeliveryStatus(deliveryStatus);
 		tripDetails.setTripTime(new Date());
-		tripDetails.setTripStartOtp(userService.generateOtp());
+		tripDetails.setTripStartOtp(tripStartOtp);
 		TripDetails details2 = tripDetailsRepo.save(tripDetails);
 	//	driverService.updateRidingStatus(driverDetails2.getId(),1);
 		if(details2.getId() > 0) {
-			driverDetailsVo = new DriverDetailsVo();
-			driverDetailsVo.setId(driverDetails2.getId());
-			driverDetailsVo.setDrivername(driverDetails.getUser().getFirstName());
-			driverDetailsVo.setMobileNumber(driverDetails.getUser().getMobileNumber());
-			driverDetailsVo.setTripStartOtp(tripDetails.getTripStartOtp());
+			tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
+			tripDetailsConfirmResponse.setId(driverDetails2.getId());
+			tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
+			tripDetailsConfirmResponse.setDriverMobileNumber(driverDetails.getUser().getMobileNumber());
+			tripDetailsConfirmResponse.setTripStartOtp(tripDetails.getTripStartOtp());
+			tripDetailsConfirmResponse.setVehicleName(vehicleDetailsList.get(0).getVehicleModel());
+			tripDetailsConfirmResponse.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
+			tripDetailsConfirmResponse.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
 		} else {
 			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTSAVED.name(), ErrorCodes.TRIPDETAILSNOTSAVED.value());
 		}
-		return driverDetailsVo;
+		return tripDetailsConfirmResponse;
 	}
 }

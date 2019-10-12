@@ -19,6 +19,7 @@ import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
 import com.transporter.vo.TripDetailsVo;
 
@@ -55,9 +56,9 @@ public class TripDetailsController {
 	public CommonResponse confirmBooking(@RequestBody TripDetailsVo tripDetailsVo) {
 		CommonResponse response = null;
 		try {
-			DriverDetailsVo driverDetailsVo = tripDetailsService.confirmBooking(tripDetailsVo);
-			if(null != driverDetailsVo) {
-				response = RestUtils.wrapObjectForSuccess(driverDetailsVo);
+			TripDetailsConfirmResponse tripDetailsConfirmResponse = tripDetailsService.confirmBooking(tripDetailsVo);
+			if(null != tripDetailsConfirmResponse) {
+				response = RestUtils.wrapObjectForSuccess(tripDetailsConfirmResponse);
 			}
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
