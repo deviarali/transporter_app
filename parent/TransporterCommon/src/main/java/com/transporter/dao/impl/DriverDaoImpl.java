@@ -139,7 +139,7 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 	@Override
 	public void updateRidingStatus(int id, int status) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "From DriverDetails dd set dd.ridingStatus=:status where dd.id= :id";
+		String sqlQuery = "update DriverDetails dd set dd.ridingStatus=:status where dd.id= :id";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("id", id);
 		query.setParameter("status",status);

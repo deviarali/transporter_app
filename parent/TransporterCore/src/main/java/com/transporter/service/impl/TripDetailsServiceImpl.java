@@ -7,6 +7,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,11 +164,11 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			if (tripDetails != null) {
 				if (deliveryStatusId == 3) {
 					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by customer");
-					transporterPushNotifications.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean);
+					transporterPushNotifications.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean, "driver");
 					return "Trip cancled by customer";
 				} else if(deliveryStatusId == 4) {
 					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by driver");
-					transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean);
+					transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
 					return "Trip cancled by driver";
 				}
 			}
@@ -176,12 +178,14 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		return "Trip details not found";
 	}
 	
+	@Override
+	@Transactional
 	public DriverDetailsVo confirmBooking(TripDetailsVo tripDetailsVo) {
 		DriverDetailsVo driverDetailsVo = null;
 		Gson gson = new Gson();
 		FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest = new FetchSelectedVehiclesRequest();
-		fetchSelectedVehiclesRequest.setLattitude(tripDetailsVo.getLattitude());
-		fetchSelectedVehiclesRequest.setLongitude(tripDetailsVo.getLongitude());
+		fetchSelectedVehiclesRequest.setLattitude(tripDetailsVo.getSourceLattitude());
+		fetchSelectedVehiclesRequest.setLongitude(tripDetailsVo.getSourceLongitude());
 		fetchSelectedVehiclesRequest.setSurroundingDistance(surroundingDistance);
 		fetchSelectedVehiclesRequest.setVehicleType(tripDetailsVo.getVehicleType());
 		List<VehicleDetails> vehicleDetailsList = vehicleService.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest);
@@ -193,22 +197,40 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		
 		DriverDetails driverDetails = driverService.findDriverById(vehicleDetailsList.get(0).getDriverDetails().getId());
 		LOG.info("Driver details for trip " +"driver id "+driverDetails.getId() +" User id "+driverDetails.getUser().getId() + " Driver fcm "+driverDetails.getUser().getFcmToken());
-		LOG.debug("Driver details for trip " +"driver id "+driverDetails.getId() +" User id "+driverDetails.getUser().getId() + " Driver fcm "+driverDetails.getUser().getFcmToken());
-		LOG.error("Driver details for trip " +"driver id "+driverDetails.getId() +" User id "+driverDetails.getUser().getId() + " Driver fcm "+driverDetails.getUser().getFcmToken());
 		if(driverDetails.getUser().getFcmToken() == null)
 		{
 			throw new BusinessException(ErrorCodes.FCMTOKEN.name(), ErrorCodes.FCMTOKEN.value());	
 		}
-		String bookingBody = "Customer name : "+details.getUser().getFirstName() +" "+" Customer mobile number : "+details.getUser().getMobileNumber();
-		PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingBody);
-		String dnResponse = transporterPushNotifications.sendPushNotification(driverDetails.getUser().getFcmToken(), bean);
+		//String bookingBody = "Customer name : "+details.getUser().getFirstName() +" "+" Customer mobile number : "+details.getUser().getMobileNumber();
+		JSONObject jsonObjectC = new JSONObject();
+		try {
+			jsonObjectC.put("customerName", details.getUser().getFirstName());
+			jsonObjectC.put("customerMobileNumber", details.getUser().getMobileNumber());
+		//	jsonObjectC.put("sourceLattitude", tripDetailsVo.getlo)
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", jsonObjectC.toString());
+		String dnResponse = transporterPushNotifications.sendPushNotification(driverDetails.getUser().getFcmToken(), bean, "driver");
 		if(Utils.isNullOrEmpty(dnResponse)) {
 			throw new BusinessException(ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.name(), ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.value());
 		}
 		
-		String bookingCustomerBody = "Driver name : "+driverDetails.getUser().getFirstName() +" "+" Driver mobile number : "+driverDetails.getUser().getMobileNumber();
-		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", bookingCustomerBody);
-		String cnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), customerBean);
+	//	String bookingCustomerBody = "Driver name : "+driverDetails.getUser().getFirstName() +" "+" Driver mobile number : "+driverDetails.getUser().getMobileNumber();
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("driverName", driverDetails.getUser().getFirstName());
+			jsonObject.put("driverMobileNumber", driverDetails.getUser().getMobileNumber());
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", jsonObject.toString());
+		String cnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), customerBean, "customer");
 		if(Utils.isNullOrEmpty(cnResponse)) {
 			LOG.error("Notification error for customer, while booking");
 		}
@@ -217,7 +239,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		customerDetails.setId(tripDetailsVo.getCustomerId());
 		tripDetails.setCustomerDetails(customerDetails);
 		DriverDetails driverDetails2 = new DriverDetails();
-		driverDetails2.setId(tripDetailsVo.getDriverId());
+		driverDetails2.setId(driverDetails.getId());
 		tripDetails.setDriverDetails(driverDetails2);
 		DeliveryStatus deliveryStatus = new DeliveryStatus();
 		deliveryStatus.setId(DeliveryStatusEnum.PENDING.getId());
@@ -225,6 +247,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		tripDetails.setTripTime(new Date());
 		tripDetails.setTripStartOtp(userService.generateOtp());
 		TripDetails details2 = tripDetailsRepo.save(tripDetails);
+	//	driverService.updateRidingStatus(driverDetails2.getId(),1);
 		if(details2.getId() > 0) {
 			driverDetailsVo = new DriverDetailsVo();
 			driverDetailsVo.setId(driverDetails2.getId());
@@ -234,7 +257,6 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		} else {
 			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTSAVED.name(), ErrorCodes.TRIPDETAILSNOTSAVED.value());
 		}
-		driverService.updateRidingStatus(driverDetails2.getId(),1);
 		return driverDetailsVo;
 	}
 }

@@ -67,9 +67,17 @@ public class TripDetailsVo implements Serializable {
 	
 	private int driverId;
 	
-	private double lattitude;
+	private double sourceLattitude;
 	
-	private double longitude;
+	private double sourceLongitude;
+	
+	private double destinationLattitude;
+	
+	private double destinationLongitude;
+	
+	private String sourceLandmark;
+	
+	private String destinationLandmark;
 	
 	private int vehicleType;
 
@@ -300,20 +308,52 @@ public class TripDetailsVo implements Serializable {
 		this.driverId = driverId;
 	}
 
-	public double getLattitude() {
-		return lattitude;
+	public double getSourceLattitude() {
+		return sourceLattitude;
 	}
 
-	public void setLattitude(double lattitude) {
-		this.lattitude = lattitude;
+	public void setSourceLattitude(double sourceLattitude) {
+		this.sourceLattitude = sourceLattitude;
 	}
 
-	public double getLongitude() {
-		return longitude;
+	public double getSourceLongitude() {
+		return sourceLongitude;
 	}
 
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+	public void setSourceLongitude(double sourceLongitude) {
+		this.sourceLongitude = sourceLongitude;
+	}
+
+	public double getDestinationLattitude() {
+		return destinationLattitude;
+	}
+
+	public void setDestinationLattitude(double destinationLattitude) {
+		this.destinationLattitude = destinationLattitude;
+	}
+
+	public double getDestinationLongitude() {
+		return destinationLongitude;
+	}
+
+	public void setDestinationLongitude(double destinationLongitude) {
+		this.destinationLongitude = destinationLongitude;
+	}
+
+	public String getSourceLandmark() {
+		return sourceLandmark;
+	}
+
+	public void setSourceLandmark(String sourceLandmark) {
+		this.sourceLandmark = sourceLandmark;
+	}
+
+	public String getDestinationLandmark() {
+		return destinationLandmark;
+	}
+
+	public void setDestinationLandmark(String destinationLandmark) {
+		this.destinationLandmark = destinationLandmark;
 	}
 
 	public int getVehicleType() {
@@ -322,7 +362,5 @@ public class TripDetailsVo implements Serializable {
 
 	public void setVehicleType(int vehicleType) {
 		this.vehicleType = vehicleType;
-	}
-
-	
+	}	
 }
