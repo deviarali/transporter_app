@@ -22,6 +22,6 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 
 	@Modifying
 	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id"  )
-	TripDetails updateTripStatus(@Param("id")int id,@Param("tripStatus")int tripStatus);
-
+	Integer updateTripStatus(@Param(value ="id")int id, @Param(value ="tripStatus")int tripStatus);
+	
 }

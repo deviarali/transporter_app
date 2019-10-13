@@ -143,7 +143,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
 		if (tripDetails != null) {
 			
-			tripDetails = tripDetailsRepo.updateTripStatus(tripDetails.getId(),deliveryStatusId);
+			int updatedRows = tripDetailsRepo.updateTripStatus(tripDetails.getId(),deliveryStatusId);
 			
 			if(deliveryStatusId == 3 || deliveryStatusId == 4) {
 				//driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), RidingStatusEnum.OFFRIDING.getRidingStatusId());
