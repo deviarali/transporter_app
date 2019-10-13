@@ -213,12 +213,8 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
+	@Transactional
 	public void updateRidingStatus(int id,int status) {
-		DriverDetails driverDetails = driverDao.findById(id);
-		if (driverDetails == null) {
-			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
-		}
-		driverDao.updateRidingStatus(id, status);
-		
+		driverDetailsRepo.updateRidingStatus(id, status);
 	}
 }

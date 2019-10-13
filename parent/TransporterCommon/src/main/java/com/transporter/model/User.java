@@ -93,7 +93,7 @@ public class User implements Serializable {
 	@Column(name = "profile_picture_url")
 	private String profilePictureUrl;
 	
-	@Column(name = "fcmToken")
+	@Column(name = "fcmtoken")
 	private String fcmToken;
 
 	public User() {

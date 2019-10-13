@@ -2,6 +2,8 @@ package com.transporter.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,8 +19,10 @@ import com.transporter.model.TripDetails;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
+import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
 import com.transporter.vo.TripDetailsVo;
 
@@ -30,6 +34,7 @@ import com.transporter.vo.TripDetailsVo;
 @RestController
 public class TripDetailsController {
 
+	private static Logger LOG = LoggerFactory.getLogger(TripDetailsController.class);
 	@Autowired
 	TripDetailsService tripDetailsService;
 
@@ -55,14 +60,16 @@ public class TripDetailsController {
 	public CommonResponse confirmBooking(@RequestBody TripDetailsVo tripDetailsVo) {
 		CommonResponse response = null;
 		try {
-			DriverDetailsVo driverDetailsVo = tripDetailsService.confirmBooking(tripDetailsVo);
-			if(null != driverDetailsVo) {
-				response = RestUtils.wrapObjectForSuccess(driverDetailsVo);
+			TripDetailsConfirmResponse tripDetailsConfirmResponse = tripDetailsService.confirmBooking(tripDetailsVo);
+			if(null != tripDetailsConfirmResponse) {
+				response = RestUtils.wrapObjectForSuccess(tripDetailsConfirmResponse);
 			}
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			LOG.error("Exception while confirmbooking "+e.getMessage());
+			e.printStackTrace();
 		}
 		return response;
 	}
@@ -87,19 +94,23 @@ public class TripDetailsController {
 	@PutMapping(value = "/trip/{tripId}/status/{deliveryStatusId}")
 	public CommonResponse updateTripStatus(@PathVariable("tripId") int tripId,
 			@PathVariable("deliveryStatusId") int deliveryStatusId) {
-		CommonResponse response = null;
+		CommonResponse commonResponse = null;
 		try {
-			TripDetails updateTripstatus = tripDetailsService.updateTripStatus(tripId, deliveryStatusId);
-			if (updateTripstatus != null) {
-				response = RestUtils.wrapObjectForSuccess("Riding status updated sucessfully");
+			String response = tripDetailsService.updateTripStatus(tripId, deliveryStatusId);
+			if (!Utils.isNullOrEmpty(response)) {
+				commonResponse = RestUtils.wrapObjectForSuccess(response);
 			} else {
-				response = RestUtils.wrapObjectForFailure("Trip details not found", "error",
+				commonResponse = RestUtils.wrapObjectForFailure(null, "error",
 						WebConstants.WEB_RESPONSE_ERROR);
 			}
 		} catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+			commonResponse = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			commonResponse = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			LOG.error("Exception while update trip status "+e.getMessage());
+			e.printStackTrace();
 		}
-		return response;
+		return commonResponse;
 	}
 
 	@PutMapping(value = "/trip/{tripId}/cancelStatus/{deliveryStatusId}")

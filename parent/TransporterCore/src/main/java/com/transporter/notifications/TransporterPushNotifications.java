@@ -11,12 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.transporter.fcm.PushNotificationBean;
+import com.transporter.utils.Utils;
 
 @Service
 public class TransporterPushNotifications {
 
-	@Value("${android.fcm.key}")
-	private String androidFcmKey;
+	@Value("${android.fcm.key.customer}")
+	private String androidFcmKeyForCustomer;
+	
+	@Value("${android.fcm.key.driver}")
+	private String androidFcmKeyForDriver;
 
 	@Value("${android.fcm.url}")
 	private String androidFcmUrl;
@@ -28,7 +32,7 @@ public class TransporterPushNotifications {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.set("Authorization", "key=" + androidFcmKey);
+			httpHeaders.set("Authorization", "key=" + androidFcmKeyForCustomer);
 			httpHeaders.set("Content-Type", "application/json");
 			JSONObject msg = new JSONObject();
 			JSONObject json = new JSONObject();
@@ -53,12 +57,16 @@ public class TransporterPushNotifications {
 		return response;
 	}
 
-	public String sendPushNotification(Object devicesToken, PushNotificationBean bean) {
+	public String sendPushNotification(Object devicesToken, PushNotificationBean bean, String typeOfUser) {
 		String response = null;
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.set("Authorization", "key=" + androidFcmKey);
+			if(!Utils.isNullOrEmpty(typeOfUser) && typeOfUser.equals("customer")) {
+				httpHeaders.set("Authorization", "key=" + androidFcmKeyForCustomer);
+			} else if (!Utils.isNullOrEmpty(typeOfUser) && typeOfUser.equals("driver")) {
+				httpHeaders.set("Authorization", "key=" + androidFcmKeyForDriver);
+			}
 			httpHeaders.set("Content-Type", "application/json");
 			JSONObject json = new JSONObject();
 			if(null != bean.getData()) {
@@ -70,6 +78,9 @@ public class TransporterPushNotifications {
 			json.put("to", devicesToken);
 
 			HttpEntity<String> httpEntity = new HttpEntity<String>(json.toString(), httpHeaders);
+			LOG.info("fcm request "+httpEntity);
+			LOG.debug("fcm request "+httpEntity);
+			LOG.error("fcm request "+httpEntity);
 			response = restTemplate.postForObject(androidFcmUrl, httpEntity, String.class);
 			System.out.println(response);
 		} catch (JSONException e) {

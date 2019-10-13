@@ -39,7 +39,7 @@ public class TripDetailsVo implements Serializable {
 
 	private String goodsType;
 
-	private String pickupLocation;
+	private String sourceLocation;
 
 	private String pickupPersonMobile;
 
@@ -67,9 +67,17 @@ public class TripDetailsVo implements Serializable {
 	
 	private int driverId;
 	
-	private double lattitude;
+	private Double sourceLattitude;
 	
-	private double longitude;
+	private Double sourceLongitude;
+	
+	private Double destinationLattitude;
+	
+	private Double destinationLongitude;
+	
+	private String sourceLandmark;
+	
+	private String destinationLandmark;
 	
 	private int vehicleType;
 
@@ -187,13 +195,13 @@ public class TripDetailsVo implements Serializable {
 	public void setGoodsType(String goodsType) {
 		this.goodsType = goodsType;
 	}
-
-	public String getPickupLocation() {
-		return pickupLocation;
+	
+	public String getSourceLocation() {
+		return sourceLocation;
 	}
 
-	public void setPickupLocation(String pickupLocation) {
-		this.pickupLocation = pickupLocation;
+	public void setSourceLocation(String sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 
 	public String getPickupPersonMobile() {
@@ -300,20 +308,52 @@ public class TripDetailsVo implements Serializable {
 		this.driverId = driverId;
 	}
 
-	public double getLattitude() {
-		return lattitude;
+	public Double getSourceLattitude() {
+		return sourceLattitude;
 	}
 
-	public void setLattitude(double lattitude) {
-		this.lattitude = lattitude;
+	public void setSourceLattitude(Double sourceLattitude) {
+		this.sourceLattitude = sourceLattitude;
 	}
 
-	public double getLongitude() {
-		return longitude;
+	public Double getSourceLongitude() {
+		return sourceLongitude;
 	}
 
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
+	public void setSourceLongitude(Double sourceLongitude) {
+		this.sourceLongitude = sourceLongitude;
+	}
+
+	public Double getDestinationLattitude() {
+		return destinationLattitude;
+	}
+
+	public void setDestinationLattitude(Double destinationLattitude) {
+		this.destinationLattitude = destinationLattitude;
+	}
+
+	public Double getDestinationLongitude() {
+		return destinationLongitude;
+	}
+
+	public void setDestinationLongitude(Double destinationLongitude) {
+		this.destinationLongitude = destinationLongitude;
+	}
+
+	public String getSourceLandmark() {
+		return sourceLandmark;
+	}
+
+	public void setSourceLandmark(String sourceLandmark) {
+		this.sourceLandmark = sourceLandmark;
+	}
+
+	public String getDestinationLandmark() {
+		return destinationLandmark;
+	}
+
+	public void setDestinationLandmark(String destinationLandmark) {
+		this.destinationLandmark = destinationLandmark;
 	}
 
 	public int getVehicleType() {
@@ -322,7 +362,5 @@ public class TripDetailsVo implements Serializable {
 
 	public void setVehicleType(int vehicleType) {
 		this.vehicleType = vehicleType;
-	}
-
-	
+	}	
 }

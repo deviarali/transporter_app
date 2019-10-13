@@ -71,8 +71,8 @@ public class TripDetails implements Serializable {
 	@Column(name = "goods_type")
 	private String goodsType;
 
-	@Column(name = "pickup_location")
-	private String pickupLocation;
+	@Column(name = "source_location")
+	private String sourceLocation;
 
 	@Column(name = "pickupperson_mobile")
 	private String pickupPersonMobile;
@@ -115,323 +115,283 @@ public class TripDetails implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trip_status")
 	private DeliveryStatus deliveryStatus;
+	
+	@Column(name = "source_lattitude")
+	private Double sourceLattitude;
+	
+	@Column(name = "source_longitude")
+	private Double sourceLongitude;
+	
+	@Column(name = "destination_lattitude")
+	private Double destinationLattitude;
+	
+	@Column(name = "destination_longitude")
+	private Double destinationLongitude;
+	
+	@Column(name = "source_landmark")
+	private String sourceLandmark;
+	
+	@Column(name = "destination_landmark")
+	private String destinationLandmark;
 
 	public TripDetails() {
 	}
-
 	
-
-	public final int getId() {
+	public int getId() {
 		return id;
 	}
 
-
-
-	public final void setId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-
-
-	public final String getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-
-
-	public final void setAmount(String amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 
-
-
-	public final String getAmountToApp() {
+	public String getAmountToApp() {
 		return amountToApp;
 	}
 
-
-
-	public final void setAmountToApp(String amountToApp) {
+	public void setAmountToApp(String amountToApp) {
 		this.amountToApp = amountToApp;
 	}
 
-
-
-	public final String getAmountToDriver() {
+	public String getAmountToDriver() {
 		return amountToDriver;
 	}
 
-
-
-	public final void setAmountToDriver(String amountToDriver) {
+	public void setAmountToDriver(String amountToDriver) {
 		this.amountToDriver = amountToDriver;
 	}
 
-
-
-	public final String getCanceledReason() {
+	public String getCanceledReason() {
 		return canceledReason;
 	}
 
-
-
-	public final void setCanceledReason(String canceledReason) {
+	public void setCanceledReason(String canceledReason) {
 		this.canceledReason = canceledReason;
 	}
 
-
-
-	public final String getCancelledAmountFromCustomer() {
+	public String getCancelledAmountFromCustomer() {
 		return cancelledAmountFromCustomer;
 	}
 
-
-
-	public final void setCancelledAmountFromCustomer(String cancelledAmountFromCustomer) {
+	public void setCancelledAmountFromCustomer(String cancelledAmountFromCustomer) {
 		this.cancelledAmountFromCustomer = cancelledAmountFromCustomer;
 	}
 
-
-
-	public final String getCancelledAmountFromDriver() {
+	public String getCancelledAmountFromDriver() {
 		return cancelledAmountFromDriver;
 	}
 
-
-
-	public final void setCancelledAmountFromDriver(String cancelledAmountFromDriver) {
+	public void setCancelledAmountFromDriver(String cancelledAmountFromDriver) {
 		this.cancelledAmountFromDriver = cancelledAmountFromDriver;
 	}
 
-
-
-	public final int getCancelledAmountStatus() {
+	public int getCancelledAmountStatus() {
 		return cancelledAmountStatus;
 	}
 
-
-
-	public final void setCancelledAmountStatus(int cancelledAmountStatus) {
+	public void setCancelledAmountStatus(int cancelledAmountStatus) {
 		this.cancelledAmountStatus = cancelledAmountStatus;
 	}
 
-
-
-	public final String getCashMode() {
+	public String getCashMode() {
 		return cashMode;
 	}
 
-
-
-	public final void setCashMode(String cashMode) {
+	public void setCashMode(String cashMode) {
 		this.cashMode = cashMode;
 	}
 
-
-
-	public final String getDeliveryPersonMobile() {
+	public String getDeliveryPersonMobile() {
 		return deliveryPersonMobile;
 	}
 
-
-
-	public final void setDeliveryPersonMobile(String deliveryPersonMobile) {
+	public void setDeliveryPersonMobile(String deliveryPersonMobile) {
 		this.deliveryPersonMobile = deliveryPersonMobile;
 	}
 
-
-
-	public final String getDeliveryPersonName() {
+	public String getDeliveryPersonName() {
 		return deliveryPersonName;
 	}
 
-
-
-	public final void setDeliveryPersonName(String deliveryPersonName) {
+	public void setDeliveryPersonName(String deliveryPersonName) {
 		this.deliveryPersonName = deliveryPersonName;
 	}
 
-
-
-	public final String getDestinationLocation() {
+	public String getDestinationLocation() {
 		return destinationLocation;
 	}
 
-
-
-	public final void setDestinationLocation(String destinationLocation) {
+	public void setDestinationLocation(String destinationLocation) {
 		this.destinationLocation = destinationLocation;
 	}
 
-
-
-	public final String getGoodsSize() {
+	public String getGoodsSize() {
 		return goodsSize;
 	}
 
-
-
-	public final void setGoodsSize(String goodsSize) {
+	public void setGoodsSize(String goodsSize) {
 		this.goodsSize = goodsSize;
 	}
 
-
-
-	public final String getGoodsType() {
+	public String getGoodsType() {
 		return goodsType;
 	}
 
-
-
-	public final void setGoodsType(String goodsType) {
+	public void setGoodsType(String goodsType) {
 		this.goodsType = goodsType;
 	}
 
-
-
-	public final String getPickupLocation() {
-		return pickupLocation;
+	public String getSourceLocation() {
+		return sourceLocation;
 	}
 
-
-
-	public final void setPickupLocation(String pickupLocation) {
-		this.pickupLocation = pickupLocation;
+	public void setSourceLocation(String sourceLocation) {
+		this.sourceLocation = sourceLocation;
 	}
 
-
-
-	public final String getPickupPersonMobile() {
+	public String getPickupPersonMobile() {
 		return pickupPersonMobile;
 	}
 
-
-
-	public final void setPickupPersonMobile(String pickupPersonMobile) {
+	public void setPickupPersonMobile(String pickupPersonMobile) {
 		this.pickupPersonMobile = pickupPersonMobile;
 	}
 
-
-
-	public final String getPickupPersonName() {
+	public String getPickupPersonName() {
 		return pickupPersonName;
 	}
 
-
-
-	public final void setPickupPersonName(String pickupPersonName) {
+	public void setPickupPersonName(String pickupPersonName) {
 		this.pickupPersonName = pickupPersonName;
 	}
 
-
-
-	public final String getRatings() {
+	public String getRatings() {
 		return ratings;
 	}
 
-
-
-	public final void setRatings(String ratings) {
+	public void setRatings(String ratings) {
 		this.ratings = ratings;
 	}
 
-
-
-	public final Date getTripEndtime() {
+	public Date getTripEndtime() {
 		return tripEndtime;
 	}
 
-
-
-	public final void setTripEndtime(Date tripEndtime) {
+	public void setTripEndtime(Date tripEndtime) {
 		this.tripEndtime = tripEndtime;
 	}
 
-
-
-	public final Date getTripStarttime() {
+	public Date getTripStarttime() {
 		return tripStarttime;
 	}
 
-
-
-	public final void setTripStarttime(Date tripStarttime) {
+	public void setTripStarttime(Date tripStarttime) {
 		this.tripStarttime = tripStarttime;
 	}
 
-
-
-	public final Date getTripTime() {
+	public Date getTripTime() {
 		return tripTime;
 	}
 
-
-
-	public final void setTripTime(Date tripTime) {
+	public void setTripTime(Date tripTime) {
 		this.tripTime = tripTime;
 	}
 
-
-
-	public final String getTripEndOtp() {
+	public String getTripEndOtp() {
 		return tripEndOtp;
 	}
 
-
-
-	public final void setTripEndOtp(String tripEndOtp) {
+	public void setTripEndOtp(String tripEndOtp) {
 		this.tripEndOtp = tripEndOtp;
 	}
 
-
-
-	public final String getTripStartOtp() {
+	public String getTripStartOtp() {
 		return tripStartOtp;
 	}
 
-
-
-	public final void setTripStartOtp(String tripStartOtp) {
+	public void setTripStartOtp(String tripStartOtp) {
 		this.tripStartOtp = tripStartOtp;
 	}
 
-
-
-	public final DriverDetails getDriverDetails() {
+	public DriverDetails getDriverDetails() {
 		return driverDetails;
 	}
 
-
-
-	public final void setDriverDetails(DriverDetails driverDetails) {
+	public void setDriverDetails(DriverDetails driverDetails) {
 		this.driverDetails = driverDetails;
 	}
 
-
-
-	public final CustomerDetails getCustomerDetails() {
+	public CustomerDetails getCustomerDetails() {
 		return customerDetails;
 	}
 
-
-
-	public final void setCustomerDetails(CustomerDetails customerDetails) {
+	public void setCustomerDetails(CustomerDetails customerDetails) {
 		this.customerDetails = customerDetails;
 	}
 
-
-
-	public final DeliveryStatus getDeliveryStatus() {
+	public DeliveryStatus getDeliveryStatus() {
 		return deliveryStatus;
 	}
 
-
-
-	public final void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+	public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
 		this.deliveryStatus = deliveryStatus;
 	}
 
+	public Double getSourceLattitude() {
+		return sourceLattitude;
+	}
 
+	public void setSourceLattitude(Double sourceLattitude) {
+		this.sourceLattitude = sourceLattitude;
+	}
+
+	public Double getSourceLongitude() {
+		return sourceLongitude;
+	}
+
+	public void setSourceLongitude(Double sourceLongitude) {
+		this.sourceLongitude = sourceLongitude;
+	}
+
+	public Double getDestinationLattitude() {
+		return destinationLattitude;
+	}
+
+	public void setDestinationLattitude(Double destinationLattitude) {
+		this.destinationLattitude = destinationLattitude;
+	}
+
+	public Double getDestinationLongitude() {
+		return destinationLongitude;
+	}
+
+	public void setDestinationLongitude(Double destinationLongitude) {
+		this.destinationLongitude = destinationLongitude;
+	}
+
+	public String getSourceLandmark() {
+		return sourceLandmark;
+	}
+
+	public void setSourceLandmark(String sourceLandmark) {
+		this.sourceLandmark = sourceLandmark;
+	}
+
+	public String getDestinationLandmark() {
+		return destinationLandmark;
+	}
+
+	public void setDestinationLandmark(String destinationLandmark) {
+		this.destinationLandmark = destinationLandmark;
+	}
 
 	public static TripDetailsVo convertTOVo(TripDetails tripDetails) {
 		TripDetailsVo tripDetailsVo = new TripDetailsVo();
@@ -449,7 +409,7 @@ public class TripDetails implements Serializable {
 		tripDetailsVo.setDestinationLocation(tripDetails.getDestinationLocation());
 		tripDetailsVo.setGoodsType(tripDetails.getGoodsType());
 		tripDetailsVo.setGoodsSize(tripDetails.getGoodsSize());
-		tripDetailsVo.setPickupLocation(tripDetails.getPickupLocation());
+		tripDetailsVo.setSourceLocation(tripDetails.getSourceLocation());
 		tripDetailsVo.setRatings(tripDetails.getRatings());
 		tripDetailsVo.setTripTime(tripDetails.getTripTime());
 		tripDetailsVo.setTripStarttime(tripDetails.getTripStarttime());
