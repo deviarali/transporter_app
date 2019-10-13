@@ -1,5 +1,6 @@
 package com.transporter.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.transporter.model.TripDetails;
@@ -24,5 +25,9 @@ public interface TripDetailsService {
 	String updateTripCancelledStatus(int tripId, int deliveryStatusId, DeliveryStatusVo deliveryStatusVo);
 
 	public DriverDetailsVo confirmBooking(TripDetailsVo tripDetailsVo);
+
+	public Integer getTotalDayRideNumber(Integer userId, Date calendar);
+	
+	public Integer getTotalRideNumber(Integer userId);
 
 }

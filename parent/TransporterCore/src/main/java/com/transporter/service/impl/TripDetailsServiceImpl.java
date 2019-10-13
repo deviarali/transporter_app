@@ -1,6 +1,7 @@
 package com.transporter.service.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.transporter.dao.TripDetailsDao;
 import com.transporter.enums.DeliveryStatusEnum;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
@@ -52,6 +54,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	
 	@Autowired
 	TripDetailsRepo tripDetailsRepo;
+	
+	@Autowired
+	TripDetailsDao tripDetailsDao;
 	
 	@Autowired
 	VehicleService vehicleService;
@@ -235,4 +240,15 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		driverService.updateRidingStatus(driverDetails2.getId(),1);
 		return driverDetailsVo;
 	}
+
+	@Override
+	public Integer getTotalDayRideNumber(Integer userId, Date calendar) {
+		return tripDetailsDao.getTotalDayRideNumber(userId, calendar);
+	}
+	
+	@Override
+	public Integer getTotalRideNumber(Integer userId) {
+		return tripDetailsDao.getTotalRideNumber(userId);
+	}
+
 }

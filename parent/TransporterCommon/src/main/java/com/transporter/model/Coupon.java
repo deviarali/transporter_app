@@ -28,11 +28,13 @@ public class Coupon implements Serializable {
 
 	private Integer id;
 	private String couponCode;
+	private String description;
 	private CouponDiscountType discountType;
 	private BigDecimal amountOrPercentage;
 	private Boolean isActive;
 	private Boolean firstRide;
 	private Boolean referral;
+	private Boolean isDayCoupon;
 	private Calendar startDate;
 	private Calendar endDate;
 	private Calendar updatedOn;
@@ -63,6 +65,15 @@ public class Coupon implements Serializable {
 		this.couponCode = couponCode;
 	}
 
+	@Column(name = "description", nullable = false)
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "discount_type", nullable = false)
 	public CouponDiscountType getDiscountType() {
@@ -82,7 +93,7 @@ public class Coupon implements Serializable {
 		this.amountOrPercentage = amountOrPercentage;
 	}
 
-	@Column(name = "first_ride")
+	@Column(name = "first_ride", nullable = false)
 	public Boolean getFirstRide() {
 		return firstRide;
 	}
@@ -91,13 +102,22 @@ public class Coupon implements Serializable {
 		this.firstRide = firstRide;
 	}
 
-	@Column(name = "referral")
+	@Column(name = "referral", nullable = false)
 	public Boolean getReferral() {
 		return referral;
 	}
 
 	public void setReferral(Boolean referral) {
 		this.referral = referral;
+	}
+
+	@Column(name = "is_day_doupon", nullable = false)
+	public Boolean getIsDayCoupon() {
+		return isDayCoupon;
+	}
+
+	public void setIsDayCoupon(Boolean isDayCoupon) {
+		this.isDayCoupon = isDayCoupon;
 	}
 
 	@Column(name = "start_date")

@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.transporter.dao.CouponDao;
 import com.transporter.model.Coupon;
@@ -69,6 +70,36 @@ public class CouponDaoImpl extends GenericDaoImpl implements CouponDao {
 	}
 
 	@Override
+	public boolean isCouponExist(Integer id, Calendar startDate, Calendar endDate) {
+		Session session = sessionFactory.getCurrentSession();
+		
+		StringBuilder builder = new StringBuilder("select coupon.id ");
+		builder.append(" from Coupon coupon ");
+		builder.append(" where coupon.isActive = true");
+		if(id  != null) {
+			builder.append(" and coupon.id != :couponId");
+		}
+		builder.append(" and ((coupon.startDate <= :startDate and :startDate <= coupon.endDate)");
+		builder.append(" 	or (coupon.startDate <= :endDate and :endDate <= coupon.endDate)) ");
+		
+		
+		Query query = session.createQuery(builder.toString());
+		
+		if(id  != null) {
+			query.setParameter("couponId", id);
+		}
+		query.setParameter("startDate", startDate);
+		query.setParameter("endDate", endDate);
+				
+		List couponIds = query.list();
+		
+		if(!CollectionUtils.isEmpty(couponIds)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
 	public Coupon getFirstRideCoupon(String couponCode) {
 		Session session = sessionFactory.getCurrentSession();
 		
@@ -96,7 +127,7 @@ public class CouponDaoImpl extends GenericDaoImpl implements CouponDao {
 		StringBuilder sqlQuery = new StringBuilder("");
 		sqlQuery.append("FROM Coupon code ");
 		sqlQuery.append("where code.isActive= true ");
-		sqlQuery.append("and code.firstRide = false ");
+//		sqlQuery.append("and code.firstRide = false ");
 		sqlQuery.append("and code.couponCode = :couponCode ");
 		sqlQuery.append("and (:currentDate between code.startDate and code.endDate) ");
 		
