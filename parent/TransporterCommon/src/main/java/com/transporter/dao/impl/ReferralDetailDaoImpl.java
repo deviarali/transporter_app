@@ -35,7 +35,15 @@ public class ReferralDetailDaoImpl extends GenericDaoImpl implements ReferralDet
 
 	@Override
 	public List<ReferralDetail> getAllReferralDetail() {
-		return loadAll(ReferralDetail.class);
+		
+		List<ReferralDetail> referrals = loadAll(ReferralDetail.class);
+		if(!CollectionUtils.isEmpty(referrals)) {
+			for (ReferralDetail detail : referrals) {
+				Hibernate.initialize(detail.getReferredUser());
+				Hibernate.initialize(detail.getReferreeUser());
+			}
+		}
+		return referrals;
 	}
 
 	@Override
@@ -46,8 +54,14 @@ public class ReferralDetailDaoImpl extends GenericDaoImpl implements ReferralDet
 		Query query = session.createQuery(sqlQuery);
 		
 		query.setParameter("isActive", isActive);
-		
-		return query.list();
+		List<ReferralDetail> referrals = query.list();
+		if(!CollectionUtils.isEmpty(referrals)) {
+			for (ReferralDetail detail : referrals) {
+				Hibernate.initialize(detail.getReferredUser());
+				Hibernate.initialize(detail.getReferreeUser());
+			}
+		}
+		return referrals;
 	}
 
 	@Override
@@ -70,7 +84,12 @@ public class ReferralDetailDaoImpl extends GenericDaoImpl implements ReferralDet
 		
 		query.setParameter("referralDetailId", referralDetailId);
 		
-		return (ReferralDetail) query.uniqueResult();
+		ReferralDetail detail = (ReferralDetail) query.uniqueResult();
+		if(detail != null) {
+			Hibernate.initialize(detail.getReferreeUser());
+		}
+
+		return detail;
 	}
 
 	@Override

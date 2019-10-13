@@ -1,7 +1,6 @@
 package com.transporter.service.impl;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,12 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-<<<<<<< HEAD
 import com.transporter.dao.TripDetailsDao;
-=======
-import com.google.gson.JsonObject;
->>>>>>> c0623c2d213f2ff69fd419465799a7c4424eccd5
-import com.transporter.enums.DeliveryStatusEnum;
 import com.transporter.enums.RidingStatusEnum;
 import com.transporter.enums.TripStatusEnum;
 import com.transporter.exceptions.BusinessException;
@@ -45,7 +39,6 @@ import com.transporter.service.VehicleService;
 import com.transporter.utils.DateTimeUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
-import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;

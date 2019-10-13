@@ -36,7 +36,14 @@ public class CouponDaoImpl extends GenericDaoImpl implements CouponDao {
 
 	@Override
 	public List<Coupon> getAllCoupon() {
-		return loadAll(Coupon.class);
+		List<Coupon> coupons = loadAll(Coupon.class);
+		if(!CollectionUtils.isEmpty(coupons)) {
+			for (Coupon coupon : coupons) {
+				Hibernate.initialize(coupon.getApplyUsers());
+				Hibernate.initialize(coupon.getExludeUsers());
+			}
+		}
+		return coupons;
 	}
 
 	@Override
@@ -46,13 +53,19 @@ public class CouponDaoImpl extends GenericDaoImpl implements CouponDao {
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("isActive", isActive);
 		List<Coupon> couponLsit = (List<Coupon>) query.list();
+		if(!CollectionUtils.isEmpty(couponLsit)) {
+			for (Coupon coupon : couponLsit) {
+				Hibernate.initialize(coupon.getApplyUsers());
+				Hibernate.initialize(coupon.getExludeUsers());
+			}
+		}
 		return couponLsit;
 	}
 
 	@Override
 	public int deleteCoupon(Integer couponId) {
 		Session session = sessionFactory.getCurrentSession();
-		Query qry = session.createQuery("delete from Coupon code where code.couponId=:couponId");
+		Query qry = session.createQuery("delete from Coupon coupon where coupon.id=:couponId");
 		qry.setParameter("couponId", couponId);
 		int res = qry.executeUpdate();
 
