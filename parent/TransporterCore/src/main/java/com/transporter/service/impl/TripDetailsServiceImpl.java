@@ -287,4 +287,20 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		}
 		return tripDetailsConfirmResponse;
 	}
+
+	@Override
+	@Transactional
+	public String validateOtp(int tripId, String otp) {
+		// TODO Auto-generated method stub
+		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
+		if (tripDetails != null) {
+		String dbOtp =tripDetails.getTripStartOtp();
+		String enteredOtp =otp ;
+		if(dbOtp.equals(enteredOtp))
+		{
+			return "Success";
+		}
+		}
+		return "Failure";
+	}
 }

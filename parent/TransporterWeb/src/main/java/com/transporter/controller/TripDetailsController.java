@@ -3,7 +3,9 @@ package com.transporter.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -124,5 +126,20 @@ public class TripDetailsController {
 		}
 		return response;
 	}
+	
+	@PostMapping(value="/validateOtp/trip/{tripId}/{otp}")
+	public CommonResponse validateOtp(@PathVariable("tripId") int tripId, @PathVariable("otp") String otp)
+	{
+		CommonResponse response = null;
+		String tripStatus = tripDetailsService.validateOtp(tripId,otp);
+		if (tripStatus != null) {
+			response = RestUtils.wrapObjectForSuccess(tripStatus);
+		} else {
+			response = RestUtils.wrapObjectForFailure("Trip details not found", "error",
+					WebConstants.WEB_RESPONSE_ERROR);
+		}
+		return response;
+	}
+	
 
 }

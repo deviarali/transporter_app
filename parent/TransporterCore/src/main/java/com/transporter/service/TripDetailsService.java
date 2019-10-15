@@ -25,4 +25,6 @@ public interface TripDetailsService {
 
 	public TripDetailsConfirmResponse confirmBooking(TripDetailsVo tripDetailsVo);
 
+	String validateOtp(int tripId, String otp);
+
 }
