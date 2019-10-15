@@ -21,7 +21,13 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	List<TripDetails> getHistoryByStatus(int id, int tripstatus);
 
 	@Modifying
+<<<<<<< HEAD
 	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id")
 	TripDetails updateTripStatus(@Param("id")int id,@Param("tripStatus")int tripStatus);
 
+=======
+	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id"  )
+	Integer updateTripStatus(@Param(value ="id")int id, @Param(value ="tripStatus")int tripStatus);
+	
+>>>>>>> 96ed563e3c25a6cf656841fe263bd28628e82a5b
 }

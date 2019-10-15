@@ -2,6 +2,8 @@ package com.transporter.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +36,7 @@ import com.transporter.vo.TripDetailsVo;
 @RestController
 public class TripDetailsController {
 
+	private static Logger LOG = LoggerFactory.getLogger(TripDetailsController.class);
 	@Autowired
 	TripDetailsService tripDetailsService;
 
@@ -67,6 +70,8 @@ public class TripDetailsController {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			LOG.error("Exception while confirmbooking "+e.getMessage());
+			e.printStackTrace();
 		}
 		return response;
 	}
@@ -104,6 +109,8 @@ public class TripDetailsController {
 			commonResponse = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
 			commonResponse = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			LOG.error("Exception while update trip status "+e.getMessage());
+			e.printStackTrace();
 		}
 		return commonResponse;
 	}

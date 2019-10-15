@@ -1,5 +1,6 @@
 package com.transporter.dao;
 
+import java.util.Calendar;
 import java.util.List;
 
 import com.transporter.model.Coupon;
@@ -9,17 +10,19 @@ import com.transporter.model.Coupon;
  */
 public interface CouponDao extends GenericDao {
 
-	Coupon saveCoupon(Coupon coupon);
+	public Coupon saveCoupon(Coupon coupon);
 
-	Coupon updateCoupon(Coupon coupon);
+	public Coupon updateCoupon(Coupon coupon);
 
-	List<Coupon> getAllCoupon();
+	public List<Coupon> getAllCoupon();
 
-	List<Coupon> getAllActiveCoupon(boolean isActive);
+	public List<Coupon> getAllActiveCoupon(boolean isActive);
 
-	int deleteCoupon(Integer couponId);
+	public int deleteCoupon(Integer couponId);
 	
-	Coupon isCouponExist(Integer code);
+	public Coupon isCouponExist(Integer code);
+
+	public boolean isCouponExist(Integer id, Calendar startDate, Calendar endDate);
 	
 	public Coupon getFirstRideCoupon(String couponCode);
 

@@ -14,33 +14,32 @@ import com.google.gson.Gson;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
-import com.transporter.model.Coupon;
+import com.transporter.model.ReferralDetail;
+import com.transporter.model.User;
 import com.transporter.response.CommonResponse;
-import com.transporter.service.CouponService;
+import com.transporter.service.ReferralDetailService;
 import com.transporter.utils.RestUtils;
-import com.transporter.vo.ApplyCouponRequestVo;
-import com.transporter.vo.CouponResponseVO;
-import com.transporter.vo.CouponVo;
 import com.transporter.vo.GenericSuccessMessage;
+import com.transporter.vo.ReferralDetailVo;
 
 /**
  * @author SHARAN A
  */
 @RestController
-public class CouponController {
+public class ReferralDetailController {
 
 	@Autowired
-	private CouponService couponService;
+	private ReferralDetailService referralDetailService;
 	
 	@Autowired
 	private Gson gson;
 
-	@RequestMapping(value = "coupon/saveCoupon", method = RequestMethod.POST)
-	public CommonResponse saveCoupon(@RequestBody CouponVo couponVo) {
+	@RequestMapping(value = "referralDetail/saveReferralDetail", method = RequestMethod.POST)
+	public CommonResponse saveReferralDetail(@RequestBody ReferralDetailVo referralDetailVo) {
 		CommonResponse response = null;
 		try {
-			Coupon coupon = gson.fromJson(gson.toJson(couponVo), Coupon.class);
-			Coupon code = couponService.saveCoupon(coupon);
+			ReferralDetail referralDetail = gson.fromJson(gson.toJson(referralDetailVo), ReferralDetail.class);
+			ReferralDetail code = referralDetailService.saveReferralDetail(referralDetail);
 			if (code != null) {
 				response = RestUtils.wrapObjectForSuccess(code);
 			} 
@@ -58,12 +57,12 @@ public class CouponController {
 		return response;
 	}
 
-	@RequestMapping(value = "coupon/updateCoupon", method = RequestMethod.PATCH)
-	public CommonResponse updateCoupon(@RequestBody CouponVo couponVo) {
+	@RequestMapping(value = "referralDetail/updateReferralDetail", method = RequestMethod.PATCH)
+	public CommonResponse updateReferralDetail(@RequestBody ReferralDetailVo referralDetailVo) {
 		CommonResponse response = null;
 		try {
-			Coupon coupon = gson.fromJson(gson.toJson(couponVo), Coupon.class);
-			Coupon code = couponService.updateCoupon(coupon);
+			ReferralDetail referralDetail = gson.fromJson(gson.toJson(referralDetailVo), ReferralDetail.class);
+			ReferralDetail code = referralDetailService.updateReferralDetail(referralDetail);
 			if (code != null) {
 				response = RestUtils.wrapObjectForSuccess(code);
 			} 
@@ -82,17 +81,17 @@ public class CouponController {
 		return response;
 	}
 
-	@RequestMapping(value = "coupon/getAllCoupon", method = RequestMethod.GET)
-	public CommonResponse getAllCoupon() {
+	@RequestMapping(value = "referralDetail/getAllReferralDetail", method = RequestMethod.GET)
+	public CommonResponse getAllReferralDetail() {
 		CommonResponse response = null;
 		try {
-			List<Coupon> couponList = couponService.getAllCoupon();
-			if (couponList != null) {
-				response = RestUtils.wrapObjectForSuccess(couponList);
+			List<ReferralDetail> referralDetailList = referralDetailService.getAllReferralDetail();
+			if (referralDetailList != null) {
+				response = RestUtils.wrapObjectForSuccess(referralDetailList);
 			} 
 			else {
 				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
-						"No coupon codes available at this moment");
+						"No referralDetail codes available at this moment");
 			}
 		} 
 		catch (BusinessException be) {
@@ -105,17 +104,17 @@ public class CouponController {
 		return response;
 	}
 
-	@RequestMapping(value = "coupon/getAllActiveCoupon", method = RequestMethod.GET)
-	public CommonResponse getAllActiveCoupon() {
+	@RequestMapping(value = "referralDetail/getAllActiveReferralDetail", method = RequestMethod.GET)
+	public CommonResponse getAllActiveReferralDetail() {
 		CommonResponse response = null;
 		try {
-			List<Coupon> couponList = couponService.getAllActiveCoupon(true);
-			if (couponList != null) {
-				response = RestUtils.wrapObjectForSuccess(couponList);
+			List<ReferralDetail> referralDetailList = referralDetailService.getAllActiveReferralDetail(true);
+			if (referralDetailList != null) {
+				response = RestUtils.wrapObjectForSuccess(referralDetailList);
 			} 
 			else {
 				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
-						"No coupon codes available at this moment");
+						"No referralDetail codes available at this moment");
 			}
 		} 
 		catch (BusinessException be) {
@@ -128,20 +127,20 @@ public class CouponController {
 		return response;
 	}
 
-	@RequestMapping(value = "coupon/deleteCoupon/{couponId}", method = RequestMethod.DELETE)
-	public CommonResponse deleteCoupon(@PathVariable int couponId) {
+	@RequestMapping(value = "referralDetail/deleteReferralDetail/{referralDetailId}", method = RequestMethod.DELETE)
+	public CommonResponse deleteReferralDetail(@PathVariable int referralDetailId) {
 		CommonResponse response = null;
 		try {
-			int res = couponService.deleteCoupon(couponId);
+			int res = referralDetailService.deleteReferralDetail(referralDetailId);
 			if (res != 0) {
 				GenericSuccessMessage successMessage = GenericSuccessMessage.Builder.newInstance()
-						.setCode(HttpStatus.OK.value()).setMessage("Coupon delete successfully")
+						.setCode(HttpStatus.OK.value()).setMessage("ReferralDetail delete successfully")
 						.setStatus(ErrorCodes.SUCCESS.value()).build();
 				response = RestUtils.wrapObjectForSuccess(successMessage);
 			} 
 			else {
 				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
-						"couln't delete coupon code");
+						"couln't delete referralDetail code");
 			}
 		} 
 		catch (BusinessException be) {
@@ -153,38 +152,24 @@ public class CouponController {
 
 		return response;
 	}
-	
-	@RequestMapping(value = "coupon/applyCoupon", method = RequestMethod.POST)
-	public CommonResponse applyCoupon(@RequestBody ApplyCouponRequestVo requestVo) {
+
+	@RequestMapping(value = "referralDetail/updateReferreeToReferralDetail/{id}/{refereeId}", method = RequestMethod.PATCH)
+	public CommonResponse updateReferreeToReferralDetail(@PathVariable Integer id, Integer refereeId) {
 		CommonResponse response = null;
 		try {
+			ReferralDetail referralDetail = referralDetailService.getReferralDetail(refereeId);
+			User user = new User();
+			user.setId(refereeId);
+			referralDetail.setReferreeUser(user);
 			
-			CouponResponseVO couponResponseVO = couponService.applyCoupon(requestVo.getCode(), requestVo.getUserId(), requestVo.getAmount());
-			if("FAIL".equals(couponResponseVO.getStatus())) {
-				response = RestUtils.wrapObjectForFailure(couponResponseVO, WebConstants.WEB_RESPONSE_FAILURE, "Coupon not applied");
-			}
+			ReferralDetail code = referralDetailService.updateReferralDetail(referralDetail);
+			if (code != null) {
+				response = RestUtils.wrapObjectForSuccess(code);
+			} 
 			else {
-				response = RestUtils.wrapObjectForSuccess(couponResponseVO);
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 			}
-		} 
-		catch (BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
-		} 
-		catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
-		}
-
-		return response;
-	}
-	
-	@RequestMapping(value = "coupon/findActiveCoupons/{userId}", method = RequestMethod.GET)
-	public CommonResponse findActiveCoupons(@PathVariable Integer userId) {
-		CommonResponse response = null;
-		try {
-			
-			List<Coupon> coupons = couponService.findActiveCouponsForUser(userId);
-			
-			response = RestUtils.wrapObjectForSuccess(coupons);
 		} 
 		catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());

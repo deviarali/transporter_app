@@ -1,5 +1,6 @@
 package com.transporter.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.transporter.model.TripDetails;
@@ -25,6 +26,12 @@ public interface TripDetailsService {
 
 	public TripDetailsConfirmResponse confirmBooking(TripDetailsVo tripDetailsVo);
 
+<<<<<<< HEAD
 	String validateOtp(int tripId, String otp);
+=======
+	public Integer getTotalDayRideNumber(Integer userId, Date calendar);
+	
+	public Integer getTotalRideNumber(Integer userId);
+>>>>>>> 96ed563e3c25a6cf656841fe263bd28628e82a5b
 
 }

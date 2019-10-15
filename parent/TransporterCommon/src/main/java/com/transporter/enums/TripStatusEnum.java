@@ -7,7 +7,7 @@ public enum TripStatusEnum {
 	int tripStatusId;
 	private TripStatusEnum(int tripStatus) {
 		
-		tripStatus = tripStatusId;
+		tripStatusId = tripStatus;
 
 	}
 	public int getTripStatusId() {

@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.transporter.enums.DeliveryStatusEnum;
+import com.transporter.dao.TripDetailsDao;
+import com.transporter.enums.RidingStatusEnum;
+import com.transporter.enums.TripStatusEnum;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.fcm.NotificationBuilder;
@@ -37,7 +39,6 @@ import com.transporter.service.VehicleService;
 import com.transporter.utils.DateTimeUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
-import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
@@ -55,6 +56,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	
 	@Autowired
 	TripDetailsRepo tripDetailsRepo;
+	
+	@Autowired
+	TripDetailsDao tripDetailsDao;
 	
 	@Autowired
 	VehicleService vehicleService;
@@ -140,21 +144,32 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
 		if (tripDetails != null) {
 			
-			tripDetails = tripDetailsRepo.updateTripStatus(tripDetails.getId(),deliveryStatusId);
+			int updatedRows = tripDetailsRepo.updateTripStatus(tripDetails.getId(),deliveryStatusId);
 			
 			if(deliveryStatusId == 3 || deliveryStatusId == 4) {
-				driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 0);
+				//driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), RidingStatusEnum.OFFRIDING.getRidingStatusId());
 			}
 			
-			if (tripDetails != null) {
-				if (deliveryStatusId == 3) {
-					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by customer");
-					transporterPushNotifications.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean, "driver");
-				} else if(deliveryStatusId == 4) {
-					PushNotificationBean bean = NotificationBuilder.buildGenericPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", "Trip cancled by driver");
-					transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
+			if (deliveryStatusId == 3) {
+				JSONObject cancelByCustomer = new JSONObject();
+				try {
+					cancelByCustomer.put("message", "trip has been cancelled by customer");
+				} catch (JSONException e) {
+					LOG.error("Exception while creating cancelled by customer json object "+e.getMessage());
+				}	
+				PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", cancelByCustomer.toString());
+				transporterPushNotifications.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean, "driver");
+			} else if(deliveryStatusId == 4) {
+				JSONObject cancelByDriver = new JSONObject();
+				try {
+					cancelByDriver.put("message", "trip has been cancelled by driver");
+				} catch (JSONException e) {
+					LOG.error("Exception while creating cancelled by driver json object "+e.getMessage());
 				}
+				PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CANCELLED, "Booking Cancelled", "Booking Cancelled", cancelByDriver.toString());
+				transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
 			}
+			
 		} else {
 			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(), ErrorCodes.TRIPDETAILSNOTFOUND.value());
 		}
@@ -172,7 +187,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetails = tripDetailsRepo.save(tripDetails);
 			
 			if(deliveryStatusId == 3 || deliveryStatusId == 4) {
-				driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 0);
+				driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), RidingStatusEnum.OFFRIDING.getRidingStatusId());
 			}
 			
 			if (tripDetails != null) {
@@ -207,9 +222,23 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			throw new BusinessException(ErrorCodes.VEHICLENOTFOUND.name(), ErrorCodes.VEHICLENOTFOUND.value());
 		}
 		
-		CustomerDetails details = customerDetailsService.findCustomerById(tripDetailsVo.getCustomerId());
-		
 		DriverDetails driverDetails = driverService.findDriverById(vehicleDetailsList.get(0).getDriverDetails().getId());
+		CustomerDetails customerDetails = customerDetailsService.findCustomerById(tripDetailsVo.getCustomerId());
+		
+		TripDetails tripDetails = gson.fromJson(gson.toJson(tripDetailsVo), TripDetails.class);			
+		tripDetails.setCustomerDetails(customerDetails);
+		tripDetails.setDriverDetails(driverDetails);
+		DeliveryStatus deliveryStatus = new DeliveryStatus();
+		deliveryStatus.setId(TripStatusEnum.PENDING.getTripStatusId());
+		tripDetails.setDeliveryStatus(deliveryStatus);
+		tripDetails.setTripTime(new Date());
+		tripDetails.setTripStartOtp(userService.generateOtp());
+		tripDetails = tripDetailsRepo.save(tripDetails);
+		LOG.info("Booking confirmed for the customer : "+customerDetails.getUser().getMobileNumber());
+		if(tripDetails.getId() == 0) {
+			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTSAVED.name(), ErrorCodes.TRIPDETAILSNOTSAVED.value());
+		}
+		
 		LOG.info("Driver details for trip " +"driver id "+driverDetails.getId() +" User id "+driverDetails.getUser().getId() + " Driver fcm "+driverDetails.getUser().getFcmToken());
 		if(driverDetails.getUser().getFcmToken() == null)
 		{
@@ -218,8 +247,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		//String bookingBody = "Customer name : "+details.getUser().getFirstName() +" "+" Customer mobile number : "+details.getUser().getMobileNumber();
 		JSONObject driverJsonObject = new JSONObject();
 		try {
-			driverJsonObject.put("customerName", details.getUser().getFirstName());
-			driverJsonObject.put("customerMobileNumber", details.getUser().getMobileNumber());
+			driverJsonObject.put("customerName", customerDetails.getUser().getFirstName());
+			driverJsonObject.put("customerMobileNumber", customerDetails.getUser().getMobileNumber());
 			driverJsonObject.put("sourceLattitude", tripDetailsVo.getSourceLattitude());
 			driverJsonObject.put("sourceLongitude", tripDetailsVo.getSourceLongitude());
 			driverJsonObject.put("destinationLattitude", tripDetailsVo.getDestinationLattitude());
@@ -228,6 +257,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			driverJsonObject.put("destinationLandmark", tripDetailsVo.getDestinationLandmark());
 			driverJsonObject.put("sourceLocation", tripDetailsVo.getSourceLocation());
 			driverJsonObject.put("destinationLocation", tripDetailsVo.getDestinationLocation());
+			driverJsonObject.put("customerId", customerDetails.getId());
+			driverJsonObject.put("tripId", tripDetails.getId());
 			
 		} catch (JSONException e) {
 			LOG.error("Exception while creating driver json object "+e.getMessage());
@@ -238,7 +269,6 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			throw new BusinessException(ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.name(), ErrorCodes.DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING.value());
 		}
 		
-		String tripStartOtp = userService.generateOtp();
 	//	String bookingCustomerBody = "Driver name : "+driverDetails.getUser().getFirstName() +" "+" Driver mobile number : "+driverDetails.getUser().getMobileNumber();
 		JSONObject customerJsonObject = new JSONObject();
 		try {
@@ -247,48 +277,36 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			customerJsonObject.put("vehicleName", vehicleDetailsList.get(0).getVehicleModel());
 			customerJsonObject.put("vehicleNumber",  vehicleDetailsList.get(0).getVehicleNum());
 			customerJsonObject.put("vehicleImage",  vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
-			customerJsonObject.put("tripStartOtp",  tripStartOtp);
+			customerJsonObject.put("tripStartOtp",  tripDetails.getTripStartOtp());
+			customerJsonObject.put("driverId",  driverDetails.getId());
+			customerJsonObject.put("tripId", tripDetails.getId());
 			
 		} catch (JSONException e) {
 			LOG.error("Exception while creating customer json object "+e.getMessage());
 		}
 		
 		PushNotificationBean customerBean = NotificationBuilder.buildPayloadNotification(NotificationType.BOOKING_CONFIRMED, "Booking confirmed", "Booking confirmed", customerJsonObject.toString());
-		String cnResponse = transporterPushNotifications.sendPushNotification(details.getUser().getFcmToken(), customerBean, "customer");
+		String cnResponse = transporterPushNotifications.sendPushNotification(customerDetails.getUser().getFcmToken(), customerBean, "customer");
 		if(Utils.isNullOrEmpty(cnResponse)) {
 			LOG.error("Notification error for customer, while booking");
 		}
-		TripDetails tripDetails = gson.fromJson(gson.toJson(tripDetailsVo), TripDetails.class);	
-		CustomerDetails customerDetails = new CustomerDetails();
-		customerDetails.setId(tripDetailsVo.getCustomerId());
-		tripDetails.setCustomerDetails(customerDetails);
-		DriverDetails driverDetails2 = new DriverDetails();
-		driverDetails2.setId(driverDetails.getId());
-		tripDetails.setDriverDetails(driverDetails2);
-		DeliveryStatus deliveryStatus = new DeliveryStatus();
-		deliveryStatus.setId(DeliveryStatusEnum.PENDING.getId());
-		tripDetails.setDeliveryStatus(deliveryStatus);
-		tripDetails.setTripTime(new Date());
-		tripDetails.setTripStartOtp(tripStartOtp);
-		TripDetails details2 = tripDetailsRepo.save(tripDetails);
-	//	driverService.updateRidingStatus(driverDetails2.getId(),1);
-		if(details2.getId() > 0) {
-			tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
-			tripDetailsConfirmResponse.setDriverId(driverDetails2.getId());
-			tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
-			tripDetailsConfirmResponse.setDriverMobileNumber(driverDetails.getUser().getMobileNumber());
-			tripDetailsConfirmResponse.setTripStartOtp(tripDetails.getTripStartOtp());
-			tripDetailsConfirmResponse.setVehicleName(vehicleDetailsList.get(0).getVehicleModel());
-			tripDetailsConfirmResponse.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
-			tripDetailsConfirmResponse.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
-			tripDetailsConfirmResponse.setTripId(details2.getId());
-		} else {
-			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTSAVED.name(), ErrorCodes.TRIPDETAILSNOTSAVED.value());
-		}
+		
+		//driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
+		tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
+		tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
+		tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
+		tripDetailsConfirmResponse.setDriverMobileNumber(driverDetails.getUser().getMobileNumber());
+		tripDetailsConfirmResponse.setTripStartOtp(tripDetails.getTripStartOtp());
+		tripDetailsConfirmResponse.setVehicleName(vehicleDetailsList.get(0).getVehicleModel());
+		tripDetailsConfirmResponse.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
+		tripDetailsConfirmResponse.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
+		tripDetailsConfirmResponse.setTripId(tripDetails.getId());
+
 		return tripDetailsConfirmResponse;
 	}
 
 	@Override
+<<<<<<< HEAD
 	@Transactional
 	public String validateOtp(int tripId, String otp) {
 		// TODO Auto-generated method stub
@@ -303,4 +321,15 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		}
 		return "Failure";
 	}
+=======
+	public Integer getTotalDayRideNumber(Integer userId, Date calendar) {
+		return tripDetailsDao.getTotalDayRideNumber(userId, calendar);
+	}
+	
+	@Override
+	public Integer getTotalRideNumber(Integer userId) {
+		return tripDetailsDao.getTotalRideNumber(userId);
+	}
+
+>>>>>>> 96ed563e3c25a6cf656841fe263bd28628e82a5b
 }
