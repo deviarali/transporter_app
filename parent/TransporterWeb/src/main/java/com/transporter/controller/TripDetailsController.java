@@ -37,6 +37,7 @@ import com.transporter.vo.TripDetailsVo;
 public class TripDetailsController {
 
 	private static Logger LOG = LoggerFactory.getLogger(TripDetailsController.class);
+	
 	@Autowired
 	TripDetailsService tripDetailsService;
 
@@ -134,19 +135,55 @@ public class TripDetailsController {
 		return response;
 	}
 	
-	@PostMapping(value="/validateOtp/trip/{tripId}/{otp}")
-	public CommonResponse validateOtp(@PathVariable("tripId") int tripId, @PathVariable("otp") String otp)
+	@RequestMapping(value = "trip/validateStartOtp", method = RequestMethod.POST)
+	public CommonResponse validateStartOtp(@RequestBody TripDetailsVo tripDetailsVo)
 	{
 		CommonResponse response = null;
-		String tripStatus = tripDetailsService.validateOtp(tripId,otp);
-		if (tripStatus != null) {
+		try{
+		String tripStatus = tripDetailsService.validateOtp(tripDetailsVo);
+		if (tripStatus.equals("Success")) {
 			response = RestUtils.wrapObjectForSuccess(tripStatus);
 		} else {
-			response = RestUtils.wrapObjectForFailure("Trip details not found", "error",
-					WebConstants.WEB_RESPONSE_ERROR);
+			response = RestUtils.wrapObjectForFailure(null, "error",WebConstants.INVALID_OTP);
+					
+		}
+		}catch(BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+			LOG.error("Trip Id Not Found in ValidateOTP:" 
+					+ " exception : " + be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
+			LOG.error("Trip Id Not Found In ValidateOTP :" 
+					+ " exception : " + e.getMessage());
 		}
 		return response;
 	}
+	
+	@RequestMapping(value = "trip/validateEndOtp", method = RequestMethod.POST)
+	public CommonResponse validateEndOtp(@RequestBody TripDetailsVo tripDetailsVo)
+	{
+		CommonResponse response = null;
+		try{
+		String tripStatus = tripDetailsService.validateEndOtp(tripDetailsVo);
+		if (tripStatus.equals("Success")) {
+			response = RestUtils.wrapObjectForSuccess(tripStatus);
+		} else {
+			response = RestUtils.wrapObjectForFailure(null, "error",WebConstants.INVALID_OTP);
+					
+		}
+		}catch(BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+			LOG.error("Trip Id Not Found in ValidateOTP:" 
+					+ " exception : " + be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
+			LOG.error("Trip Id Not Found In ValidateOTP :" 
+					+ " exception : " + e.getMessage());
+		}
+		return response;
+	}
+	
+	
 	
 
 }

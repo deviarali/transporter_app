@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.model.TripDetails;
+import com.transporter.vo.TripDetailsVo;
 
 @Repository
 public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
@@ -20,14 +21,16 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	@Query("SELECT m from TripDetails m WHERE m.customerDetails.id =?1 and m.deliveryStatus.id=?2")
 	List<TripDetails> getHistoryByStatus(int id, int tripstatus);
 
-	@Modifying
-<<<<<<< HEAD
+	/*@Modifying
 	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id")
-	TripDetails updateTripStatus(@Param("id")int id,@Param("tripStatus")int tripStatus);
+	TripDetails updateTripStatus(@Param("id")int id,@Param("tripStatus")int tripStatus);*/
 
-=======
+	@Modifying
 	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id"  )
 	Integer updateTripStatus(@Param(value ="id")int id, @Param(value ="tripStatus")int tripStatus);
+
 	
->>>>>>> 96ed563e3c25a6cf656841fe263bd28628e82a5b
+
+	
+	
 }
