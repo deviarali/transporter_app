@@ -217,4 +217,5 @@ public class DriverServiceImpl implements DriverService {
 	public void updateRidingStatus(int id,int status) {
 		driverDetailsRepo.updateRidingStatus(id, status);
 	}
+
 }

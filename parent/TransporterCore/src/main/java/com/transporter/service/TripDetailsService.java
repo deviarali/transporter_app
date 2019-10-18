@@ -30,9 +30,8 @@ public interface TripDetailsService {
 	
 	public Integer getTotalRideNumber(Integer userId);
 
-	String validateOtp(TripDetailsVo tripDetailsVo);
+	String validateStartEndOtp(int tripId, String otp, String status);
 
-	String validateEndOtp(TripDetailsVo tripDetailsVo);
 
 	
 

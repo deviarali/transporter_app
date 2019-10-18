@@ -18,7 +18,7 @@ public class WebConstants {
 	public static final String VEHICLE_TYPE_NOT_SAVED ="Vehicle type not saved";
 	public static final String VEHICLE_TYPE_NOT_UPDATED ="Vehicle type not updated";
 	public static final String VEHICLES_NOT_AVAILABLE = "Vehicles not available";
-	public static final String INVALID_OTP = "Invalid OTP";
+	public static final String INVALID_STATUS = "Enter Valid Status Value";
 	public static final String INVALID_TRIP_ID = "Invalid Trip ID";
 	
 }

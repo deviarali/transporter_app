@@ -306,27 +306,6 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		return tripDetailsConfirmResponse;
 	}
 
-	@Override
-	public String validateOtp(TripDetailsVo tripDetailsVo)
-	{
-		int tripId=	tripDetailsVo.getId();
-		String enteredOtp = tripDetailsVo.getTripStartOtp();
-		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
-		if (tripDetails == null) {
-			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(), ErrorCodes.TRIPDETAILSNOTFOUND.value());
-		}
-		String dbotp = tripDetails.getTripStartOtp();
-			if(enteredOtp.equals(dbotp))
-			{
-				return "Success";
-			}
-			else
-			{
-				return "Failure";
-			}
-	
-		
-	}
 
 	public Integer getTotalDayRideNumber(Integer userId, Date calendar) {
 		return tripDetailsDao.getTotalDayRideNumber(userId, calendar);
@@ -337,25 +316,41 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		return tripDetailsDao.getTotalRideNumber(userId);
 	}
 
+
 	@Override
-	public String validateEndOtp(TripDetailsVo tripDetailsVo)
-	{
-		int tripId=	tripDetailsVo.getId();
-		String enteredOtp = tripDetailsVo.getTripEndOtp();
-		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
-			if (tripDetails == null) 
+	public String validateStartEndOtp(int tripId, String otp, String status) {
+
+		TripDetails tripDetailsData = tripDetailsRepo.findOne(tripId);
+		if(tripDetailsData == null)
+		{
+			throw new BusinessException(ErrorCodes.TRIPIDNOTFOUND.name(), ErrorCodes.TRIPIDNOTFOUND.value());
+		}
+		
+		if(status.equals("start"))
+		{
+			TripDetails tripDetails = tripDetailsRepo.validateStartEndOtp(tripId,otp);
+			if(tripDetails == null)
+			{
+				throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
+				
+			}
+			return "Success";
+		}
+		else if(status.equals("end"))
+		{
+			TripDetails tripDetails = tripDetailsRepo.validateEndOtp(tripId,otp);
+			if(tripDetails == null)
 			{
 				throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(), ErrorCodes.TRIPDETAILSNOTFOUND.value());
+				
 			}
-			String dbOtp = tripDetails.getTripEndOtp();
-			if(enteredOtp.equals(dbOtp))
-			{
-				return "Success";
-			}
-			else
-			{
-				return "Failure";
-			}
+			return "Success";
+		}
+		else
+		{
+			return "Failure";
+		}
+		
 	}
 
 }

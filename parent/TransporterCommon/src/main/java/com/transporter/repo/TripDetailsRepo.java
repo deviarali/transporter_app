@@ -26,11 +26,17 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	TripDetails updateTripStatus(@Param("id")int id,@Param("tripStatus")int tripStatus);*/
 
 	@Modifying
-	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id"  )
+	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id")
 	Integer updateTripStatus(@Param(value ="id")int id, @Param(value ="tripStatus")int tripStatus);
-
 	
+	@Query(value= "SELECT dd.sourceLattitude,dd.sourceLongitude from TripDetails dd where dd.driverDetails.id =?1")
+	TripDetails getdriverDeatils(int driverId);
 
+	@Query("SELECT m From TripDetails m where m.id= :tripId and m.tripStartOtp= :otp")
+	TripDetails validateStartEndOtp(@Param(value ="tripId")int tripId,@Param(value ="otp") String otp);
+
+	@Query("SELECT m From TripDetails m where m.id= :tripId and m.tripEndOtp= :otp")
+	TripDetails validateEndOtp(@Param(value ="tripId")int tripId,@Param(value ="otp") String otp);
 	
 	
 }

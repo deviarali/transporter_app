@@ -1,9 +1,12 @@
 package com.transporter.controller;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,11 +19,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
+import com.transporter.model.DriverDetails;
+import com.transporter.model.TripDetails;
 import com.transporter.response.CommonResponse;
+import com.transporter.response.LatitudeLongitudeResponse;
 import com.transporter.service.DriverService;
+import com.transporter.service.TripDetailsService;
+import com.transporter.service.VehicleService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.TripDetailsVo;
+import com.transporter.vo.VehicleDetailsVo;
 
 /**
  * @author Devappa.Arali
@@ -34,6 +44,9 @@ public class DriverController {
 
 	@Autowired
 	private DriverService driverService;
+	
+	@Autowired
+	private VehicleService vehicleService;
 
 	@RequestMapping(value = "driver/registerDriver", method = RequestMethod.POST)
 	public CommonResponse registerDriver(@RequestBody DriverDetailsVo driverDetailsVo) {
@@ -191,5 +204,22 @@ public class DriverController {
 		}
 		return response;
 	}
-
+	/* TO DO INComplete the function */
+	@GetMapping("/driver/getDriverLocation/{driverId}")
+	public CommonResponse getDriverLocation(@PathVariable("driverId") int driverId)
+	{
+		CommonResponse response = null;
+		try {
+			List<LatitudeLongitudeResponse> details = (List<LatitudeLongitudeResponse>) vehicleService.getDriverLocations(driverId);
+			if (details != null) {
+				response = RestUtils.wrapObjectForSuccess(details);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.NOT_UPDATED);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return response;
+	}
 }

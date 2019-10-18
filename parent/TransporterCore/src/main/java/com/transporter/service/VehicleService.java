@@ -3,6 +3,7 @@ package com.transporter.service;
 import java.util.List;
 
 import com.transporter.model.VehicleDetails;
+import com.transporter.response.LatitudeLongitudeResponse;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleDetailsVo;
@@ -32,6 +33,8 @@ public interface VehicleService {
 	List<VehicleDetails> fetchSelectedVehiclesToConfirmOrder(FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);
 
 	List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest);
+
+	List<LatitudeLongitudeResponse> getDriverLocations(int driverId);
 	
 	
 	
