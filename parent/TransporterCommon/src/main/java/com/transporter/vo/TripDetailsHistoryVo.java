@@ -12,9 +12,11 @@ public class TripDetailsHistoryVo implements Serializable {
     private int vehicleType;
 	private String vehicleImage;
 	private String vehicleModel;
-	private String tripHours;
+	private String tripHours="0";
 	private Double cgst;
 	private Double sgst;
+	private Double cgstPercentage;
+	private Double sgstPercentage;
 	
 	public int getId() {
 		return id;
@@ -75,5 +77,17 @@ public class TripDetailsHistoryVo implements Serializable {
 	}
 	public void setSgst(Double sgst) {
 		this.sgst = sgst;
+	}
+	public Double getCgstPercentage() {
+		return cgstPercentage;
+	}
+	public void setCgstPercentage(Double cgstPercentage) {
+		this.cgstPercentage = cgstPercentage;
+	}
+	public Double getSgstPercentage() {
+		return sgstPercentage;
+	}
+	public void setSgstPercentage(Double sgstPercentage) {
+		this.sgstPercentage = sgstPercentage;
 	}
 }

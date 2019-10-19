@@ -80,6 +80,9 @@ public class TripDetailsVo implements Serializable {
 	private TripDetailsHistoryVo tripDetailsHistory;
 	private int capacity;
 	private double kms;
+	private Double cgst;
+	private Double sgst;
+	private Double rideFare;
 	
 	public TripDetailsVo() {
 	}
@@ -402,5 +405,29 @@ public class TripDetailsVo implements Serializable {
 
 	public void setKms(double kms) {
 		this.kms = kms;
+	}
+
+	public Double getCgst() {
+		return cgst;
+	}
+
+	public void setCgst(Double cgst) {
+		this.cgst = cgst;
+	}
+
+	public Double getSgst() {
+		return sgst;
+	}
+
+	public void setSgst(Double sgst) {
+		this.sgst = sgst;
+	}
+
+	public Double getRideFare() {
+		return rideFare;
+	}
+
+	public void setRideFare(Double rideFare) {
+		this.rideFare = rideFare;
 	}
 }

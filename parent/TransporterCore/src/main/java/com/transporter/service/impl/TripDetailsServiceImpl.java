@@ -79,7 +79,13 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	
 	@Value("${surrounding.area}")
 	private double surroundingDistance;
-
+	
+	@Value("${cgst}")
+	private Double cgst;
+	
+	@Value("${sgst}")
+	private Double sgst;
+	
 	@Override
 	public List<TripDetailsVo> getTripHistory(int id, int tripStatus, String fromDate, String toDate) {
 		String fromTripStart = null;
@@ -101,47 +107,27 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		tripDetailsList.forEach(data -> {
 			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
 			TripDetailsHistoryVo tripDetailsHistoryVo = gson.fromJson(tripDetailsVo.getTripHistoryJson(), TripDetailsHistoryVo.class);
-			if(null != tripDetailsVo.getTripStarttime() && null != tripDetailsVo.getTripEndtime()) {
-				Period p = new Period(tripDetailsVo.getTripStarttime().getTime(), tripDetailsVo.getTripEndtime().getTime());
-				if(p.getMinutes() < 10) {				
-					tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":0"+String.valueOf(p.getMinutes()));
-				} else {
-					tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":"+String.valueOf(p.getMinutes()));
+			if(null != tripDetailsHistoryVo) {
+				if(null != tripDetailsVo.getTripStarttime() && null != tripDetailsVo.getTripEndtime()) {
+					Period p = new Period(tripDetailsVo.getTripStarttime().getTime(), tripDetailsVo.getTripEndtime().getTime());
+					if(p.getMinutes() < 10) {				
+						tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":0"+String.valueOf(p.getMinutes()));
+					} else {
+						tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":"+String.valueOf(p.getMinutes()));
+					}
 				}
+				Double cgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getCgstPercentage()/100;
+				Double sgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getSgstPercentage()/100;
+				Double rideFare = Double.valueOf(tripDetailsVo.getAmount())-(cgstAmount+sgstAmount);
+				tripDetailsVo.setCgst(cgstAmount);
+				tripDetailsVo.setSgst(sgstAmount);
+				tripDetailsVo.setRideFare(rideFare);
+				tripDetailsHistoryVo.setCgst(10.00);
+				tripDetailsHistoryVo.setSgst(10.00);
 			}
-			tripDetailsHistoryVo.setCgst(10.00);
-			tripDetailsHistoryVo.setSgst(10.00);
 			tripDetailsVo.setTripDetailsHistory(tripDetailsHistoryVo);
 			tripDetailsVoList.add(tripDetailsVo);
 		});
-		
-		/*tripDetailsList.forEach(data -> {
-			TripDetailsHistoryVo tripDetailsHistory = new TripDetailsHistoryVo();
-
-			tripDetailsHistory.setId(data.getId());
-			tripDetailsHistory.setAmount(data.getAmount());
-			tripDetailsHistory.setAmountToApp(data.getAmountToApp());
-			tripDetailsHistory.setAmountToDriver(data.getAmountToDriver());
-			tripDetailsHistory.setCanceledReason(data.getCanceledReason());
-			tripDetailsHistory.setCancelledamountFromCustomer(data.getCancelledAmountFromCustomer());
-			tripDetailsHistory.setCancelledamountFromDriver(data.getCancelledAmountFromDriver());
-			tripDetailsHistory.setCancelledamountStatus(data.getCancelledAmountStatus());
-			tripDetailsHistory.setCashMode(data.getCashMode());
-			tripDetailsHistory.setDeliverypersonMobile(data.getDeliveryPersonMobile());
-			tripDetailsHistory.setDeliverypersonName(data.getDeliveryPersonName());
-			tripDetailsHistory.setDestinationLocation(data.getDestinationLocation());
-			tripDetailsHistory.setGoodsType(data.getGoodsType());
-			tripDetailsHistory.setGoodsSize(data.getGoodsSize());
-			tripDetailsHistory.setPickupLocation(data.getSourceLocation());
-			tripDetailsHistory.setRatings(data.getRatings());
-			tripDetailsHistory.setTripTime(data.getTripTime());
-			tripDetailsHistory.setTripStarttime(data.getTripStarttime());
-			tripDetailsHistory.setTripEndtime(data.getTripEndtime());
-			tripDetailsHistory.setDriverName(data.getDriverDetails().getDriverName());
-			tripDetailsHistory
-					.setVehicleName(data.getDriverDetails().getVehicleDetails().getVehicleType().getVehicleName());
-			tripDetailsVoList.add(tripDetailsHistory);
-		});*/
 		return tripDetailsVoList;
 	}
 
@@ -260,10 +246,12 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		TripDetailsHistoryVo historyVo = new TripDetailsHistoryVo();
 		historyVo.setDriverName(driverDetails.getDriverName());
 		historyVo.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
-		historyVo.setVehicleName(vehicleDetailsList.get(0).getVehicleName());
+		historyVo.setVehicleName(vehicleDetailsList.get(0).getVehicleType().getVehicleName());
 		historyVo.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
 		historyVo.setVehicleType(vehicleDetailsList.get(0).getVehicleType().getId());
 		historyVo.setVehicleModel(vehicleDetailsList.get(0).getVehicleModel());
+		historyVo.setCgst(cgst);
+		historyVo.setSgst(sgst);
 		tripDetails.setTripHistoryJson(gson.toJson(historyVo));
 		tripDetails = tripDetailsRepo.save(tripDetails);
 		LOG.info("Booking confirmed for the customer : "+customerDetails.getUser().getMobileNumber());
