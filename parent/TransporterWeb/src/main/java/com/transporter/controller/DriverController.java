@@ -204,13 +204,13 @@ public class DriverController {
 		}
 		return response;
 	}
-	/* TO DO INComplete the function */
+	
 	@GetMapping("/driver/getDriverLocation/{driverId}")
 	public CommonResponse getDriverLocation(@PathVariable("driverId") int driverId)
 	{
 		CommonResponse response = null;
 		try {
-			List<LatitudeLongitudeResponse> details = (List<LatitudeLongitudeResponse>) vehicleService.getDriverLocations(driverId);
+			LatitudeLongitudeResponse details = vehicleService.getDriverLocations(driverId);
 			if (details != null) {
 				response = RestUtils.wrapObjectForSuccess(details);
 			} else {

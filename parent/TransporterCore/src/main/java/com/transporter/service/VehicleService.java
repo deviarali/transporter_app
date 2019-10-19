@@ -34,7 +34,7 @@ public interface VehicleService {
 
 	List<VehiclesByOrderResponse> fetchVehiclesByOrder(VehiclesByOrderRequest vehiclesByOrderRequest);
 
-	List<LatitudeLongitudeResponse> getDriverLocations(int driverId);
+	LatitudeLongitudeResponse getDriverLocations(int driverId);
 	
 	
 	

@@ -79,6 +79,7 @@ public class UserController {
 		}
 		return response;
 	}
+	
 	/* IntenalUser update API  */
 	@RequestMapping(value = "user/updateInternalUser/{id}", method = RequestMethod.PUT)
 	public CommonResponse updateCustomer(@RequestBody UserVo userVo, @PathVariable int id) {
@@ -87,7 +88,7 @@ public class UserController {
 			User userId = userService.findById(id);
 
 			if (userId == null) {
-				response = RestUtils.wrapObjectForFailure("user not found", WebConstants.WEB_RESPONSE_ERROR,
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
 				return response;
 			} 
@@ -95,10 +96,18 @@ public class UserController {
 			
 			response = RestUtils.wrapObjectForSuccess(userVo);
 			
-		} catch (Exception e) {
+		} 
+		catch(BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+			LOGGER.error("Internal user not updated for the user:" 
+					+ " exception : " + be.getErrorMsg());
+		}
+		catch (Exception e) {
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 			LOGGER.error("Internal user not updated for the user : "+id +" exception is : "+e.getMessage());
 		}
 		return response;
 	}
+	
+	
 }

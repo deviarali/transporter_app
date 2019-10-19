@@ -14,7 +14,6 @@ import com.transporter.dao.VehicleDetailsDao;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.DriverDetails;
-import com.transporter.model.TripDetails;
 import com.transporter.model.VehicleDetails;
 import com.transporter.model.VehicleType;
 import com.transporter.repo.VehicleDetailsRepo;
@@ -25,7 +24,6 @@ import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.FetchSelectedVehiclesResponse;
-import com.transporter.vo.TripDetailsVo;
 import com.transporter.vo.VehicleDetailsVo;
 import com.transporter.vo.VehiclesByOrderRequest;
 import com.transporter.vo.VehiclesByOrderResponse;
@@ -153,7 +151,7 @@ public class VehicleServiceImpl implements VehicleService {
 	@Override
 	public List<VehicleDetails> fetchSelectedVehiclesToConfirmOrder(
 			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest) {
-		return vehicleDetailsRepo.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest.getLattitude(), 
+				return vehicleDetailsRepo.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest.getLattitude(), 
 				fetchSelectedVehiclesRequest.getLongitude(), fetchSelectedVehiclesRequest.getSurroundingDistance(), 
 				fetchSelectedVehiclesRequest.getVehicleType());
 	}
@@ -164,21 +162,17 @@ public class VehicleServiceImpl implements VehicleService {
 	}
 
 	@Override
-	public List<LatitudeLongitudeResponse> getDriverLocations(int driverId) {
-		VehicleDetails vehicleDetails = new VehicleDetails();
-		List<VehicleDetails> vehiclesList = new ArrayList<VehicleDetails>();
-		LatitudeLongitudeResponse latitudeLongitudeVo = new LatitudeLongitudeResponse();
-		vehicleDetails	= 	(VehicleDetails) vehicleDetailsRepo.getdriverDeatils(driverId);
-		if(vehicleDetails != null)
+	public LatitudeLongitudeResponse getDriverLocations(int driverId) {
+		LatitudeLongitudeResponse   res = new LatitudeLongitudeResponse();
+		VehicleDetails vehicleDetails2	= 	 vehicleDetailsRepo.getdriverDeatils(driverId);
+		if(vehicleDetails2 == null)
 		{
-			latitudeLongitudeVo.setId(vehicleDetails.getId());
-			latitudeLongitudeVo.setCurrentLattitude(vehicleDetails.getCurrentLattitude());
-			latitudeLongitudeVo.setCurrentLongitude(vehicleDetails.getCurrentLongitude());
-			
+			throw new BusinessException(ErrorCodes.VEHICLEIDNOTFOUND.name(), ErrorCodes.VEHICLEIDNOTFOUND.value());
 		}
-		//vehicleDetailsVo = vehicleDetails.convertModelToVo(vehicleDetails);
+		res.setCurrentLattitude(vehicleDetails2.getCurrentLattitude());
+		res.setCurrentLongitude(vehicleDetails2.getCurrentLongitude());
+		return  res;
 		
-		return null;
 	}
 
 }

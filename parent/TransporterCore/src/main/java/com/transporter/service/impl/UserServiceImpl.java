@@ -19,6 +19,7 @@ import com.transporter.repo.UserRepo;
 import com.transporter.service.UserService;
 import com.transporter.utility.TransporterUtility;
 import com.transporter.utils.PasswordUtils;
+import com.transporter.utils.Utils;
 import com.transporter.vo.UserVo;
 
 @Service
@@ -130,6 +131,7 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(userVo.getFirstName());
 		user.setLastName(userVo.getLastName());
 		user.setEmailId(userVo.getEmailId());
+	
 		return userRepo.save(user);
 
 	}
