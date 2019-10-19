@@ -49,8 +49,8 @@ public class TripDetailsController {
 		if (tripHistoryList != null && tripHistoryList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(tripHistoryList);
 		} else {
-			response = RestUtils.wrapObjectForFailure("Trip History not found", "error",
-					WebConstants.WEB_RESPONSE_ERROR);
+			response = RestUtils.wrapObjectForFailure(null, "error",
+					"Trip History not found");
 		}
 
 		return response;
