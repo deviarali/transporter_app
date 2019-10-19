@@ -132,16 +132,17 @@ public class TripDetailsController {
 		return response;
 	}
 	
-	@RequestMapping(value = "trip/validateStartOtp", method = RequestMethod.POST)
-	public CommonResponse validateStartOtp(@RequestBody TripDetailsVo tripDetailsVo)
+	
+	@RequestMapping(value = "trip/validateTripOtp", method = RequestMethod.POST)
+	public CommonResponse validateTripOtp(@RequestParam int tripId, @RequestParam String otp,@RequestParam String status)
 	{
 		CommonResponse response = null;
 		try{
-		String tripStatus = tripDetailsService.validateOtp(tripDetailsVo);
+		String tripStatus = tripDetailsService.validateStartEndOtp(tripId,otp,status);
 		if (tripStatus.equals("Success")) {
 			response = RestUtils.wrapObjectForSuccess(tripStatus);
 		} else {
-			response = RestUtils.wrapObjectForFailure(null, "error",WebConstants.INVALID_OTP);
+			response = RestUtils.wrapObjectForFailure(null, "error",WebConstants.INVALID_STATUS);
 					
 		}
 		}catch(BusinessException be) {
@@ -155,32 +156,6 @@ public class TripDetailsController {
 		}
 		return response;
 	}
-	
-	@RequestMapping(value = "trip/validateEndOtp", method = RequestMethod.POST)
-	public CommonResponse validateEndOtp(@RequestBody TripDetailsVo tripDetailsVo)
-	{
-		CommonResponse response = null;
-		try{
-		String tripStatus = tripDetailsService.validateEndOtp(tripDetailsVo);
-		if (tripStatus.equals("Success")) {
-			response = RestUtils.wrapObjectForSuccess(tripStatus);
-		} else {
-			response = RestUtils.wrapObjectForFailure(null, "error",WebConstants.INVALID_OTP);
-					
-		}
-		}catch(BusinessException be) {
-			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
-			LOG.error("Trip Id Not Found in ValidateOTP:" 
-					+ " exception : " + be.getErrorMsg());
-		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
-			LOG.error("Trip Id Not Found In ValidateOTP :" 
-					+ " exception : " + e.getMessage());
-		}
-		return response;
-	}
-	
-	
 	
 
 }

@@ -17,6 +17,7 @@ public enum ErrorCodes
 	CNFOUND("Customer not found, please register"),
 	INVALIDRATING("Rating can not be zero"),
 	TRIPDETAILSNOTFOUND("Trip details not found"),
+	TRIPIDNOTFOUND("Trip ID not found"),
 	SUCCESS("success"),
 	DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING("Push notification error for driver, while booking"),
 	FCMTOKEN("FCM Token Missing"),

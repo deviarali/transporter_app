@@ -39,4 +39,6 @@ public interface DriverService {
 
 	void updateRidingStatus(int id, int status);
 
+	
+
 }

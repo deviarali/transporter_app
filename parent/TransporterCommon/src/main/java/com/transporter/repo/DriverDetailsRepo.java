@@ -13,4 +13,6 @@ public interface DriverDetailsRepo extends JpaRepository<DriverDetails, Integer>
 	@Query(value = "update DriverDetails dd set dd.ridingStatus= :status where dd.id= :id")
 	void updateRidingStatus(@Param(value ="id") int id, @Param(value ="status")int status);
 
+
+
 }

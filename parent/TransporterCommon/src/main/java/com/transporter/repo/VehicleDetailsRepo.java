@@ -17,4 +17,8 @@ public interface VehicleDetailsRepo extends JpaRepository<VehicleDetails, Intege
 	public List<VehicleDetails> fetchSelectedVehiclesToConfirmOrder(@Param(value = "lattitude") double lattitude, @Param(value = "longitude") double longitude,
 			@Param(value = "distance") double distance, @Param(value = "vehicleType") int vehicleType);
 
+	@Query(value= "SELECT dd.currentLattitude,dd.currentLongitude from VehicleDetails dd where dd.driverDetails.id =?1")
+	public List<VehicleDetails> getdriverDeatils(int driverId);
+
+
 }
