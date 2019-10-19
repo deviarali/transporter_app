@@ -5,9 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +21,7 @@ import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
-import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
-import com.transporter.vo.TripDetailsHistoryVo;
 import com.transporter.vo.TripDetailsVo;
 
 /**
@@ -44,10 +40,11 @@ public class TripDetailsController {
 	@RequestMapping(value = "trip/tripHistory/{id}/{tripstatus}", method = RequestMethod.GET)
 	public CommonResponse getHistoryDetails(@PathVariable("id") int id, @PathVariable("tripstatus") int tripstatus,
 			@RequestParam(name = "fromDate", required = false) String fromDate,
-			@RequestParam(name = "toDate", required = false) String toDate) {
+			@RequestParam(name = "toDate", required = false) String toDate, 
+			@RequestParam(name = "userType", required = true) String userType) {
 		CommonResponse response = null;
 
-		List<TripDetailsHistoryVo> tripHistoryList = tripDetailsService.getTripHistory(id, tripstatus, fromDate,
+		List<TripDetailsVo> tripHistoryList = tripDetailsService.getTripHistory(id, tripstatus, fromDate,
 				toDate);
 		if (tripHistoryList != null && tripHistoryList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(tripHistoryList);

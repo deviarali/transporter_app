@@ -7,6 +7,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.Period;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -80,20 +81,41 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	private double surroundingDistance;
 
 	@Override
-	public List<TripDetailsHistoryVo> getTripHistory(int id, int tripstatus, String fromDate, String toDate) {
+	public List<TripDetailsVo> getTripHistory(int id, int tripStatus, String fromDate, String toDate) {
 		String fromTripStart = null;
 		String toTripStart = null;
-		List<TripDetails> history = null;
+		Gson gson = new Gson();
+		List<TripDetails> tripDetailsList = null;
 		if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
 			fromTripStart = DateTimeUtils.convertToTimestamp(fromDate);
 			toTripStart = DateTimeUtils.convertToTimestamp(toDate);
-			history = tripDetailsRepo.getHistory(id, tripstatus, fromTripStart, toTripStart);
+			tripDetailsList = tripDetailsRepo.getHistory(id, tripStatus, fromTripStart, toTripStart);
 		} else {
-			history = tripDetailsRepo.getHistoryByStatus(id, tripstatus);
+			if(tripStatus == TripStatusEnum.CANCELLED.getTripStatusId()) {
+				tripDetailsList = tripDetailsRepo.getCancelledHistory(id);
+			}
+			tripDetailsList = tripDetailsRepo.getHistoryByStatus(id, tripStatus);
 		}
 
-		List<TripDetailsHistoryVo> tripDetailsHistoryVos = new ArrayList<>();
-		history.forEach(data -> {
+		List<TripDetailsVo> tripDetailsVoList = new ArrayList<>();
+		tripDetailsList.forEach(data -> {
+			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
+			TripDetailsHistoryVo tripDetailsHistoryVo = gson.fromJson(tripDetailsVo.getTripHistoryJson(), TripDetailsHistoryVo.class);
+			if(null != tripDetailsVo.getTripStarttime() && null != tripDetailsVo.getTripEndtime()) {
+				Period p = new Period(tripDetailsVo.getTripStarttime().getTime(), tripDetailsVo.getTripEndtime().getTime());
+				if(p.getMinutes() < 10) {				
+					tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":0"+String.valueOf(p.getMinutes()));
+				} else {
+					tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":"+String.valueOf(p.getMinutes()));
+				}
+			}
+			tripDetailsHistoryVo.setCgst(10.00);
+			tripDetailsHistoryVo.setSgst(10.00);
+			tripDetailsVo.setTripDetailsHistory(tripDetailsHistoryVo);
+			tripDetailsVoList.add(tripDetailsVo);
+		});
+		
+		/*tripDetailsList.forEach(data -> {
 			TripDetailsHistoryVo tripDetailsHistory = new TripDetailsHistoryVo();
 
 			tripDetailsHistory.setId(data.getId());
@@ -118,9 +140,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetailsHistory.setDriverName(data.getDriverDetails().getDriverName());
 			tripDetailsHistory
 					.setVehicleName(data.getDriverDetails().getVehicleDetails().getVehicleType().getVehicleName());
-			tripDetailsHistoryVos.add(tripDetailsHistory);
-		});
-		return tripDetailsHistoryVos;
+			tripDetailsVoList.add(tripDetailsHistory);
+		});*/
+		return tripDetailsVoList;
 	}
 
 	@Override
@@ -183,7 +205,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		if (tripDetails != null) {
 			DeliveryStatus deliveryStatus = new DeliveryStatus();
 			deliveryStatus.setId(deliveryStatusId);
-			tripDetails.setCanceledReason(deliveryStatusVo.getDeliverystatus());
+			tripDetails.setCancelledReason(deliveryStatusVo.getDeliverystatus());
 			tripDetails.setDeliveryStatus(deliveryStatus);
 			tripDetails = tripDetailsRepo.save(tripDetails);
 			
@@ -234,6 +256,15 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		tripDetails.setDeliveryStatus(deliveryStatus);
 		tripDetails.setTripTime(new Date());
 		tripDetails.setTripStartOtp(userService.generateOtp());
+		tripDetails.setTripEndOtp(userService.generateOtp());
+		TripDetailsHistoryVo historyVo = new TripDetailsHistoryVo();
+		historyVo.setDriverName(driverDetails.getDriverName());
+		historyVo.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
+		historyVo.setVehicleName(vehicleDetailsList.get(0).getVehicleName());
+		historyVo.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
+		historyVo.setVehicleType(vehicleDetailsList.get(0).getVehicleType().getId());
+		historyVo.setVehicleModel(vehicleDetailsList.get(0).getVehicleModel());
+		tripDetails.setTripHistoryJson(gson.toJson(historyVo));
 		tripDetails = tripDetailsRepo.save(tripDetails);
 		LOG.info("Booking confirmed for the customer : "+customerDetails.getUser().getMobileNumber());
 		if(tripDetails.getId() == 0) {

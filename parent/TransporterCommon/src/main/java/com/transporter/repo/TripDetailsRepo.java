@@ -29,8 +29,8 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id"  )
 	Integer updateTripStatus(@Param(value ="id")int id, @Param(value ="tripStatus")int tripStatus);
 
-	
-
+	@Query("From TripDetails td WHERE td.id= :id AND (td.deliveryStatus.id=3 OR td.deliveryStatus.id=4)")
+	List<TripDetails> getCancelledHistory(int id);
 	
 	
 }

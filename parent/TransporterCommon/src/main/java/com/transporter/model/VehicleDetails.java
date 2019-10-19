@@ -74,6 +74,9 @@ public class VehicleDetails implements Serializable {
 	
 	@Column(name = "current_longitude")
 	private Double currentLongitude;
+	
+	@Column(name = "vehicle_name")
+	private String vehicleName;
 
 	public VehicleDetails() {
 	}
@@ -190,6 +193,14 @@ public class VehicleDetails implements Serializable {
 		this.currentLongitude = currentLongitude;
 	}
 
+	public String getVehicleName() {
+		return vehicleName;
+	}
+
+	public void setVehicleName(String vehicleName) {
+		this.vehicleName = vehicleName;
+	}
+
 	public static VehicleDetailsVo convertModelToVo(VehicleDetails vehicleDetails) {
 		if (vehicleDetails == null)
 			return null;
@@ -201,6 +212,7 @@ public class VehicleDetails implements Serializable {
 		vehicleDetailsVo.setVehicleType(VehicleType.convertModelToVo(vehicleDetails.getVehicleType()));
 		vehicleDetailsVo.setCurrentLattitude(vehicleDetails.getCurrentLattitude());
 		vehicleDetailsVo.setCurrentLongitude(vehicleDetails.getCurrentLongitude());
+		vehicleDetailsVo.setVehicleName(vehicleDetails.getVehicleName());
 		return vehicleDetailsVo;
 	}
 

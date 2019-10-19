@@ -19,7 +19,7 @@ public class TripDetailsVo implements Serializable {
 
 	private String amountToDriver;
 
-	private String canceledReason;
+	private String cancelledReason;
 
 	private String cancelledAmountFromCustomer;
 
@@ -70,17 +70,17 @@ public class TripDetailsVo implements Serializable {
 	private Double sourceLattitude;
 	
 	private Double sourceLongitude;
-	
 	private Double destinationLattitude;
-	
 	private Double destinationLongitude;
-	
 	private String sourceLandmark;
-	
-	private String destinationLandmark;
-	
+	private String destinationLandmark;	
+	private String tripStatus;
+	private String tripHistoryJson;
 	private int vehicleType;
-
+	private TripDetailsHistoryVo tripDetailsHistory;
+	private int capacity;
+	private double kms;
+	
 	public TripDetailsVo() {
 	}
 
@@ -116,12 +116,12 @@ public class TripDetailsVo implements Serializable {
 		this.amountToDriver = amountToDriver;
 	}
 
-	public String getCanceledReason() {
-		return canceledReason;
+	public String getCancelledReason() {
+		return cancelledReason;
 	}
 
-	public void setCanceledReason(String canceledReason) {
-		this.canceledReason = canceledReason;
+	public void setCancelledReason(String cancelledReason) {
+		this.cancelledReason = cancelledReason;
 	}
 
 	public String getCancelledAmountFromCustomer() {
@@ -356,11 +356,51 @@ public class TripDetailsVo implements Serializable {
 		this.destinationLandmark = destinationLandmark;
 	}
 
+	public String getTripStatus() {
+		return tripStatus;
+	}
+
+	public void setTripStatus(String tripStatus) {
+		this.tripStatus = tripStatus;
+	}
+
+	public String getTripHistoryJson() {
+		return tripHistoryJson;
+	}
+
+	public void setTripHistoryJson(String tripHistoryJson) {
+		this.tripHistoryJson = tripHistoryJson;
+	}
+
 	public int getVehicleType() {
 		return vehicleType;
 	}
 
 	public void setVehicleType(int vehicleType) {
 		this.vehicleType = vehicleType;
-	}	
+	}
+
+	public TripDetailsHistoryVo getTripDetailsHistory() {
+		return tripDetailsHistory;
+	}
+
+	public void setTripDetailsHistory(TripDetailsHistoryVo tripDetailsHistory) {
+		this.tripDetailsHistory = tripDetailsHistory;
+	}
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+
+	public double getKms() {
+		return kms;
+	}
+
+	public void setKms(double kms) {
+		this.kms = kms;
+	}
 }

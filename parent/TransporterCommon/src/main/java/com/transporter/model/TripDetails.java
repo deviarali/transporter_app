@@ -41,8 +41,8 @@ public class TripDetails implements Serializable {
 	@Column(name = "amount_to_driver")
 	private String amountToDriver;
 
-	@Column(name = "canceled_reason")
-	private String canceledReason;
+	@Column(name = "cancelled_reason")
+	private String cancelledReason;
 
 	@Column(name = "cancelledamount_from_customer")
 	private String cancelledAmountFromCustomer;
@@ -133,6 +133,15 @@ public class TripDetails implements Serializable {
 	
 	@Column(name = "destination_landmark")
 	private String destinationLandmark;
+	
+	@Column(name = "trip_history_json")
+	private String tripHistoryJson;
+	
+	@Column(name = "capacity")
+	private int capacity;
+	
+	@Column(name = "kms")
+	private double kms;
 
 	public TripDetails() {
 	}
@@ -169,12 +178,12 @@ public class TripDetails implements Serializable {
 		this.amountToDriver = amountToDriver;
 	}
 
-	public String getCanceledReason() {
-		return canceledReason;
+	public String getCancelledReason() {
+		return cancelledReason;
 	}
 
-	public void setCanceledReason(String canceledReason) {
-		this.canceledReason = canceledReason;
+	public void setCancelledReason(String cancelledReason) {
+		this.cancelledReason = cancelledReason;
 	}
 
 	public String getCancelledAmountFromCustomer() {
@@ -393,20 +402,48 @@ public class TripDetails implements Serializable {
 		this.destinationLandmark = destinationLandmark;
 	}
 
-	public static TripDetailsVo convertTOVo(TripDetails tripDetails) {
+	public String getTripHistoryJson() {
+		return tripHistoryJson;
+	}
+
+	public void setTripHistoryJson(String tripHistoryJson) {
+		this.tripHistoryJson = tripHistoryJson;
+	}
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+
+	public double getKms() {
+		return kms;
+	}
+
+	public void setKms(double kms) {
+		this.kms = kms;
+	}
+
+	public static TripDetailsVo convertEntityTOVo(TripDetails tripDetails) {
 		TripDetailsVo tripDetailsVo = new TripDetailsVo();
 		tripDetailsVo.setId(tripDetails.getId());
 		tripDetailsVo.setAmount(tripDetails.getAmount());
 		tripDetailsVo.setAmountToApp(tripDetails.getAmountToApp());
 		tripDetailsVo.setAmountToDriver(tripDetails.getAmountToDriver());
-		tripDetailsVo.setCanceledReason(tripDetails.getCanceledReason());
+		tripDetailsVo.setCancelledReason(tripDetails.getCancelledReason());
 		tripDetailsVo.setCancelledAmountFromCustomer(tripDetails.getCancelledAmountFromCustomer());
 		tripDetailsVo.setCancelledAmountFromDriver(tripDetails.getCancelledAmountFromDriver());
 		tripDetailsVo.setCancelledAmountStatus(tripDetails.getCancelledAmountStatus());
+		tripDetailsVo.setCustomerId(tripDetails.getCustomerDetails().getId());
 		tripDetailsVo.setCashMode(tripDetails.getCashMode());
 		tripDetailsVo.setDeliveryPersonMobile(tripDetails.getDeliveryPersonMobile());
 		tripDetailsVo.setDeliveryPersonName(tripDetails.getDeliveryPersonName());
 		tripDetailsVo.setDestinationLocation(tripDetails.getDestinationLocation());
+		tripDetailsVo.setDestinationLandmark(tripDetails.getDestinationLandmark());
+		tripDetailsVo.setDestinationLattitude(tripDetails.getDestinationLattitude());
+		tripDetailsVo.setDestinationLongitude(tripDetails.getDestinationLongitude());
 		tripDetailsVo.setGoodsType(tripDetails.getGoodsType());
 		tripDetailsVo.setGoodsSize(tripDetails.getGoodsSize());
 		tripDetailsVo.setSourceLocation(tripDetails.getSourceLocation());
@@ -414,7 +451,19 @@ public class TripDetails implements Serializable {
 		tripDetailsVo.setTripTime(tripDetails.getTripTime());
 		tripDetailsVo.setTripStarttime(tripDetails.getTripStarttime());
 		tripDetailsVo.setTripEndtime(tripDetails.getTripEndtime());
-		tripDetailsVo.setDriverDetails(DriverDetails.convertModelToVo(tripDetails.getDriverDetails()));
+		//tripDetailsVo.setDriverDetails(DriverDetails.convertModelToVo(tripDetails.getDriverDetails()));
+		tripDetailsVo.setTripHistoryJson(tripDetails.getTripHistoryJson());
+		tripDetailsVo.setTripStatus(tripDetails.getDeliveryStatus().getDeliverystatus());
+		tripDetailsVo.setDriverId(tripDetails.getDriverDetails().getId());
+		tripDetailsVo.setPickupPersonMobile(tripDetails.getPickupPersonMobile());
+		tripDetailsVo.setPickupPersonName(tripDetails.getPickupPersonName());
+		tripDetailsVo.setSourceLandmark(tripDetails.getSourceLandmark());
+		tripDetailsVo.setSourceLattitude(tripDetails.getSourceLattitude());
+		tripDetailsVo.setSourceLongitude(tripDetails.getSourceLongitude());
+		tripDetailsVo.setTripStartOtp(tripDetails.getTripStartOtp());
+		tripDetailsVo.setTripEndOtp(tripDetails.getTripEndOtp());
+		tripDetailsVo.setCapacity(tripDetails.getCapacity());
+		tripDetailsVo.setKms(tripDetails.getKms());
 		return tripDetailsVo;
 	}
 
