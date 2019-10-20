@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.model.DriverDetails;
-import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehiclesByOrderRequest;
 import com.transporter.vo.VehiclesByOrderResponse;
@@ -38,6 +37,10 @@ public interface DriverService {
 	DriverDetails findDriverById(int driverId);
 
 	void updateRidingStatus(int id, int status);
+
+	List<DriverDetailsVo> getAllDrivers();
+
+	DriverDetailsVo getDriverById(int driverId);
 
 	
 

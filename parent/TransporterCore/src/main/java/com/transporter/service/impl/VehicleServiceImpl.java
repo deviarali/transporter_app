@@ -163,16 +163,15 @@ public class VehicleServiceImpl implements VehicleService {
 
 	@Override
 	public LatitudeLongitudeResponse getDriverLocations(int driverId) {
-		LatitudeLongitudeResponse   res = new LatitudeLongitudeResponse();
-		VehicleDetails vehicleDetails2	= 	 vehicleDetailsRepo.getdriverDeatils(driverId);
-		if(vehicleDetails2 == null)
+		LatitudeLongitudeResponse res = new LatitudeLongitudeResponse();
+		VehicleDetails vehicleDetails = vehicleDetailsRepo.getdriverDeatils(driverId);
+		if(vehicleDetails == null)
 		{
-			throw new BusinessException(ErrorCodes.VEHICLEIDNOTFOUND.name(), ErrorCodes.VEHICLEIDNOTFOUND.value());
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
 		}
-		res.setCurrentLattitude(vehicleDetails2.getCurrentLattitude());
-		res.setCurrentLongitude(vehicleDetails2.getCurrentLongitude());
+		res.setCurrentLattitude(vehicleDetails.getCurrentLattitude());
+		res.setCurrentLongitude(vehicleDetails.getCurrentLongitude());
 		return  res;
-		
 	}
 
 }

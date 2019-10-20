@@ -25,6 +25,7 @@ import com.transporter.service.DriverService;
 import com.transporter.service.UserService;
 import com.transporter.service.VehicleService;
 import com.transporter.utility.TransporterUtility;
+import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
@@ -216,6 +217,30 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public void updateRidingStatus(int id,int status) {
 		driverDetailsRepo.updateRidingStatus(id, status);
+	}
+
+	@Override
+	@Transactional
+	public List<DriverDetailsVo> getAllDrivers() {
+		List<DriverDetails> driverDetailsList = driverDetailsRepo.findAll();
+		List<DriverDetailsVo> driverDetailsVos = new ArrayList<>();
+		if(Utils.isNullOrEmpty(driverDetailsList)) {
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
+		}
+		driverDetailsList.forEach(data -> {
+			driverDetailsVos.add(DriverDetails.convertModelToVo(data));
+		});
+		return driverDetailsVos;
+	}
+
+	@Override
+	@Transactional
+	public DriverDetailsVo getDriverById(int driverId) {
+		DriverDetails driverDetails = driverDetailsRepo.findOne(driverId);
+		if(null == driverDetails) {
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
+		}
+		return DriverDetails.convertModelToVo(driverDetails);
 	}
 
 }

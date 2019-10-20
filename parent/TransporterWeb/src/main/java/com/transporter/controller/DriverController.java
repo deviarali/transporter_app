@@ -19,18 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
-import com.transporter.model.DriverDetails;
-import com.transporter.model.TripDetails;
 import com.transporter.response.CommonResponse;
 import com.transporter.response.LatitudeLongitudeResponse;
 import com.transporter.service.DriverService;
-import com.transporter.service.TripDetailsService;
 import com.transporter.service.VehicleService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DriverDetailsVo;
-import com.transporter.vo.TripDetailsVo;
-import com.transporter.vo.VehicleDetailsVo;
 
 /**
  * @author Devappa.Arali
@@ -221,5 +216,29 @@ public class DriverController {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		}
 		return response;
+	}
+	
+	@GetMapping("/driver/getAllDrivers")
+	public CommonResponse getAllDrivers() {
+		CommonResponse commonResponse = null;
+		try {
+			List<DriverDetailsVo> driverDetailsVo = driverService.getAllDrivers();
+			commonResponse = RestUtils.wrapObjectForSuccess(driverDetailsVo);
+		} catch (BusinessException be) {
+			commonResponse = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return commonResponse;
+	}
+	
+	@GetMapping("/driver/getDriverById/{driverId}")
+	public CommonResponse getDriverById(@PathVariable(required=true) int driverId) {
+		CommonResponse commonResponse = null;
+		try {
+			DriverDetailsVo driverDetailsVo = driverService.getDriverById(driverId);
+			commonResponse = RestUtils.wrapObjectForSuccess(driverDetailsVo);
+		} catch (BusinessException be) {
+			commonResponse = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return commonResponse;
 	}
 }
