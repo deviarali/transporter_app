@@ -21,6 +21,7 @@ import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsVo;
 
@@ -131,8 +132,7 @@ public class TripDetailsController {
 		}
 		return response;
 	}
-	
-	
+		
 	@RequestMapping(value = "trip/validateTripOtp", method = RequestMethod.POST)
 	public CommonResponse validateTripOtp(@RequestParam int tripId, @RequestParam String otp,@RequestParam String status)
 	{
@@ -157,5 +157,21 @@ public class TripDetailsController {
 		return response;
 	}
 	
-
+	@RequestMapping(value ="trip/CancelledTrip", method = RequestMethod.PUT)
+	public CommonResponse tripCancelledByDriver(@RequestBody TripCancelledVo tripCancelledVo)
+	{
+		CommonResponse response = null;
+		try {
+			String updateTripstatus = tripDetailsService.tripCancelledStatus(tripCancelledVo);
+			if (updateTripstatus != null) {
+				response = RestUtils.wrapObjectForSuccess(updateTripstatus);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, "error",
+						WebConstants.WEB_RESPONSE_ERROR);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return response;
+	}
 }

@@ -116,6 +116,8 @@ public class TripDetails implements Serializable {
 	@JoinColumn(name = "trip_status")
 	private DeliveryStatus deliveryStatus;
 	
+	
+	
 	@Column(name = "source_lattitude")
 	private Double sourceLattitude;
 	
@@ -353,6 +355,7 @@ public class TripDetails implements Serializable {
 	public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
 		this.deliveryStatus = deliveryStatus;
 	}
+	
 
 	public Double getSourceLattitude() {
 		return sourceLattitude;

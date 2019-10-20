@@ -40,6 +40,10 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 
 	@Query("SELECT m From TripDetails m where m.id= :tripId and m.tripEndOtp= :otp")
 	TripDetails validateEndOtp(@Param(value ="tripId")int tripId,@Param(value ="otp") String otp);
+
+
+
+
 	
 	
 }

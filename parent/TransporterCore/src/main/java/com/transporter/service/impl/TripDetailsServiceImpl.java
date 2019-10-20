@@ -42,6 +42,7 @@ import com.transporter.utils.DateTimeUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
+import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
 import com.transporter.vo.TripDetailsVo;
@@ -373,6 +374,26 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			return "Failure";
 		}
 		
+	}
+
+	@Override
+	public String tripCancelledStatus(TripCancelledVo tripCancelledVo)
+	{
+		int tripId = tripCancelledVo.getTripId();
+		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
+		DeliveryStatus deliveryStatus = new DeliveryStatus();
+		if (tripDetails != null) 
+		{
+			deliveryStatus.setId(tripCancelledVo.getDeliveryStatusId());
+			tripDetails.setCancelledReason(tripCancelledVo.getCancelledReason());
+			tripDetails.setDeliveryStatus(deliveryStatus);
+			tripDetails=  tripDetailsRepo.save(tripDetails);
+			if(tripDetails != null)
+			{
+				return "Success";
+			}	
+		}
+		return "Failure";
 	}
 
 }
