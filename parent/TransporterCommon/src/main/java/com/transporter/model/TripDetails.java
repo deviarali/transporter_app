@@ -116,8 +116,6 @@ public class TripDetails implements Serializable {
 	@JoinColumn(name = "trip_status")
 	private DeliveryStatus deliveryStatus;
 	
-	
-	
 	@Column(name = "source_lattitude")
 	private Double sourceLattitude;
 	
