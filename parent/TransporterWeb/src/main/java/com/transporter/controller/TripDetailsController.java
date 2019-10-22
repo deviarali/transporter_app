@@ -57,6 +57,25 @@ public class TripDetailsController {
 		return response;
 	}
 	
+	@RequestMapping(value = "trip/tripHistoryOfPassenger/{id}/{tripstatus}", method = RequestMethod.GET)
+	public CommonResponse getPassengerHistoryDetails(@PathVariable("id") int id, @PathVariable("tripstatus") int tripstatus,
+			@RequestParam(name = "fromDate", required = false) String fromDate,
+			@RequestParam(name = "toDate", required = false) String toDate, 
+			@RequestParam(name = "userType", required = true) String userType) {
+		CommonResponse response = null;
+
+		List<TripDetailsVo> tripHistoryList = tripDetailsService.getTripPassengerHistory(id, tripstatus, fromDate,
+				toDate);
+		if (tripHistoryList != null && tripHistoryList.size() > 0) {
+			response = RestUtils.wrapObjectForSuccess(tripHistoryList);
+		} else {
+			response = RestUtils.wrapObjectForFailure(null, "error",
+					"Trip History not found");
+		}
+
+		return response;
+	}
+	
 	@RequestMapping(value = "trip/confirmBooking", method = RequestMethod.POST)
 	public CommonResponse confirmBooking(@RequestBody TripDetailsVo tripDetailsVo) {
 		CommonResponse response = null;

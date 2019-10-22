@@ -131,6 +131,55 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		});
 		return tripDetailsVoList;
 	}
+	
+	/*   
+	 * TripHistoryOfPassenger
+	 * 
+	 */
+	@Override
+	public List<TripDetailsVo> getTripPassengerHistory(int id, int tripStatus, String fromDate, String toDate) {
+		String fromTripStart = null;
+		String toTripStart = null;
+		Gson gson = new Gson();
+		List<TripDetails> tripDetailsList = null;
+		if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
+			fromTripStart = DateTimeUtils.convertToTimestamp(fromDate);
+			toTripStart = DateTimeUtils.convertToTimestamp(toDate);
+			tripDetailsList = tripDetailsRepo.getHistoryOfPassenger(id, tripStatus, fromTripStart, toTripStart);
+		} else {
+			if(tripStatus == TripStatusEnum.CANCELLED.getTripStatusId()) {
+				tripDetailsList = tripDetailsRepo.getCancelledHistory(id);
+			}
+			tripDetailsList = tripDetailsRepo.getHistoryByStatusOfPassenger(id, tripStatus);
+		}
+
+		List<TripDetailsVo> tripDetailsVoList = new ArrayList<>();
+		tripDetailsList.forEach(data -> {
+			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
+			TripDetailsHistoryVo tripDetailsHistoryVo = gson.fromJson(tripDetailsVo.getTripHistoryJson(), TripDetailsHistoryVo.class);
+			if(null != tripDetailsHistoryVo) {
+				if(null != tripDetailsVo.getTripStarttime() && null != tripDetailsVo.getTripEndtime()) {
+					Period p = new Period(tripDetailsVo.getTripStarttime().getTime(), tripDetailsVo.getTripEndtime().getTime());
+					if(p.getMinutes() < 10) {				
+						tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":0"+String.valueOf(p.getMinutes()));
+					} else {
+						tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":"+String.valueOf(p.getMinutes()));
+					}
+				}
+				Double cgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getCgstPercentage()/100;
+				Double sgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getSgstPercentage()/100;
+				Double rideFare = Double.valueOf(tripDetailsVo.getAmount())-(cgstAmount+sgstAmount);
+				tripDetailsVo.setCgst(cgstAmount);
+				tripDetailsVo.setSgst(sgstAmount);
+				tripDetailsVo.setRideFare(rideFare);
+				tripDetailsHistoryVo.setCgst(10.00);
+				tripDetailsHistoryVo.setSgst(10.00);
+			}
+			tripDetailsVo.setTripDetailsHistory(tripDetailsHistoryVo);
+			tripDetailsVoList.add(tripDetailsVo);
+		});
+		return tripDetailsVoList;
+	}
 
 	@Override
 	@Transactional
@@ -397,5 +446,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		}
 		return "Failure";
 	}
+
+	
 
 }
