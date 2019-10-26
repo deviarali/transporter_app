@@ -117,14 +117,16 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 						tripDetailsHistoryVo.setTripHours(String.valueOf(p.getHours())+":"+String.valueOf(p.getMinutes()));
 					}
 				}
-				Double cgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getCgstPercentage()/100;
-				Double sgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getSgstPercentage()/100;
-				Double rideFare = Double.valueOf(tripDetailsVo.getAmount())-(cgstAmount+sgstAmount);
-				tripDetailsVo.setCgst(cgstAmount);
-				tripDetailsVo.setSgst(sgstAmount);
-				tripDetailsVo.setRideFare(rideFare);
-				tripDetailsHistoryVo.setCgst(10.00);
-				tripDetailsHistoryVo.setSgst(10.00);
+				if(null != tripDetailsHistoryVo.getCgstPercentage() && null != tripDetailsHistoryVo.getSgstPercentage()) {
+					Double cgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getCgstPercentage()/100;
+					Double sgstAmount = Double.valueOf(tripDetailsVo.getAmount())*tripDetailsHistoryVo.getSgstPercentage()/100;
+					Double rideFare = Double.valueOf(tripDetailsVo.getAmount())-(cgstAmount+sgstAmount);
+					tripDetailsVo.setCgst(cgstAmount);
+					tripDetailsVo.setSgst(sgstAmount);
+					tripDetailsVo.setRideFare(rideFare);
+					tripDetailsHistoryVo.setCgst(10.00);
+					tripDetailsHistoryVo.setSgst(10.00);
+				}
 			}
 			tripDetailsVo.setTripDetailsHistory(tripDetailsHistoryVo);
 			tripDetailsVoList.add(tripDetailsVo);
@@ -408,6 +410,14 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
 				
 			}
+			JSONObject tripStartedToCustomer = new JSONObject();
+			try {
+				tripStartedToCustomer.put("message", "Trip started");
+			} catch (JSONException e) {
+				LOG.error("Exception while trip started json object "+e.getMessage());
+			}
+			PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.TRIP_STARTED, "Trip started", "Trip started", tripStartedToCustomer.toString());
+			transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
 			return "Success";
 		}
 		else if(status.equals("end"))
@@ -415,9 +425,17 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			TripDetails tripDetails = tripDetailsRepo.validateEndOtp(tripId,otp);
 			if(tripDetails == null)
 			{
-				throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(), ErrorCodes.TRIPDETAILSNOTFOUND.value());
+				throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
 				
 			}
+			JSONObject goodsDeliveredToCustomer = new JSONObject();
+			try {
+				goodsDeliveredToCustomer.put("message", "Goods Delivered");
+			} catch (JSONException e) {
+				LOG.error("Exception while goods delivered json object "+e.getMessage());
+			}
+			PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.GOODS_DELIVERED, "Goods Delivered", "Goods Delivered", goodsDeliveredToCustomer.toString());
+			transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
 			return "Success";
 		}
 		else
