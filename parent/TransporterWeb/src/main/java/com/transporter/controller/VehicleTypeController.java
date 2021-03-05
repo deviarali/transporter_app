@@ -41,7 +41,7 @@ public class VehicleTypeController {
 	}
 	
 	@RequestMapping(value = "vehicleType/addVehicleType",method = RequestMethod.POST)
-	public CommonResponse addVehicleType(@ModelAttribute VehicleTypeVo vehicleTypeVo) {
+	public CommonResponse addVehicleType(@RequestBody VehicleTypeVo vehicleTypeVo) {
 
 		CommonResponse response = null;
 		try {

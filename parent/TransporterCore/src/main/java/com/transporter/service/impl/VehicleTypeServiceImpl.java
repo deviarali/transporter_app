@@ -34,6 +34,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 	VehicleTypeRepo vehicleTypeRepo;
 
 	@Override
+	@Transactional
 	public List<VehicleTypeVo> getAllVehicleTypes() {
 		List<VehicleTypeVo> displayVehicleList = vehicleTypeDao.getAllVehicleTypes();
 		return displayVehicleList;
@@ -83,7 +84,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 			vehicleType.setLength(vehicleTypeVo.getLength());
 			vehicleType.setSize(vehicleTypeVo.getSize());
 			vehicleType.setWidth(vehicleTypeVo.getWidth());
-			vehicleType.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getSelectedVehicle(),"vehicle"));
+			//vehicleType.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getSelectedVehicle(),"vehicle"));
 			vehicleType.setUnselectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getUnSelectedVehicle(), "vehicle"));
 			try {
 				vehicleTypeDao.save(vehicleType);

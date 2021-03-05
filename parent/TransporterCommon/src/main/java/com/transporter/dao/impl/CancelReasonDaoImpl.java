@@ -24,4 +24,20 @@ public class CancelReasonDaoImpl extends GenericDaoImpl implements CancelReasonD
 		return reasons;
 	}
 
+	@Override
+	public void addCancelReason(CancelReasons reason) {
+		saveOrUpdate(reason);
+	}
+	
+	
+	@Override
+	public int deleteCancelReason(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "delete from CancelReasons reason where reason.id=:id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", id);
+		int res = query.executeUpdate();
+		return res;	
+	}
+
 }
