@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.transporter.model.TripDetails;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverReachedVo;
 import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
@@ -36,7 +37,8 @@ public interface TripDetailsService {
 	String validateStartEndOtp(int tripId, String otp, String status);
 
 	String tripCancelledStatus(TripCancelledVo tripCancelledVo);
-
+	
+	boolean isDriverReachedLocation(DriverReachedVo driverReachedVo);
 
 	
 

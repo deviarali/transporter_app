@@ -21,6 +21,7 @@ import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverReachedVo;
 import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsVo;
@@ -187,6 +188,24 @@ public class TripDetailsController {
 			} else {
 				response = RestUtils.wrapObjectForFailure(null, "error",
 						WebConstants.WEB_RESPONSE_ERROR);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return response;
+	}
+	
+	@RequestMapping(value ="trip/isDriverReachedLocation", method = RequestMethod.POST)
+	public CommonResponse isDriverReachedLocation(@RequestBody DriverReachedVo driverReachedVo)
+	{
+		CommonResponse response = null;
+		try {
+			boolean isDriverReachedLocation = tripDetailsService.isDriverReachedLocation(driverReachedVo);
+			if (isDriverReachedLocation) {
+				response = RestUtils.wrapObjectForSuccess(WebConstants.SUCCESS);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, "error",
+						WebConstants.DRIVER_NOT_REACHED_LOCATION);
 			}
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());

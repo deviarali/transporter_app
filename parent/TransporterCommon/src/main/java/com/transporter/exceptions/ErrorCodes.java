@@ -24,7 +24,9 @@ public enum ErrorCodes
 	DRIVERPUSHNOTIFICATIONERRORWHILEBOOKING("Push notification error for driver, while booking"),
 	FCMTOKEN("FCM Token Missing"),
 	TRIPDETAILSNOTSAVED("Trip details are not saved"),
-	DRIVERNOTFOUND("Driver not found");
+	DRIVERNOTFOUND("Driver not found"),
+	DRIVER_NOT_REACHED_LOCATION("driver not reached location"),
+	IN_VALID_LOCATION_TYPE("invalid location type");
 	
 	
 	private final String value;
