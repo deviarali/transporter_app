@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.model.TripDetails;
-import com.transporter.vo.TripDetailsVo;
 
 @Repository
 public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
@@ -38,7 +37,7 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	Integer updateTripStatus(@Param(value ="id")int id, @Param(value ="tripStatus")int tripStatus);
 
 	@Query("From TripDetails td WHERE td.id= :id AND (td.deliveryStatus.id=3 OR td.deliveryStatus.id=4)")
-	List<TripDetails> getCancelledHistory(int id);
+	List<TripDetails> getCancelledHistory(@Param(value ="id") int id);
 	
 	@Query(value= "SELECT dd.sourceLattitude,dd.sourceLongitude from TripDetails dd where dd.driverDetails.id =?1")
 	TripDetails getdriverDeatils(int driverId);
