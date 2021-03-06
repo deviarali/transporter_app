@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.transporter.dao.TripDetailsDao;
+import com.transporter.enums.LocationType;
 import com.transporter.enums.RidingStatusEnum;
 import com.transporter.enums.TripStatusEnum;
 import com.transporter.exceptions.BusinessException;
@@ -41,6 +42,7 @@ import com.transporter.service.VehicleService;
 import com.transporter.utils.DateTimeUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverReachedVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
@@ -494,6 +496,59 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			}
 		}
 		return "Failure";
+	}
+
+	@Override
+	public boolean isDriverReachedLocation(DriverReachedVo driverReachedVo) {
+		boolean isDriverReachedLocation = false;
+		int tripId = driverReachedVo.getTripId();
+		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
+		if(tripDetails != null) {
+			double distance = Utils.distance(driverReachedVo.getLocationLatitude(), 
+					driverReachedVo.getDriverLocationLatitude(), 
+					driverReachedVo.getLocationLongitude(), 
+					driverReachedVo.getDriverLocationLongitude());
+			if(distance <= 0.6) {
+				isDriverReachedLocation = true;
+				if(!driverReachedVo.getLocationType().isEmpty()) {
+					LocationType locationType = LocationType.valueOf(driverReachedVo.getLocationType());
+					switch (locationType) {
+					case PICK_UP:
+						JSONObject driverReachedPickLocation = new JSONObject();
+						try {
+							driverReachedPickLocation.put("message", "driver reached pick up point");
+						} catch (JSONException e) {
+							LOG.error("Exception while sending push notificatin " + e.getMessage());
+						}
+						PushNotificationBean pickUpBean = NotificationBuilder.buildPayloadNotification(NotificationType.DRIVER_REACHED_PICK_UP_POIN,
+								"Driver reached pickup point", "Driver has arrived in pickup location", driverReachedPickLocation.toString());
+						transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
+								pickUpBean, "customer");
+						break;
+					case DROP: 
+						JSONObject driverReachedDropLocation = new JSONObject();
+						try {
+							driverReachedDropLocation.put("message", "driver reached pick up point");
+						} catch (JSONException e) {
+							LOG.error("Exception while sending push notificatin " + e.getMessage());
+						}
+						PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.DRIVER_REACHED_DESTINATION,
+								"Driver reached destination point", "Driver has reached destination", driverReachedDropLocation.toString());
+						transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
+								bean, "customer");
+						break;
+					default:
+						throw new BusinessException(ErrorCodes.IN_VALID_LOCATION_TYPE.name(), ErrorCodes.IN_VALID_LOCATION_TYPE.value());
+					}
+				}
+			}else {
+				isDriverReachedLocation = false;
+				throw new BusinessException(ErrorCodes.DRIVER_NOT_REACHED_LOCATION.name(), ErrorCodes.DRIVER_NOT_REACHED_LOCATION.value());
+			}
+		}
+		
+		
+		return isDriverReachedLocation;
 	}
 
 }
