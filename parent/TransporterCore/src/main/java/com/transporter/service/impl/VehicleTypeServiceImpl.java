@@ -60,10 +60,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 			vehicleTypeDao.saveOrUpdate(displayVehicle);
 		}
 
-		if (displayVehicle != null) {
-			return displayVehicle;
-		} else
-			return null;
+		return displayVehicle;
 	}
 
 	@Override
