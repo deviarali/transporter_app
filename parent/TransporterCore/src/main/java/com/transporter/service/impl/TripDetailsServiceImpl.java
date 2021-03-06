@@ -426,8 +426,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			LOG.error("Notification error for customer, while booking");
 		}
 
-		// driverService.updateRidingStatus(driverDetails.getId(),
-		// RidingStatusEnum.ONRIDING.getRidingStatusId());
+		driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
 		tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
 		tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
 		tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
@@ -545,7 +544,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 					case DROP:
 						JSONObject driverReachedDropLocation = new JSONObject();
 						try {
-							driverReachedDropLocation.put("message", "driver reached pick up point");
+							driverReachedDropLocation.put("message", "driver has reached destination point");
 						} catch (JSONException e) {
 							LOG.error("Exception while sending push notificatin " + e.getMessage());
 						}
@@ -565,6 +564,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				throw new BusinessException(ErrorCodes.DRIVER_NOT_REACHED_LOCATION.name(),
 						ErrorCodes.DRIVER_NOT_REACHED_LOCATION.value());
 			}
+		} else {
+			isDriverReachedLocation = false;
+			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(), ErrorCodes.TRIPDETAILSNOTFOUND.value());
 		}
 
 		return isDriverReachedLocation;
