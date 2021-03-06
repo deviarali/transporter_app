@@ -1,21 +1,31 @@
 package com.transporter.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.joda.time.Period;
 
+import com.google.gson.Gson;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.CustomerDetailsDao;
+import com.transporter.dao.TripDetailsDao;
 import com.transporter.dao.UserDao;
 import com.transporter.enums.UserRoleEnum;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.CustomerDetails;
+import com.transporter.model.TripDetails;
 import com.transporter.model.User;
 import com.transporter.repo.CustomerDetailsRepo;
 import com.transporter.service.CustomerDetailsService;
+import com.transporter.service.TripDetailsService;
 import com.transporter.service.UserService;
 import com.transporter.vo.CustomerDetailsVo;
+import com.transporter.vo.TripDetailsHistoryVo;
+import com.transporter.vo.TripDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
 
@@ -33,6 +43,10 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	
 	@Autowired
 	private CustomerDetailsRepo customerDetailsRepo;
+	
+	@Autowired
+	TripDetailsService tripDetailService;
+	
 	
 	@Override
 	@Transactional
@@ -124,8 +138,62 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	}
 
 	@Override
+	@Transactional
 	public CustomerDetails findCustomerById(int customerId) {
 		return customerDetailsRepo.findOne(customerId);
+	}
+
+	@Override
+	@Transactional
+	public CustomerDetailsVo getUserById(int id) {
+		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
+		CustomerDetailsVo customerDetailsVo = null;
+		if(customerDetails != null) {
+			customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
+			List<TripDetails> tripDetails  = tripDetailService.getTripHistoryByUserId(id);
+			if(tripDetails != null && tripDetails.size() > 0) {
+				Gson gson = new Gson();
+				List<TripDetailsVo> tripDetailsVoList = new ArrayList<>();
+				tripDetails.forEach(data -> {
+					TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
+					TripDetailsHistoryVo tripDetailsHistoryVo = gson.fromJson(tripDetailsVo.getTripHistoryJson(),
+							TripDetailsHistoryVo.class);
+					if (null != tripDetailsHistoryVo) {
+						if (null != tripDetailsVo.getTripStarttime() && null != tripDetailsVo.getTripEndtime()) {
+							Period p = new Period(tripDetailsVo.getTripStarttime().getTime(),
+									tripDetailsVo.getTripEndtime().getTime());
+							if (p.getMinutes() < 10) {
+								tripDetailsHistoryVo
+										.setTripHours(String.valueOf(p.getHours()) + ":0" + String.valueOf(p.getMinutes()));
+							} else {
+								tripDetailsHistoryVo
+										.setTripHours(String.valueOf(p.getHours()) + ":" + String.valueOf(p.getMinutes()));
+							}
+						}
+						if (null != tripDetailsHistoryVo.getCgstPercentage()
+								&& null != tripDetailsHistoryVo.getSgstPercentage()) {
+							Double cgstAmount = Double.valueOf(tripDetailsVo.getAmount())
+									* tripDetailsHistoryVo.getCgstPercentage() / 100;
+							Double sgstAmount = Double.valueOf(tripDetailsVo.getAmount())
+									* tripDetailsHistoryVo.getSgstPercentage() / 100;
+							Double rideFare = Double.valueOf(tripDetailsVo.getAmount()) - (cgstAmount + sgstAmount);
+							tripDetailsVo.setCgst(cgstAmount);
+							tripDetailsVo.setSgst(sgstAmount);
+							tripDetailsVo.setRideFare(rideFare);
+							tripDetailsHistoryVo.setCgst(10.00);
+							tripDetailsHistoryVo.setSgst(10.00);
+						}
+					}
+					tripDetailsVo.setTripDetailsHistory(tripDetailsHistoryVo);
+					tripDetailsVoList.add(tripDetailsVo);
+				});
+				
+				customerDetailsVo.setTripDetailsVoList(tripDetailsVoList);
+			}
+		}else {
+			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
+		}
+		return customerDetailsVo;
 	}
 
 }

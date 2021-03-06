@@ -1,9 +1,20 @@
 package com.transporter.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -88,6 +102,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Value("${sgst}")
 	private Double sgst;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 	@Override
 	public List<TripDetailsVo> getTripHistory(int id, int tripStatus, String fromDate, String toDate) {
@@ -503,14 +520,13 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		boolean isDriverReachedLocation = false;
 		int tripId = driverReachedVo.getTripId();
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
-		if(tripDetails != null) {
-			double distance = Utils.distance(driverReachedVo.getLocationLatitude(), 
-					driverReachedVo.getDriverLocationLatitude(), 
-					driverReachedVo.getLocationLongitude(), 
+		if (tripDetails != null) {
+			double distance = Utils.distance(driverReachedVo.getLocationLatitude(),
+					driverReachedVo.getDriverLocationLatitude(), driverReachedVo.getLocationLongitude(),
 					driverReachedVo.getDriverLocationLongitude());
-			if(distance <= 0.6) {
+			if (distance <= 0.6) {
 				isDriverReachedLocation = true;
-				if(!driverReachedVo.getLocationType().isEmpty()) {
+				if (!driverReachedVo.getLocationType().isEmpty()) {
 					LocationType locationType = LocationType.valueOf(driverReachedVo.getLocationType());
 					switch (locationType) {
 					case PICK_UP:
@@ -520,35 +536,86 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 						} catch (JSONException e) {
 							LOG.error("Exception while sending push notificatin " + e.getMessage());
 						}
-						PushNotificationBean pickUpBean = NotificationBuilder.buildPayloadNotification(NotificationType.DRIVER_REACHED_PICK_UP_POIN,
-								"Driver reached pickup point", "Driver has arrived in pickup location", driverReachedPickLocation.toString());
-						transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
-								pickUpBean, "customer");
+						PushNotificationBean pickUpBean = NotificationBuilder.buildPayloadNotification(
+								NotificationType.DRIVER_REACHED_PICK_UP_POIN, "Driver reached pickup point",
+								"Driver has arrived in pickup location", driverReachedPickLocation.toString());
+						transporterPushNotifications.sendPushNotification(
+								tripDetails.getCustomerDetails().getUser().getFcmToken(), pickUpBean, "customer");
 						break;
-					case DROP: 
+					case DROP:
 						JSONObject driverReachedDropLocation = new JSONObject();
 						try {
 							driverReachedDropLocation.put("message", "driver reached pick up point");
 						} catch (JSONException e) {
 							LOG.error("Exception while sending push notificatin " + e.getMessage());
 						}
-						PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(NotificationType.DRIVER_REACHED_DESTINATION,
-								"Driver reached destination point", "Driver has reached destination", driverReachedDropLocation.toString());
-						transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
-								bean, "customer");
+						PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(
+								NotificationType.DRIVER_REACHED_DESTINATION, "Driver reached destination point",
+								"Driver has reached destination", driverReachedDropLocation.toString());
+						transporterPushNotifications.sendPushNotification(
+								tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
 						break;
 					default:
-						throw new BusinessException(ErrorCodes.IN_VALID_LOCATION_TYPE.name(), ErrorCodes.IN_VALID_LOCATION_TYPE.value());
+						throw new BusinessException(ErrorCodes.IN_VALID_LOCATION_TYPE.name(),
+								ErrorCodes.IN_VALID_LOCATION_TYPE.value());
 					}
 				}
-			}else {
+			} else {
 				isDriverReachedLocation = false;
-				throw new BusinessException(ErrorCodes.DRIVER_NOT_REACHED_LOCATION.name(), ErrorCodes.DRIVER_NOT_REACHED_LOCATION.value());
+				throw new BusinessException(ErrorCodes.DRIVER_NOT_REACHED_LOCATION.name(),
+						ErrorCodes.DRIVER_NOT_REACHED_LOCATION.value());
 			}
 		}
-		
-		
+
 		return isDriverReachedLocation;
+	}
+
+	@Override
+	public boolean sendInvoiceToMail(int tripId) {
+		boolean isMainSent = false;
+		/*
+		 * TripDetails tripDetails = tripDetailsRepo.findOne(tripId); if(tripDetails !=
+		 * null) {
+		 * 
+		 * 
+		 * }else { isMainSent = false; throw new
+		 * BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(),
+		 * ErrorCodes.TRIPDETAILSNOTFOUND.value()); }
+		 */
+		try {
+			sendMail("bnavi1992@gmail.com", "new email",
+					"You are receiving this email just becasue of you are part of transol family");
+			isMainSent = true;
+		} catch (Exception e) {
+			isMainSent = false;
+			LOG.error(e.getMessage());
+		}
+
+		return isMainSent;
+	}
+
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+	public void sendMail(String toEmail, String subject, String message) {
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+		mailMessage.setTo(toEmail);
+		mailMessage.setSubject(subject);
+		mailMessage.setText(message);
+
+		mailMessage.setFrom("bnavi1992@gmail.com");
+
+		javaMailSender.send(mailMessage);
+	}
+
+	@Override
+	@Transactional
+	public List<TripDetails> getTripHistoryByUserId(int userId) {
+		List<TripDetails> details = null;
+		details = tripDetailsRepo.getTripHistoryByUserId(userId);
+		return details;
 	}
 
 }

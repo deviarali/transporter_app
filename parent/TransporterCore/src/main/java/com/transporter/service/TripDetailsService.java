@@ -39,6 +39,10 @@ public interface TripDetailsService {
 	String tripCancelledStatus(TripCancelledVo tripCancelledVo);
 	
 	boolean isDriverReachedLocation(DriverReachedVo driverReachedVo);
+	
+	boolean sendInvoiceToMail(int tripId);
+	
+	List<TripDetails> getTripHistoryByUserId(int userId);
 
 	
 
