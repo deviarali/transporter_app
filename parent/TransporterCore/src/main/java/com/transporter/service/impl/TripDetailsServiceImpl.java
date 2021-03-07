@@ -1,20 +1,9 @@
 package com.transporter.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,13 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.transporter.dao.TripDetailsDao;
+import com.transporter.enums.DeliveryStatusEnum;
 import com.transporter.enums.LocationType;
 import com.transporter.enums.RidingStatusEnum;
 import com.transporter.enums.TripStatusEnum;
@@ -44,7 +33,6 @@ import com.transporter.model.CustomerDetails;
 import com.transporter.model.DeliveryStatus;
 import com.transporter.model.DriverDetails;
 import com.transporter.model.TripDetails;
-import com.transporter.model.User;
 import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.repo.TripDetailsRepo;
@@ -461,8 +449,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			TripDetails tripDetails = tripDetailsRepo.validateStartEndOtp(tripId, otp);
 			if (tripDetails == null) {
 				throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
-
 			}
+			this.updateTripStatus(tripId, DeliveryStatusEnum.ONGOING.getId());
 			JSONObject tripStartedToCustomer = new JSONObject();
 			try {
 				tripStartedToCustomer.put("message", "Trip started");
@@ -490,6 +478,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 					"Goods Delivered", "Goods Delivered", goodsDeliveredToCustomer.toString());
 			transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
 					bean, "customer");
+			this.updateTripStatus(tripId, DeliveryStatusEnum.COMPLETED.getId());
 			return "Success";
 		} else {
 			return "Failure";
