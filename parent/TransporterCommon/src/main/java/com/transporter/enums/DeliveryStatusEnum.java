@@ -2,7 +2,7 @@ package com.transporter.enums;
 
 public enum DeliveryStatusEnum {
 
-	PENDING(1), ON_GOING(2), COMPLETED(3);
+	PENDING(1), ONGOING(2), CANCELEDBYDRIVER(3), CANCELEDBYCUSTOMER(4), COMPLETED(5);
 	
 	private int deliveryStatusId;
 
