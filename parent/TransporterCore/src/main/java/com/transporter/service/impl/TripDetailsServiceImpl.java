@@ -526,9 +526,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			if (distance <= 0.6) {
 				isDriverReachedLocation = true;
 				if (!driverReachedVo.getLocationType().isEmpty()) {
-					LocationType locationType = LocationType.valueOf(driverReachedVo.getLocationType());
-					switch (locationType) {
-					case PICK_UP:
+					switch (driverReachedVo.getLocationType()) {
+					case "pickup":
 						JSONObject driverReachedPickLocation = new JSONObject();
 						try {
 							driverReachedPickLocation.put("message", "driver reached pick up point");
@@ -541,7 +540,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 						transporterPushNotifications.sendPushNotification(
 								tripDetails.getCustomerDetails().getUser().getFcmToken(), pickUpBean, "customer");
 						break;
-					case DROP:
+					case "drop":
 						JSONObject driverReachedDropLocation = new JSONObject();
 						try {
 							driverReachedDropLocation.put("message", "driver has reached destination point");
