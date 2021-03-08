@@ -51,9 +51,14 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 
 	@Query("SELECT m From TripDetails m where m.id= :tripId and m.tripEndOtp= :otp")
 	TripDetails validateEndOtp(@Param(value = "tripId") int tripId, @Param(value = "otp") String otp);
-	
+
 	@Query(value = "SELECT m from TripDetails m where m.deliveryStatus=5 and m.tripStarttime BETWEEN :fromTripStart and :toTripStart")
 	List<TripDetails> getTopDriversForWeek(@Param(value = "fromTripStart") Date fromTripStart,
 			@Param(value = "toTripStart") Date toTripStart);
 
+	@Query("SELECT m From TripDetails m where m.id= :tripId")
+	TripDetails getTripDetail(@Param(value = "tripId") int tripId);
+
+	@Query(value = "SELECT * from tripdetails m WHERE m.customer_id =:id", nativeQuery = true)
+	List<TripDetails> getTripHistoryByUserId(@Param(value = "id") int id);
 }

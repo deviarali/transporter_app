@@ -3,16 +3,16 @@ package com.transporter.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.transporter.constants.WebConstants;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.GoodsTypeService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.GoodsTypeVo;
-
+@CrossOrigin(origins = "*")
 @RestController
 public class GoodsTypeController {
 

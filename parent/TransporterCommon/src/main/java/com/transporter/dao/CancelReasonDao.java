@@ -7,5 +7,7 @@ import com.transporter.model.CancelReasons;
 public interface CancelReasonDao extends GenericDao {
 
 	List<CancelReasons> getCancelReason();
+	void addCancelReason(CancelReasons cancelReason);
+	int deleteCancelReason(int id);
 
 }

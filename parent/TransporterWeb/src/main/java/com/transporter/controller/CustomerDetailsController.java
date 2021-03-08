@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -30,6 +31,7 @@ import com.transporter.vo.UserVo;
  *
  */
 
+@CrossOrigin(origins = "*")
 @RestController
 public class CustomerDetailsController {
 
@@ -178,6 +180,29 @@ public class CustomerDetailsController {
 			response = RestUtils.wrapObjectForSuccess(customerDetails);
 		}
 		return response;
+	}
 
+	@RequestMapping(value = "/customer/getCustomerById/{id}", method = RequestMethod.GET)
+	public CommonResponse getCustomerById(@PathVariable("id") int id) {
+		CommonResponse response = null;
+		CustomerDetailsVo customerDetails = null;
+
+		try {
+			customerDetails = customerDetailsService.getUserById(id);
+			if (customerDetails == null) {
+				response = RestUtils.wrapObjectForFailure("user not found", WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
+			} else {
+				response = RestUtils.wrapObjectForSuccess(customerDetails);
+			}
+		} catch (BusinessException exception) {
+			LOGGER.error("customer not found by " + id);
+			response = RestUtils.wrapObjectForFailure(null, exception.getErrorCode(), exception.getErrorMsg());
+		} catch (Exception exception) {
+			LOGGER.error("customer not found by " + id + " message : " + exception.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, "Error", WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
+
+		return response;
 	}
 }

@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
+import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.TripDetails;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.TripDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverReachedVo;
 import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsVo;
@@ -193,4 +195,44 @@ public class TripDetailsController {
 		}
 		return response;
 	}
+	
+	@RequestMapping(value ="trip/isDriverReachedLocation", method = RequestMethod.POST)
+	public CommonResponse isDriverReachedLocation(@RequestBody DriverReachedVo driverReachedVo)
+	{
+		CommonResponse response = null;
+		try {
+			boolean isDriverReachedLocation = tripDetailsService.isDriverReachedLocation(driverReachedVo);
+			if (isDriverReachedLocation) {
+				response = RestUtils.wrapObjectForSuccess(WebConstants.SUCCESS);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, "error",
+						WebConstants.DRIVER_NOT_REACHED_LOCATION);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return response;
+	}
+	
+	@RequestMapping(value ="trip/sendTripInvoice/{tripId}", method = RequestMethod.POST)
+	public CommonResponse sendTripInvoice(@PathVariable("tripId") int tripId) {
+		CommonResponse response = null;
+		try {
+			if(tripId != 0) {
+			boolean isMainSent = tripDetailsService.sendInvoiceToMail(tripId);
+			if (isMainSent) {
+				response = RestUtils.wrapObjectForSuccess(WebConstants.INVOICE_SENT_SUCCESSFULLY);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, "error",
+						WebConstants.UNABLE_TO_SEND_EMAIL);
+			}
+			}else {
+				throw new BusinessException(ErrorCodes.TRIPIDNOTFOUND.name(), ErrorCodes.TRIPIDNOTFOUND.value());
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		}
+		return response;
+	}
 }
+

@@ -19,10 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.transporter.dao.TripDetailsDao;
+import com.transporter.enums.DeliveryStatusEnum;
+import com.transporter.enums.LocationType;
 import com.transporter.enums.RidingStatusEnum;
 import com.transporter.enums.TripStatusEnum;
 import com.transporter.exceptions.BusinessException;
@@ -45,6 +49,7 @@ import com.transporter.service.VehicleService;
 import com.transporter.utils.DateTimeUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
+import com.transporter.vo.DriverReachedVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
 import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
@@ -90,6 +95,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Value("${sgst}")
 	private Double sgst;
+
+	@Autowired
+	private JavaMailSender mailSender;
 
 	@Override
 	public List<TripDetailsVo> getTripHistory(int id, int tripStatus, String fromDate, String toDate) {
@@ -411,8 +419,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			LOG.error("Notification error for customer, while booking");
 		}
 
-		// driverService.updateRidingStatus(driverDetails.getId(),
-		// RidingStatusEnum.ONRIDING.getRidingStatusId());
+		driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
 		tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
 		tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
 		tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
@@ -447,8 +454,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			TripDetails tripDetails = tripDetailsRepo.validateStartEndOtp(tripId, otp);
 			if (tripDetails == null) {
 				throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
-
 			}
+			this.updateTripStatus(tripId, DeliveryStatusEnum.ONGOING.getId());
 			JSONObject tripStartedToCustomer = new JSONObject();
 			try {
 				tripStartedToCustomer.put("message", "Trip started");
@@ -476,6 +483,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 					"Goods Delivered", "Goods Delivered", goodsDeliveredToCustomer.toString());
 			transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
 					bean, "customer");
+			this.updateTripStatus(tripId, DeliveryStatusEnum.COMPLETED.getId());
 			return "Success";
 		} else {
 			return "Failure";
@@ -500,35 +508,109 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		return "Failure";
 	}
 
-	/**
-	 * need to review
-	 */
 	@Override
-	public List<TripDetailsVo> getTopDriversForWeek(int count) {
+	public boolean isDriverReachedLocation(DriverReachedVo driverReachedVo) {
+		boolean isDriverReachedLocation = false;
+		int tripId = driverReachedVo.getTripId();
+		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
+		if (tripDetails != null) {
+			double distance = Utils.distance(driverReachedVo.getLocationLatitude(),
+					driverReachedVo.getDriverLocationLatitude(), driverReachedVo.getLocationLongitude(),
+					driverReachedVo.getDriverLocationLongitude());
+			if (distance <= 0.6) {
+				isDriverReachedLocation = true;
+				if (!driverReachedVo.getLocationType().isEmpty()) {
+					switch (driverReachedVo.getLocationType()) {
+					case "pickup":
+						JSONObject driverReachedPickLocation = new JSONObject();
+						try {
+							driverReachedPickLocation.put("message", "driver reached pick up point");
+						} catch (JSONException e) {
+							LOG.error("Exception while sending push notificatin " + e.getMessage());
+						}
+						PushNotificationBean pickUpBean = NotificationBuilder.buildPayloadNotification(
+								NotificationType.DRIVER_REACHED_PICK_UP_POIN, "Driver reached pickup point",
+								"Driver has arrived in pickup location", driverReachedPickLocation.toString());
+						transporterPushNotifications.sendPushNotification(
+								tripDetails.getCustomerDetails().getUser().getFcmToken(), pickUpBean, "customer");
+						break;
+					case "drop":
+						JSONObject driverReachedDropLocation = new JSONObject();
+						try {
+							driverReachedDropLocation.put("message", "driver has reached destination point");
+						} catch (JSONException e) {
+							LOG.error("Exception while sending push notificatin " + e.getMessage());
+						}
+						PushNotificationBean bean = NotificationBuilder.buildPayloadNotification(
+								NotificationType.DRIVER_REACHED_DESTINATION, "Driver reached destination point",
+								"Driver has reached destination", driverReachedDropLocation.toString());
+						transporterPushNotifications.sendPushNotification(
+								tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
+						break;
+					default:
+						throw new BusinessException(ErrorCodes.IN_VALID_LOCATION_TYPE.name(),
+								ErrorCodes.IN_VALID_LOCATION_TYPE.value());
+					}
+				}
+			} else {
+				isDriverReachedLocation = false;
+				throw new BusinessException(ErrorCodes.DRIVER_NOT_REACHED_LOCATION.name(),
+						ErrorCodes.DRIVER_NOT_REACHED_LOCATION.value());
+			}
+		} else {
+			isDriverReachedLocation = false;
+			throw new BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(), ErrorCodes.TRIPDETAILSNOTFOUND.value());
+		}
+
+		return isDriverReachedLocation;
+	}
+
+	@Override
+	public boolean sendInvoiceToMail(int tripId) {
+		boolean isMainSent = false;
 		/*
-		 * Date fromTripStart = DateTimeUtils.getBackDate(7); Date toTripStart =
-		 * DateTimeUtils.getBackDate(1); System.out.println(fromTripStart + " : " +
-		 * toTripStart); List<TripDetails> topDriversForWeek =
-		 * tripDetailsRepo.getTopDriversForWeek(fromTripStart, toTripStart);
-		 * Map<Integer, List<TripDetails>> map = new HashMap<>(); for (TripDetails
-		 * tripDetails : topDriversForWeek) { int id =
-		 * tripDetails.getDriverDetails().getId(); System.out.println(id); if
-		 * (map.containsKey(id)) { List<TripDetails> list = map.get(id);
-		 * list.add(tripDetails); map.put(id, list); } else { List<TripDetails> list =
-		 * new ArrayList<>(); list.add(tripDetails); map.put(id, list); } }
+		 * TripDetails tripDetails = tripDetailsRepo.findOne(tripId); if(tripDetails !=
+		 * null) {
 		 * 
-		 * Map<Integer, List<Entry<Integer, List<TripDetails>>>> collect =
-		 * map.entrySet().stream() .collect(Collectors.groupingBy(entry ->
-		 * entry.getValue().size()));
 		 * 
-		 * Stream<Entry<Integer,List<Entry<Integer,List<TripDetails>>>>> sorted =
-		 * collect.entrySet().stream().sorted(Map.Entry.comparingByKey());
-		 * 
-		 * System.out.println(sorted);
-		 * 
-		 * return null;
+		 * }else { isMainSent = false; throw new
+		 * BusinessException(ErrorCodes.TRIPDETAILSNOTFOUND.name(),
+		 * ErrorCodes.TRIPDETAILSNOTFOUND.value()); }
 		 */
-		return null;
+		try {
+			sendMail("bnavi1992@gmail.com", "new email",
+					"You are receiving this email just becasue of you are part of transol family");
+			isMainSent = true;
+		} catch (Exception e) {
+			isMainSent = false;
+			LOG.error(e.getMessage());
+		}
+
+		return isMainSent;
+	}
+
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+	public void sendMail(String toEmail, String subject, String message) {
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+		mailMessage.setTo(toEmail);
+		mailMessage.setSubject(subject);
+		mailMessage.setText(message);
+
+		mailMessage.setFrom("bnavi1992@gmail.com");
+
+		javaMailSender.send(mailMessage);
+	}
+
+	@Override
+	@Transactional
+	public List<TripDetails> getTripHistoryByUserId(int userId) {
+		List<TripDetails> details = null;
+		details = tripDetailsRepo.getTripHistoryByUserId(userId);
+		return details;
 	}
 
 }

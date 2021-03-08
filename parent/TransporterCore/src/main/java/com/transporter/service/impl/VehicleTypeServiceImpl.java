@@ -34,6 +34,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 	VehicleTypeRepo vehicleTypeRepo;
 
 	@Override
+	@Transactional
 	public List<VehicleTypeVo> getAllVehicleTypes() {
 		List<VehicleTypeVo> displayVehicleList = vehicleTypeDao.getAllVehicleTypes();
 		return displayVehicleList;
@@ -59,10 +60,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 			vehicleTypeDao.saveOrUpdate(displayVehicle);
 		}
 
-		if (displayVehicle != null) {
-			return displayVehicle;
-		} else
-			return null;
+		return displayVehicle;
 	}
 
 	@Override

@@ -21,5 +21,7 @@ public interface CustomerDetailsService {
 	public CustomerDetails findCustomerById(int customerId);
 	
 	public CustomerDetailsVo findCustomerByUserId(int id);
+	
+	CustomerDetailsVo getUserById(int id);
 
 }
