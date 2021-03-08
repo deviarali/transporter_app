@@ -249,7 +249,7 @@ public class DriverServiceImpl implements DriverService {
 
 	@Override
 	public List<DriverDetailsVo> getTopDriversForWeek(int count) {
-		tripDetailsService.getTopDriversForWeek(count);
+		// tripDetailsService.getTopDriversForWeek(count);
 	//	driverDetailsRepo.getTopDriversIdForWeek(count);
 		return null;
 	}
