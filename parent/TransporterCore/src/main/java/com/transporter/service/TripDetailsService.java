@@ -37,7 +37,6 @@ public interface TripDetailsService {
 
 	String tripCancelledStatus(TripCancelledVo tripCancelledVo);
 
-
-	
+	List<TripDetailsVo> getTopDriversForWeek(int count);
 
 }

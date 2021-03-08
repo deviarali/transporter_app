@@ -42,6 +42,8 @@ public interface DriverService {
 
 	DriverDetailsVo getDriverById(int driverId);
 
+	List<DriverDetailsVo> getTopDriversForWeek(int count);
+
 	
 
 }

@@ -19,5 +19,7 @@ public interface CustomerDetailsService {
 	CustomerDetailsVo updateUserProfile(UserVo userVo);
 
 	public CustomerDetails findCustomerById(int customerId);
+	
+	public CustomerDetailsVo findCustomerByUserId(int id);
 
 }

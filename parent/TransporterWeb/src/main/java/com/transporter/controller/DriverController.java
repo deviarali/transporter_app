@@ -39,7 +39,7 @@ public class DriverController {
 
 	@Autowired
 	private DriverService driverService;
-	
+
 	@Autowired
 	private VehicleService vehicleService;
 
@@ -199,10 +199,9 @@ public class DriverController {
 		}
 		return response;
 	}
-	
+
 	@GetMapping("/driver/getDriverLocation/{driverId}")
-	public CommonResponse getDriverLocation(@PathVariable("driverId") int driverId)
-	{
+	public CommonResponse getDriverLocation(@PathVariable("driverId") int driverId) {
 		CommonResponse response = null;
 		try {
 			LatitudeLongitudeResponse details = vehicleService.getDriverLocations(driverId);
@@ -217,7 +216,7 @@ public class DriverController {
 		}
 		return response;
 	}
-	
+
 	@GetMapping("/driver/getAllDrivers")
 	public CommonResponse getAllDrivers() {
 		CommonResponse commonResponse = null;
@@ -229,9 +228,9 @@ public class DriverController {
 		}
 		return commonResponse;
 	}
-	
+
 	@GetMapping("/driver/getDriverById/{driverId}")
-	public CommonResponse getDriverById(@PathVariable(required=true) int driverId) {
+	public CommonResponse getDriverById(@PathVariable(required = true) int driverId) {
 		CommonResponse commonResponse = null;
 		try {
 			DriverDetailsVo driverDetailsVo = driverService.getDriverById(driverId);
@@ -241,4 +240,26 @@ public class DriverController {
 		}
 		return commonResponse;
 	}
+
+	/**
+	 * Get top drivers for week
+	 * 
+	 * @author naveen
+	 * @param count
+	 * @return
+	 */
+	@GetMapping(path = "/v1/driver/getTopDriversForWeek")
+	public CommonResponse getTopDriversForWeek(@RequestParam("count") int count) {
+		CommonResponse response = null;
+		try {
+			List<DriverDetailsVo> driverDetailsVo = driverService.getTopDriversForWeek(count);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Internal error while fetching top driver for a week: " + e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
+		return response;
+	}
+
 }

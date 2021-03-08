@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,18 +43,19 @@ public class CustomerDetailsController {
 		CommonResponse response = null;
 		try {
 			String created = customerDetailsService.registerCustomer(customerDetailsVo);
-			if(!StringUtils.isBlank(created)) {
+			if (!StringUtils.isBlank(created)) {
 				response = RestUtils.wrapObjectForSuccess(created);
 			} else {
-				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
-				LOGGER.error("customer not created. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+				LOGGER.error("customer not created. Mobile number : " + customerDetailsVo.getUser().getMobileNumber());
 			}
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
-			LOGGER.error("user already exists. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
+			LOGGER.error("user already exists. Mobile number : " + customerDetailsVo.getUser().getMobileNumber());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,e.getMessage());
-			LOGGER.error("Internal server error. Mobile number : "+customerDetailsVo.getUser().getMobileNumber());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, e.getMessage());
+			LOGGER.error("Internal server error. Mobile number : " + customerDetailsVo.getUser().getMobileNumber());
 		}
 
 		return response;
@@ -104,7 +107,8 @@ public class CustomerDetailsController {
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
-			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
 		return response;
 	}
@@ -117,7 +121,8 @@ public class CustomerDetailsController {
 			if (customerDetailsVo != null)
 				response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
 			else
-				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, WebConstants.INVALID_USER);
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.INVALID_USER);
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
 		} catch (Exception e) {
@@ -141,7 +146,7 @@ public class CustomerDetailsController {
 		}
 		return map;
 	}
-	
+
 	@PutMapping(value = "/customer/updateCustomer")
 	public CommonResponse updateUserProfile(@RequestBody UserVo userVo) {
 		CommonResponse response = null;
@@ -153,5 +158,26 @@ public class CustomerDetailsController {
 			response = RestUtils.wrapObjectForSuccess(customerDetails);
 		}
 		return response;
+	}
+
+	/**
+	 * Below api to get customer by user id
+	 * 
+	 * @author naveen
+	 * @param id
+	 * @return
+	 */
+	@GetMapping(value = "/v1/customer/getCustomerByUserId/{id}")
+	public CommonResponse getCustomerByUserId(@PathVariable(name = "id") int id) {
+		CommonResponse response = null;
+		CustomerDetailsVo customerDetails = customerDetailsService.findCustomerByUserId(id);
+		if (customerDetails == null) {
+			response = RestUtils.wrapObjectForFailure("Customer not found", WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
+		} else {
+			response = RestUtils.wrapObjectForSuccess(customerDetails);
+		}
+		return response;
+
 	}
 }

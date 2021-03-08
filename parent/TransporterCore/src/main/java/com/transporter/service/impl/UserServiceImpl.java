@@ -18,8 +18,8 @@ import com.transporter.model.UserRole;
 import com.transporter.repo.UserRepo;
 import com.transporter.service.UserService;
 import com.transporter.utility.TransporterUtility;
+import com.transporter.utils.DateTimeUtils;
 import com.transporter.utils.PasswordUtils;
-import com.transporter.utils.Utils;
 import com.transporter.vo.UserVo;
 
 @Service
@@ -131,8 +131,22 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(userVo.getFirstName());
 		user.setLastName(userVo.getLastName());
 		user.setEmailId(userVo.getEmailId());
-	
+
 		return userRepo.save(user);
+
+	}
+
+	@Override
+	public int getTotalUsersCountByRole(int roleId) {
+		return userRepo.getTotalUsersCountByRole(roleId);
+
+	}
+	
+	@Override
+	public int getTotalUsersCountForToday(int roleId) {
+		Date startTime = DateTimeUtils.getZeroTimeDate(DateTimeUtils.getCurrentDate());
+		Date endTime = DateTimeUtils.getLastMinTimeDate(DateTimeUtils.getCurrentDate());
+		return userRepo.getTotalUsersCountForToday(roleId, startTime, endTime);
 
 	}
 }

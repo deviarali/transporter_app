@@ -27,4 +27,8 @@ public interface UserService {
 	
 	public String generateOtp();
 
+	public int getTotalUsersCountByRole(int roleId);
+
+	int getTotalUsersCountForToday(int roleId);
+
 }

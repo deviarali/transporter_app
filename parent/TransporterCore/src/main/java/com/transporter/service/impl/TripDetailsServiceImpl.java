@@ -2,7 +2,12 @@ package com.transporter.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
 
@@ -29,7 +34,6 @@ import com.transporter.model.CustomerDetails;
 import com.transporter.model.DeliveryStatus;
 import com.transporter.model.DriverDetails;
 import com.transporter.model.TripDetails;
-import com.transporter.model.User;
 import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.repo.TripDetailsRepo;
@@ -494,6 +498,37 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			}
 		}
 		return "Failure";
+	}
+
+	/**
+	 * need to review
+	 */
+	@Override
+	public List<TripDetailsVo> getTopDriversForWeek(int count) {
+		/*
+		 * Date fromTripStart = DateTimeUtils.getBackDate(7); Date toTripStart =
+		 * DateTimeUtils.getBackDate(1); System.out.println(fromTripStart + " : " +
+		 * toTripStart); List<TripDetails> topDriversForWeek =
+		 * tripDetailsRepo.getTopDriversForWeek(fromTripStart, toTripStart);
+		 * Map<Integer, List<TripDetails>> map = new HashMap<>(); for (TripDetails
+		 * tripDetails : topDriversForWeek) { int id =
+		 * tripDetails.getDriverDetails().getId(); System.out.println(id); if
+		 * (map.containsKey(id)) { List<TripDetails> list = map.get(id);
+		 * list.add(tripDetails); map.put(id, list); } else { List<TripDetails> list =
+		 * new ArrayList<>(); list.add(tripDetails); map.put(id, list); } }
+		 * 
+		 * Map<Integer, List<Entry<Integer, List<TripDetails>>>> collect =
+		 * map.entrySet().stream() .collect(Collectors.groupingBy(entry ->
+		 * entry.getValue().size()));
+		 * 
+		 * Stream<Entry<Integer,List<Entry<Integer,List<TripDetails>>>>> sorted =
+		 * collect.entrySet().stream().sorted(Map.Entry.comparingByKey());
+		 * 
+		 * System.out.println(sorted);
+		 * 
+		 * return null;
+		 */
+		return null;
 	}
 
 }

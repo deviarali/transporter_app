@@ -22,6 +22,7 @@ import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.repo.DriverDetailsRepo;
 import com.transporter.service.DriverService;
+import com.transporter.service.TripDetailsService;
 import com.transporter.service.UserService;
 import com.transporter.service.VehicleService;
 import com.transporter.utility.TransporterUtility;
@@ -45,7 +46,7 @@ public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private DriverDetailsRepo driverDetailsRepo;
 
@@ -57,6 +58,9 @@ public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private VehicleService vehicleService;
+	
+	@Autowired
+	private TripDetailsService tripDetailsService;
 
 	@Value("${surrounding.area}")
 	private double surrounding;
@@ -215,7 +219,7 @@ public class DriverServiceImpl implements DriverService {
 
 	@Override
 	@Transactional
-	public void updateRidingStatus(int id,int status) {
+	public void updateRidingStatus(int id, int status) {
 		driverDetailsRepo.updateRidingStatus(id, status);
 	}
 
@@ -224,7 +228,7 @@ public class DriverServiceImpl implements DriverService {
 	public List<DriverDetailsVo> getAllDrivers() {
 		List<DriverDetails> driverDetailsList = driverDetailsRepo.findAll();
 		List<DriverDetailsVo> driverDetailsVos = new ArrayList<>();
-		if(Utils.isNullOrEmpty(driverDetailsList)) {
+		if (Utils.isNullOrEmpty(driverDetailsList)) {
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
 		}
 		driverDetailsList.forEach(data -> {
@@ -237,10 +241,17 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public DriverDetailsVo getDriverById(int driverId) {
 		DriverDetails driverDetails = driverDetailsRepo.findOne(driverId);
-		if(null == driverDetails) {
+		if (null == driverDetails) {
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
 		}
 		return DriverDetails.convertModelToVo(driverDetails);
+	}
+
+	@Override
+	public List<DriverDetailsVo> getTopDriversForWeek(int count) {
+		tripDetailsService.getTopDriversForWeek(count);
+	//	driverDetailsRepo.getTopDriversIdForWeek(count);
+		return null;
 	}
 
 }

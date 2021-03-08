@@ -98,7 +98,8 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	}
 
 	@Transactional
-	private CustomerDetailsVo findCustomerByUserId(int id) {
+	@Override
+	public CustomerDetailsVo findCustomerByUserId(int id) {
 		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
 		CustomerDetailsVo customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
 		return customerDetailsVo;

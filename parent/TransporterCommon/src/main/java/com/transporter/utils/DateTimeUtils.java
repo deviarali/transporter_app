@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -118,6 +120,20 @@ public class DateTimeUtils {
         return getCurrentDateCalendar().getTime();
     }
     
+    public static Date getBackDate(int noDays) {
+		final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date date = new Date();
+			final Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			calendar.add(Calendar.DAY_OF_YEAR, -noDays);
+			return calendar.getTime();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Date();
+	}
+      
     public static Date removeTime(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -1660,6 +1676,17 @@ public class DateTimeUtils {
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		date = calendar.getTime();
+		return date;
+	}
+	
+	public static Date getLastMinTimeDate(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
 		calendar.set(Calendar.MILLISECOND, 0);
 		date = calendar.getTime();
 		return date;
