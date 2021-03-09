@@ -613,4 +613,11 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		return details;
 	}
 
+	@Override
+	public Integer getTotalDayAllRideNumber() {
+		Date startTime = DateTimeUtils.getZeroTimeDate(DateTimeUtils.getCurrentDate());
+		Date endTime = DateTimeUtils.getLastMinTimeDate(DateTimeUtils.getCurrentDate());
+		return tripDetailsDao.getTotalDayAllRideNumber(startTime, endTime);
+	}
+
 }

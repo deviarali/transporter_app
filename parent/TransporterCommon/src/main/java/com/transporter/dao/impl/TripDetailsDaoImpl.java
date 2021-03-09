@@ -61,4 +61,21 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		return ((Long) firstResult(query.list())).intValue();
 	}
 
+	@Override
+	public Integer getTotalDayAllRideNumber(Date startTime, Date endTime) {
+		Session session = sessionFactory.getCurrentSession();
+
+		StringBuilder sqlQuery = new StringBuilder(" select count(td.id)");
+		sqlQuery.append(" FROM TripDetails td ");
+		sqlQuery.append(" where td.deliveryStatus.id in ('2','5')");
+		sqlQuery.append(" and td.tripStarttime between :startTime and :endTime ");
+
+		Query query = session.createQuery(sqlQuery.toString());
+
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+
+		return ((Long) firstResult(query.list())).intValue();
+	}
+
 }

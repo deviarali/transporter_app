@@ -43,5 +43,7 @@ public interface TripDetailsService {
 	
 	List<TripDetails> getTripHistoryByUserId(int userId);
 
+	Integer getTotalDayAllRideNumber();
+
 
 }
