@@ -2,12 +2,8 @@ package com.transporter.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
 
@@ -26,7 +22,6 @@ import org.springframework.stereotype.Service;
 import com.google.gson.Gson;
 import com.transporter.dao.TripDetailsDao;
 import com.transporter.enums.DeliveryStatusEnum;
-import com.transporter.enums.LocationType;
 import com.transporter.enums.RidingStatusEnum;
 import com.transporter.enums.TripStatusEnum;
 import com.transporter.exceptions.BusinessException;
@@ -618,6 +613,13 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		Date startTime = DateTimeUtils.getZeroTimeDate(DateTimeUtils.getCurrentDate());
 		Date endTime = DateTimeUtils.getLastMinTimeDate(DateTimeUtils.getCurrentDate());
 		return tripDetailsDao.getTotalDayAllRideNumber(startTime, endTime);
+	}
+
+	@Override
+	public Map<Integer, Long> getTopDriversForWeek(int limit) {
+		Date startTime = DateTimeUtils.getZeroTimeDate(DateTimeUtils.getBackDate(7));
+		Date endTime = DateTimeUtils.getLastMinTimeDate(DateTimeUtils.getCurrentDate());
+		return tripDetailsDao.getTopDriversForWeek(limit, startTime, endTime);
 	}
 
 }

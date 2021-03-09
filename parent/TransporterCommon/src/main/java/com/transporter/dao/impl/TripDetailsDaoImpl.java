@@ -2,6 +2,10 @@ package com.transporter.dao.impl;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -76,6 +80,32 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		query.setParameter("endTime", endTime);
 
 		return ((Long) firstResult(query.list())).intValue();
+	}
+
+	@Override
+	public Map<Integer, Long> getTopDriversForWeek(int limit, Date startTime, Date endTime) {
+		Session session = sessionFactory.getCurrentSession();
+
+		StringBuilder sqlQuery = new StringBuilder(" select count(*) as counts, td.driverDetails.id as driverId");
+		sqlQuery.append(" FROM TripDetails td ");
+		sqlQuery.append(" where td.deliveryStatus.id in ('5')");
+		sqlQuery.append(" and td.tripStarttime between :startTime and :endTime ");
+		sqlQuery.append(" GROUP BY td.driverDetails.id");
+		sqlQuery.append(" ORDER BY counts DESC");
+		Query query = session.createQuery(sqlQuery.toString());
+
+		query.setParameter("startTime", startTime);
+		query.setParameter("endTime", endTime);
+		query.setMaxResults(limit);
+		List list = query.list();
+
+		Map<Integer, Long> tripCount = new HashMap<>();
+		list.forEach(data -> {
+			Object[] objects = (Object[]) data;
+			tripCount.put((int) objects[1], (long) objects[0]);
+		});
+
+		return tripCount;
 	}
 
 }

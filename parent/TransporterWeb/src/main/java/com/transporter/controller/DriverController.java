@@ -246,17 +246,21 @@ public class DriverController {
 	}
 
 	/**
-	 * Get top drivers for week
+	 * Get top drivers from last 7 days
 	 * 
 	 * @author naveen
 	 * @param count
 	 * @return
 	 */
 	@GetMapping(path = "/v1/driver/getTopDriversForWeek")
-	public CommonResponse getTopDriversForWeek(@RequestParam("count") int count) {
+	public CommonResponse getTopDriversForWeek(@RequestParam(name = "count", required = false) Integer count) {
 		CommonResponse response = null;
+		if (count == null) {
+			count = 5;
+		}
 		try {
 			List<DriverDetailsVo> driverDetailsVo = driverService.getTopDriversForWeek(count);
+			response = RestUtils.wrapObjectForSuccess(driverDetailsVo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("Internal error while fetching top driver for a week: " + e.getMessage());

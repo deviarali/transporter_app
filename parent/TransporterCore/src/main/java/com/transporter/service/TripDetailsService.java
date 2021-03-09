@@ -2,6 +2,7 @@ package com.transporter.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.transporter.model.TripDetails;
 import com.transporter.vo.DeliveryStatusVo;
@@ -44,6 +45,8 @@ public interface TripDetailsService {
 	List<TripDetails> getTripHistoryByUserId(int userId);
 
 	Integer getTotalDayAllRideNumber();
+
+	Map<Integer, Long> getTopDriversForWeek(int count);
 
 
 }

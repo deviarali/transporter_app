@@ -3,6 +3,7 @@ package com.transporter.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private VehicleService vehicleService;
-	
+
 	@Autowired
 	private TripDetailsService tripDetailsService;
 
@@ -249,9 +250,20 @@ public class DriverServiceImpl implements DriverService {
 
 	@Override
 	public List<DriverDetailsVo> getTopDriversForWeek(int count) {
-		// tripDetailsService.getTopDriversForWeek(count);
-	//	driverDetailsRepo.getTopDriversIdForWeek(count);
-		return null;
-	}
+		List<DriverDetailsVo> driverDetails = new ArrayList<>();
+		Map<Integer, Long> topDriversForWeek = tripDetailsService.getTopDriversForWeek(count);
 
+		topDriversForWeek.entrySet().forEach(key -> {
+			Integer driverId = key.getKey();
+			try {
+				DriverDetailsVo driverById = getDriverById(driverId);
+				if (driverById != null) {
+					driverDetails.add(driverById);
+				}
+			} catch (BusinessException e) {
+				e.printStackTrace();
+			}
+		});
+		return driverDetails;
+	}
 }
