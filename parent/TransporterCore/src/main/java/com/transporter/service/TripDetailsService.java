@@ -48,5 +48,7 @@ public interface TripDetailsService {
 
 	Map<Integer, Long> getTopDriversForWeek(int count);
 
+	Map<Integer, Long> getTopCustomerForWeek(Integer count);
+
 
 }

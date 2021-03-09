@@ -622,4 +622,11 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		return tripDetailsDao.getTopDriversForWeek(limit, startTime, endTime);
 	}
 
+	@Override
+	public Map<Integer, Long> getTopCustomerForWeek(Integer limit) {
+		Date startTime = DateTimeUtils.getZeroTimeDate(DateTimeUtils.getBackDate(7));
+		Date endTime = DateTimeUtils.getLastMinTimeDate(DateTimeUtils.getCurrentDate());
+		return tripDetailsDao.getTopCustomerForWeek(limit, startTime, endTime);
+	}
+
 }

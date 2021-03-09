@@ -2,16 +2,16 @@ package com.transporter.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.joda.time.Period;
 
 import com.google.gson.Gson;
 import com.transporter.constants.WebConstants;
 import com.transporter.dao.CustomerDetailsDao;
-import com.transporter.dao.TripDetailsDao;
 import com.transporter.dao.UserDao;
 import com.transporter.enums.UserRoleEnum;
 import com.transporter.exceptions.BusinessException;
@@ -30,30 +30,29 @@ import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
 
 @Service
-public class CustomerDetailsServiceImpl implements CustomerDetailsService{
+public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private CustomerDetailsDao customerDetailsDao;
-	
+
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Autowired
 	private CustomerDetailsRepo customerDetailsRepo;
-	
+
 	@Autowired
 	TripDetailsService tripDetailService;
-	
-	
+
 	@Override
 	@Transactional
 	public String registerCustomer(CustomerDetailsVo customerDetailsVo) {
 		String response = null;
 		UserVo userExists = userService.isUserExists(customerDetailsVo.getUser().getMobileNumber());
-		if(null != userExists) {
+		if (null != userExists) {
 			throw new BusinessException(ErrorCodes.MOEXISTS.name(), ErrorCodes.MOEXISTS.value());
 		}
 		UserVo userVo = customerDetailsVo.getUser();
@@ -65,9 +64,9 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setUser(user);
 		customerDetailsDao.save(customerDetails);
-		if(customerDetails.getId() > 0) {
+		if (customerDetails.getId() > 0) {
 			int generate = generateOtp(customerDetailsVo.getUser().getMobileNumber());
-			if(generate == 1) {
+			if (generate == 1) {
 				response = WebConstants.SUCCESS;
 			}
 		}
@@ -78,11 +77,11 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	public UserVo isUserExists(CustomerDetailsVo customerDetailsVo) {
 		return userService.isUserExists(customerDetailsVo.getUser().getMobileNumber());
 	}
-	
+
 	@Override
 	public int generateOtp(String mobileNumber) {
 		UserVo userExists = userService.isUserExists(mobileNumber);
-		if(null == userExists) {
+		if (null == userExists) {
 			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
 		}
 		return userService.generateOtp(mobileNumber);
@@ -93,13 +92,13 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	public CustomerDetailsVo validateOtp(String mobile, String otp) {
 		CustomerDetailsVo customerDetailsVo = null;
 		UserVo userVo = userService.validateOtp(mobile, otp);
-		if(userVo == null) {
+		if (userVo == null) {
 			throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
 		}
 		customerDetailsVo = findCustomerByUserId(userVo.getId());
 		return customerDetailsVo;
 	}
-	
+
 	@Override
 	@Transactional
 	public CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo) {
@@ -107,7 +106,7 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 
 		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setUser(user);
-		customerDetailsDao.saveOrUpdate(customerDetails);		
+		customerDetailsDao.saveOrUpdate(customerDetails);
 		return CustomerDetails.convertModelToVO(customerDetails);
 	}
 
@@ -149,10 +148,10 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 	public CustomerDetailsVo getUserById(int id) {
 		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
 		CustomerDetailsVo customerDetailsVo = null;
-		if(customerDetails != null) {
+		if (customerDetails != null) {
 			customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
-			List<TripDetails> tripDetails  = tripDetailService.getTripHistoryByUserId(id);
-			if(tripDetails != null && tripDetails.size() > 0) {
+			List<TripDetails> tripDetails = tripDetailService.getTripHistoryByUserId(id);
+			if (tripDetails != null && tripDetails.size() > 0) {
 				Gson gson = new Gson();
 				List<TripDetailsVo> tripDetailsVoList = new ArrayList<>();
 				tripDetails.forEach(data -> {
@@ -164,11 +163,11 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 							Period p = new Period(tripDetailsVo.getTripStarttime().getTime(),
 									tripDetailsVo.getTripEndtime().getTime());
 							if (p.getMinutes() < 10) {
-								tripDetailsHistoryVo
-										.setTripHours(String.valueOf(p.getHours()) + ":0" + String.valueOf(p.getMinutes()));
+								tripDetailsHistoryVo.setTripHours(
+										String.valueOf(p.getHours()) + ":0" + String.valueOf(p.getMinutes()));
 							} else {
-								tripDetailsHistoryVo
-										.setTripHours(String.valueOf(p.getHours()) + ":" + String.valueOf(p.getMinutes()));
+								tripDetailsHistoryVo.setTripHours(
+										String.valueOf(p.getHours()) + ":" + String.valueOf(p.getMinutes()));
 							}
 						}
 						if (null != tripDetailsHistoryVo.getCgstPercentage()
@@ -188,13 +187,33 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService{
 					tripDetailsVo.setTripDetailsHistory(tripDetailsHistoryVo);
 					tripDetailsVoList.add(tripDetailsVo);
 				});
-				
+
 				customerDetailsVo.setTripDetailsVoList(tripDetailsVoList);
 			}
-		}else {
+		} else {
 			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
 		}
 		return customerDetailsVo;
+	}
+
+	@Override
+	@Transactional
+	public List<CustomerDetailsVo> getTopCustomerForWeek(Integer count) {
+		List<CustomerDetailsVo> customerDetails = new ArrayList<>();
+		Map<Integer, Long> topCustomersForWeek = tripDetailService.getTopCustomerForWeek(count);
+
+		topCustomersForWeek.entrySet().forEach(key -> {
+			Integer driverId = key.getKey();
+			try {
+				CustomerDetailsVo customerVo = findCustomerByUserId(driverId);
+				if (customerVo != null) {
+					customerDetails.add(customerVo);
+				}
+			} catch (BusinessException e) {
+				e.printStackTrace();
+			}
+		});
+		return customerDetails;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.transporter.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,7 @@ import com.transporter.response.CommonResponse;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.CustomerDetailsVo;
+import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserVo;
 
 /**
@@ -203,6 +205,31 @@ public class CustomerDetailsController {
 			response = RestUtils.wrapObjectForFailure(null, "Error", WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
 
+		return response;
+	}
+
+	/**
+	 * Get top customer from last 7 days
+	 * 
+	 * @author naveen
+	 * @param count
+	 * @return
+	 */
+	@GetMapping(path = "/v1/customer/getTopCustomerForWeek")
+	public CommonResponse getTopCustomerForWeek(@RequestParam(name = "count", required = false) Integer count) {
+		CommonResponse response = null;
+		if (count == null) {
+			count = 5;
+		}
+		try {
+			List<CustomerDetailsVo> customerDetailsVo = customerDetailsService.getTopCustomerForWeek(count);
+			response = RestUtils.wrapObjectForSuccess(customerDetailsVo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Internal error while fetching top customer for a week: " + e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
 		return response;
 	}
 }
