@@ -559,7 +559,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 							LOG.error("Exception while sending push notificatin " + e.getMessage());
 						}
 						PushNotificationBean pickUpBean = NotificationBuilder.buildPayloadNotification(
-								NotificationType.DRIVER_REACHED_PICK_UP_POIN, "Driver reached pickup point",
+								NotificationType.DRIVER_REACHED_PICK_UP_POINT, "Driver reached pickup point",
 								"Driver has arrived in pickup location", driverReachedPickLocation.toString());
 						transporterPushNotifications.sendPushNotification(
 								tripDetails.getCustomerDetails().getUser().getFcmToken(), pickUpBean, "customer");
