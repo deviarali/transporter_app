@@ -13,6 +13,7 @@ import com.transporter.service.GoodsTypeService;
 import com.transporter.vo.GoodsTypeVo;
 
 @Service
+@Transactional
 public class GoodsTypeServiceImpl implements GoodsTypeService {
 
 	@Autowired
