@@ -30,6 +30,7 @@ import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
 
 @Service
+@Transactional
 public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 
 	@Autowired
