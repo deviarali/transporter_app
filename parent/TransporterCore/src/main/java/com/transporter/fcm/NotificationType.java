@@ -6,7 +6,7 @@ public enum NotificationType {
 	BOOKING_CONFIRMED("booking_confirmed"),
 	BOOKING_CANCELLED("booking_cancelled"),
 	PROMOTION("promotion"),
-	DRIVER_REACHED_PICK_UP_POIN("driver_reached_pick_up_point"),
+	DRIVER_REACHED_PICK_UP_POINT("driver_reached_pick_up_point"),
 	TRIP_STARTED("trip_started"),
 	DRIVER_REACHED_DESTINATION("driver_reached_destination"),
 	TRIP_END("trip_end"),

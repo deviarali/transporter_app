@@ -2,6 +2,7 @@ package com.transporter.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.transporter.model.TripDetails;
 import com.transporter.vo.DeliveryStatusVo;
@@ -42,6 +43,12 @@ public interface TripDetailsService {
 	boolean sendInvoiceToMail(int tripId);
 	
 	List<TripDetails> getTripHistoryByUserId(int userId);
+
+	Integer getTotalDayAllRideNumber();
+
+	Map<Integer, Long> getTopDriversForWeek(int count);
+
+	Map<Integer, Long> getTopCustomerForWeek(Integer count);
 
 
 }

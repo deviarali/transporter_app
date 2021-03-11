@@ -1,5 +1,7 @@
 package com.transporter.service;
 
+import java.util.List;
+
 import com.transporter.model.CustomerDetails;
 import com.transporter.vo.CustomerDetailsVo;
 import com.transporter.vo.UserVo;
@@ -23,5 +25,7 @@ public interface CustomerDetailsService {
 	public CustomerDetailsVo findCustomerByUserId(int id);
 	
 	CustomerDetailsVo getUserById(int id);
+
+	public List<CustomerDetailsVo> getTopCustomerForWeek(Integer count);
 
 }
