@@ -40,6 +40,7 @@ import com.transporter.vo.VehiclesByOrderResponse;
  */
 
 @Service
+@Transactional
 public class DriverServiceImpl implements DriverService {
 
 	@Autowired
