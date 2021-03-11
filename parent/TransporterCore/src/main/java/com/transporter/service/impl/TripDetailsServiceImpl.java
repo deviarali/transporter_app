@@ -57,6 +57,7 @@ import com.transporter.vo.TripDetailsVo;
  */
 
 @Service
+@Transactional
 public class TripDetailsServiceImpl implements TripDetailsService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TripDetailsServiceImpl.class);
