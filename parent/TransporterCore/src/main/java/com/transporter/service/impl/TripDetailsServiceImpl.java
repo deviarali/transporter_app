@@ -405,6 +405,24 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			customerJsonObject.put("tripStartOtp", tripDetails.getTripStartOtp());
 			customerJsonObject.put("driverId", driverDetails.getId());
 			customerJsonObject.put("tripId", tripDetails.getId());
+			
+			customerJsonObject.put("sourceLattitude", tripDetailsVo.getSourceLattitude());
+			customerJsonObject.put("sourceLongitude", tripDetailsVo.getSourceLongitude());
+			customerJsonObject.put("destinationLattitude", tripDetailsVo.getDestinationLattitude());
+			customerJsonObject.put("destinationLongitude", tripDetailsVo.getDestinationLongitude());
+			customerJsonObject.put("sourceLandmark", tripDetailsVo.getSourceLandmark());
+			customerJsonObject.put("destinationLandmark", tripDetailsVo.getDestinationLandmark());
+			customerJsonObject.put("sourceLocation", tripDetailsVo.getSourceLocation());
+			customerJsonObject.put("destinationLocation", tripDetailsVo.getDestinationLocation());
+			customerJsonObject.put("customerId", customerDetails.getId());
+			customerJsonObject.put("goodsType", tripDetailsVo.getGoodsType());
+			customerJsonObject.put("capacity", tripDetailsVo.getCapacity());
+			customerJsonObject.put("goodsSize", tripDetailsVo.getGoodsSize());
+			customerJsonObject.put("amount", tripDetailsVo.getAmount());
+			customerJsonObject.put("cashMode", tripDetailsVo.getCashMode());
+			customerJsonObject.put("driverCurrentLongitude", driverDetails.getVehicleDetails().getCurrentLongitude());
+			customerJsonObject.put("driverCurrentLattitude", driverDetails.getVehicleDetails().getCurrentLattitude());
+			
 
 		} catch (JSONException e) {
 			LOG.error("Exception while creating customer json object " + e.getMessage());
@@ -419,7 +437,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			LOG.error("Notification error for customer, while booking");
 		}
 
-		driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
+		//driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
 		tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
 		tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
 		tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
@@ -459,6 +477,20 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			JSONObject tripStartedToCustomer = new JSONObject();
 			try {
 				tripStartedToCustomer.put("message", "Trip started");
+				tripStartedToCustomer.put("tripId", tripDetails.getId());
+				tripStartedToCustomer.put("sourceLattitude", tripDetails.getSourceLattitude());
+				tripStartedToCustomer.put("sourceLongitude", tripDetails.getSourceLongitude());
+				tripStartedToCustomer.put("destinationLattitude", tripDetails.getDestinationLattitude());
+				tripStartedToCustomer.put("destinationLongitude", tripDetails.getDestinationLongitude());
+				tripStartedToCustomer.put("sourceLandmark", tripDetails.getSourceLandmark());
+				tripStartedToCustomer.put("destinationLandmark", tripDetails.getDestinationLandmark());
+				tripStartedToCustomer.put("sourceLocation", tripDetails.getSourceLocation());
+				tripStartedToCustomer.put("destinationLocation", tripDetails.getDestinationLocation());
+				tripStartedToCustomer.put("goodsType", tripDetails.getGoodsType());
+				tripStartedToCustomer.put("capacity", tripDetails.getCapacity());
+				tripStartedToCustomer.put("goodsSize", tripDetails.getGoodsSize());
+				tripStartedToCustomer.put("amount", tripDetails.getAmount());
+				tripStartedToCustomer.put("cashMode", tripDetails.getCashMode());
 			} catch (JSONException e) {
 				LOG.error("Exception while trip started json object " + e.getMessage());
 			}
@@ -476,6 +508,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			JSONObject goodsDeliveredToCustomer = new JSONObject();
 			try {
 				goodsDeliveredToCustomer.put("message", "Goods Delivered");
+				goodsDeliveredToCustomer.put("amount", tripDetails.getAmount());
+				goodsDeliveredToCustomer.put("paymentType", tripDetails.getCashMode());
+				goodsDeliveredToCustomer.put("tripId", tripDetails.getId());
 			} catch (JSONException e) {
 				LOG.error("Exception while goods delivered json object " + e.getMessage());
 			}

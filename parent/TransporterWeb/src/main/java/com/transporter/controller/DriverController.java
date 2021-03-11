@@ -62,6 +62,8 @@ public class DriverController {
 			LOGGER.error("Driver not registered for mobile number :" + driverDetailsVo.getUser().getMobileNumber()
 					+ " exception : " + be.getErrorMsg());
 		} catch (Exception e) {
+			e.getStackTrace();
+			e.printStackTrace();
 			response = RestUtils.wrapObjectForFailure(null, null, e.getMessage());
 			LOGGER.error("Driver not registered for mobile number :" + driverDetailsVo.getUser().getMobileNumber()
 					+ " exception : " + e.getMessage());

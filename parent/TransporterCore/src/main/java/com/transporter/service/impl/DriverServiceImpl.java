@@ -83,7 +83,7 @@ public class DriverServiceImpl implements DriverService {
 		driverDetails.setDriverName(userVo.getFirstName());
 		driverDetails.setDriverVerificationStatus("pending");
 		driverDetails.setOnRoad(0);
-		driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
+		//driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
 		driverDetails.setUser(user);
 		driverDao.save(driverDetails);
 		if (driverDetails.getId() > 0) {
