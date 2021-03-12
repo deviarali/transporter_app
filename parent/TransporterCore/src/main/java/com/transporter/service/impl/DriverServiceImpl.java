@@ -227,8 +227,8 @@ public class DriverServiceImpl implements DriverService {
 
 	@Override
 	@Transactional
-	public List<DriverDetailsVo> getAllDrivers() {
-		List<DriverDetails> driverDetailsList = driverDetailsRepo.findAll();
+	public List<DriverDetailsVo> getAllDrivers(int status) {
+		List<DriverDetails> driverDetailsList = driverDetailsRepo.getAllDrivers(status);
 		List<DriverDetailsVo> driverDetailsVos = new ArrayList<>();
 		if (Utils.isNullOrEmpty(driverDetailsList)) {
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());

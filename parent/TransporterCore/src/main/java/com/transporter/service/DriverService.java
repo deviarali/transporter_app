@@ -38,7 +38,7 @@ public interface DriverService {
 
 	void updateRidingStatus(int id, int status);
 
-	List<DriverDetailsVo> getAllDrivers();
+	List<DriverDetailsVo> getAllDrivers(int status);
 
 	DriverDetailsVo getDriverById(int driverId);
 

@@ -224,10 +224,10 @@ public class DriverController {
 	}
 
 	@GetMapping("/driver/getAllDrivers")
-	public CommonResponse getAllDrivers() {
+	public CommonResponse getAllDrivers(@RequestParam(name = "status", required = false, defaultValue = "1") int status) {
 		CommonResponse commonResponse = null;
 		try {
-			List<DriverDetailsVo> driverDetailsVo = driverService.getAllDrivers();
+			List<DriverDetailsVo> driverDetailsVo = driverService.getAllDrivers(status);
 			commonResponse = RestUtils.wrapObjectForSuccess(driverDetailsVo);
 		} catch (BusinessException be) {
 			commonResponse = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());

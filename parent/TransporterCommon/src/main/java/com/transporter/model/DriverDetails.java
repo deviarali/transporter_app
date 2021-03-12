@@ -86,7 +86,7 @@ public class DriverDetails implements Serializable {
 	private User user;
 
 	@Column(name="verified_by")
-	private int verifedBy;
+	private Integer verifedBy;
 
 	@Column(name = "current_lattitude")
 	private Double currentLattitude;
