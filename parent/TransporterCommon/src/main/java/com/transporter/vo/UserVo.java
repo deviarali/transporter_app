@@ -13,7 +13,7 @@ public class UserVo implements Serializable {
 
 	private int id;
 
-	private String createdBy;
+	private int createdBy;
 
 	private Date createdOn;
 
@@ -66,11 +66,11 @@ public class UserVo implements Serializable {
 		this.id = id;
 	}
 
-	public String getCreatedBy() {
+	public int getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
 

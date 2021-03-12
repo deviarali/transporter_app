@@ -44,8 +44,11 @@ public class UserServiceImpl implements UserService {
 		user.setEmailId(userVo.getEmailId());
 		user.setMobileNumber(userVo.getMobileNumber());
 		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
-		user.setStatus(0);
+		user.setStatus(1);
 		user.setUserRole(UserRole.convertVoToModel(userVo.getUserRole()));
+		User createdBy = new User();
+		createdBy.setId(userVo.getCreatedBy());
+		user.setCreatedBy(createdBy);
 		userDao.save(user);
 		return user;
 	}

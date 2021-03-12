@@ -33,8 +33,10 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="created_by")
-	private String createdBy;
+	
+	@OneToOne
+	@JoinColumn(name="created_by")
+	private User createdBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on")
@@ -107,11 +109,11 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -265,7 +267,7 @@ public class User implements Serializable {
 			return null;
 		UserVo userVo = new UserVo();
 		userVo.setId(user.getId());
-		userVo.setUserRole(UserRole.convertModelToVo(user.getUserRole()));
+		//userVo.setUserRole(UserRole.convertModelToVo(user.getUserRole()));
 		userVo.setFirstName(user.getFirstName());
 		userVo.setLastName(user.getLastName());
 		userVo.setEmailId(user.getEmailId());
@@ -274,12 +276,12 @@ public class User implements Serializable {
 		userVo.setLoginOtp(user.getLoginOtp());
 		userVo.setLoginTime(user.getLoginTime());
 		userVo.setNoOfVehicles(user.getNoOfVehicles());
-		userVo.setPassword(user.getPassword());
+		//userVo.setPassword(user.getPassword());
 		userVo.setMobileNumber(user.getMobileNumber());
 		userVo.setPreviousEmailId(user.getPreviousEmailId());
 		userVo.setStatus(user.getStatus());
 		userVo.setTransporterId(user.getTransporterId());
-		userVo.setCreatedBy(user.getCreatedBy());
+		userVo.setCreatedBy(user.getCreatedBy().getId());
 		userVo.setCreatedOn(user.getCreatedOn());
 		userVo.setProfilePictureUrl(user.getProfilePictureUrl());
 		userVo.setFcmToken(user.getFcmToken());
