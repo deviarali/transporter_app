@@ -25,7 +25,6 @@ import com.transporter.response.CommonResponse;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.CustomerDetailsVo;
-import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserVo;
 
 /**
@@ -157,6 +156,18 @@ public class CustomerDetailsController {
 		CustomerDetailsVo customerDetails = customerDetailsService.updateUserProfile(userVo);
 		if (customerDetails == null) {
 			response = RestUtils.wrapObjectForFailure("user not found", WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
+		} else {
+			response = RestUtils.wrapObjectForSuccess(customerDetails);
+		}
+		return response;
+	}
+	@GetMapping(value = "/customer/customers")
+	public CommonResponse getAllCustomers(@RequestParam(name = "status", required = false, defaultValue = "1") int status) {
+		CommonResponse response = null;
+		List<CustomerDetailsVo> customerDetails = customerDetailsService.getAllCustomers(status);
+		if (customerDetails == null || customerDetails.isEmpty() ) {
+			response = RestUtils.wrapObjectForFailure("customers not found", WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
 		} else {
 			response = RestUtils.wrapObjectForSuccess(customerDetails);

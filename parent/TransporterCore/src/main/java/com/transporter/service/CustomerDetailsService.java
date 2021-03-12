@@ -28,4 +28,6 @@ public interface CustomerDetailsService {
 
 	public List<CustomerDetailsVo> getTopCustomerForWeek(Integer count);
 
+	public List<CustomerDetailsVo> getAllCustomers(int status);
+
 }

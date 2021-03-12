@@ -60,6 +60,8 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 		UserRoleVo userRoleVo = new UserRoleVo();
 		userRoleVo.setId(UserRoleEnum.CUSTOMER.getId());
 		userVo.setUserRole(userRoleVo);
+		if(userVo.getCreatedBy() == 0)
+			userVo.setCreatedBy(1);
 		User user = userService.registerUser(userVo);
 
 		CustomerDetails customerDetails = new CustomerDetails();
@@ -215,6 +217,17 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 			}
 		});
 		return customerDetails;
+	}
+
+	@Override
+	@Transactional
+	public List<CustomerDetailsVo> getAllCustomers(int status) {
+		List<CustomerDetails> customers = customerDetailsRepo.getAllCustomers(status);
+		List<CustomerDetailsVo> customerDetailsList = new ArrayList<>();
+		for(CustomerDetails customerDetails : customers) {
+			customerDetailsList.add(CustomerDetails.convertModelToVO(customerDetails));
+		}
+		return customerDetailsList;
 	}
 
 }
