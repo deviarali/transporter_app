@@ -30,4 +30,6 @@ public interface CustomerDetailsService {
 
 	public List<CustomerDetailsVo> getAllCustomers(int status);
 
+	public int deleteCustomer(int id, String reason);
+
 }

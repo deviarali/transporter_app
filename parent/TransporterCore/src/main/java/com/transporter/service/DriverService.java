@@ -44,6 +44,8 @@ public interface DriverService {
 
 	List<DriverDetailsVo> getTopDriversForWeek(int count);
 
+	int deleteDriver(int id, String reason);
+
 	
 
 }

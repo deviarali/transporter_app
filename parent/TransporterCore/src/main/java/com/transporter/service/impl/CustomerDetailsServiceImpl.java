@@ -149,7 +149,7 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 	@Override
 	@Transactional
 	public CustomerDetailsVo getUserById(int id) {
-		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
+		CustomerDetails customerDetails = customerDetailsRepo.findOne(id);
 		CustomerDetailsVo customerDetailsVo = null;
 		if (customerDetails != null) {
 			customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
@@ -228,6 +228,18 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 			customerDetailsList.add(CustomerDetails.convertModelToVO(customerDetails));
 		}
 		return customerDetailsList;
+	}
+
+	@Override
+	@Transactional
+	public int deleteCustomer(int id, String reason) {
+		// TODO Auto-generated method stub
+		CustomerDetails customerDetails = customerDetailsRepo.findOne(id);
+		if(null == customerDetails) {
+			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
+		}
+		int deleted = userService.deleteUser(customerDetails.getUser().getId(), reason);
+		return deleted;
 	}
 
 }

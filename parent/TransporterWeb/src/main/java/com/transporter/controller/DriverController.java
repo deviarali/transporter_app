@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -266,6 +267,29 @@ public class DriverController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("Internal error while fetching top driver for a week: " + e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
+		return response;
+	}
+	
+	@DeleteMapping("/driver/{id}")
+	public CommonResponse deleteCustomer(@PathVariable(name = "id", required = true) int id,
+										@RequestParam(name = "reason", required = true) String reason) {
+		CommonResponse response = null;
+		try {
+			int deleted = driverService.deleteDriver(id, reason);
+			if(deleted == 1) {
+				response = RestUtils.wrapObjectForSuccess("success");
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						"Driver not deleted");
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Internal error while deleting driver: " + e.getMessage());
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
