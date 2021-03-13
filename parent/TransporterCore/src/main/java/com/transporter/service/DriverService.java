@@ -46,6 +46,8 @@ public interface DriverService {
 
 	int deleteDriver(int id, String reason);
 
+	List<DriverDetailsVo> getDriversForEmployee(int id);
+
 	
 
 }

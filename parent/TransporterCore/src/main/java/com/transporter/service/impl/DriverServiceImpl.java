@@ -277,4 +277,15 @@ public class DriverServiceImpl implements DriverService {
 		}
 		return userService.deleteUser(driverDetails.getUser().getId(), reason);
 	}
+
+	@Override
+	@Transactional
+	public List<DriverDetailsVo> getDriversForEmployee(int id) {
+		List<DriverDetails> driversList = driverDetailsRepo.getDriversForEmployee(id);
+		List<DriverDetailsVo> driverDetailsVoList = new ArrayList<>();
+		for(DriverDetails driverDetails : driversList) {
+			driverDetailsVoList.add(DriverDetails.convertModelToVo(driverDetails));
+		}
+		return driverDetailsVoList;
+	}
 }

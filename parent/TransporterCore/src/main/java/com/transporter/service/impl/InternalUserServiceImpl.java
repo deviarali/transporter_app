@@ -1,5 +1,7 @@
 package com.transporter.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +14,10 @@ import com.transporter.exceptions.ErrorCodes;
 import com.transporter.model.InternalUserDetails;
 import com.transporter.model.InternalUserRoleMaster;
 import com.transporter.model.User;
+import com.transporter.service.DriverService;
 import com.transporter.service.InternalUserService;
 import com.transporter.service.UserService;
+import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.InternalUserDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
@@ -31,6 +35,9 @@ public class InternalUserServiceImpl implements InternalUserService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private DriverService driverService;
 	
 	@Override
 	@Transactional
@@ -61,6 +68,17 @@ public class InternalUserServiceImpl implements InternalUserService {
 			response = WebConstants.SUCCESS;
 		}
 		return response;
+	}
+
+	@Override
+	@Transactional
+	public List<DriverDetailsVo> getDriversForEmployee(int id) {
+		User user = userService.findById(id);
+		if(null == user) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value()+ " "+id);
+		}
+		List<DriverDetailsVo> driverDetailsList = driverService.getDriversForEmployee(id);
+		return driverDetailsList;
 	}
 
 }
