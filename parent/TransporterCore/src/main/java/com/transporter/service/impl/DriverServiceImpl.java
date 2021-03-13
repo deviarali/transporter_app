@@ -267,4 +267,14 @@ public class DriverServiceImpl implements DriverService {
 		});
 		return driverDetails;
 	}
+
+	@Override
+	@Transactional
+	public int deleteDriver(int id, String reason) {
+		DriverDetails driverDetails = driverDetailsRepo.findOne(id);
+		if(null == driverDetails) {
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
+		}
+		return userService.deleteUser(driverDetails.getUser().getId(), reason);
+	}
 }

@@ -19,4 +19,6 @@ public interface UserDao extends GenericDao {
 
 	User isUserExistsUsingId(int id);
 
+	int deleteUser(int id, String reason);
+
 }

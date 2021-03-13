@@ -152,4 +152,10 @@ public class UserServiceImpl implements UserService {
 		return userRepo.getTotalUsersCountForToday(roleId, startTime, endTime);
 
 	}
+
+	@Override
+	public int deleteUser(int id, String reason) {
+		int deleted = userDao.deleteUser(id, reason);
+		return deleted;
+	}
 }

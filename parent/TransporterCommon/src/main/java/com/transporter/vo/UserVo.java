@@ -55,6 +55,8 @@ public class UserVo implements Serializable {
 	
 	private String fcmToken;
 
+	private String inActiveReason;
+
 	public UserVo() {
 	}
 
@@ -232,6 +234,14 @@ public class UserVo implements Serializable {
 
 	public void setInternalUserDetails(InternalUserDetailsVo internalUserDetails) {
 		this.internalUserDetails = internalUserDetails;
+	}
+	
+	public String getInActiveReason() {
+		return inActiveReason;
+	}
+	
+	public void setInActiveReason(String inActiveReason) {
+		this.inActiveReason = inActiveReason;
 	}
 
 }

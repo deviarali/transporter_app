@@ -97,6 +97,9 @@ public class User implements Serializable {
 	
 	@Column(name = "fcmtoken")
 	private String fcmToken;
+	
+	@Column(name = "inactive_reason")
+	private String inActiveReason;
 
 	public User() {
 	}
@@ -261,6 +264,14 @@ public class User implements Serializable {
 	public void setFcmToken(String fcmToken) {
 		this.fcmToken = fcmToken;
 	}
+	
+	public String getInActiveReason() {
+		return inActiveReason;
+	}
+	
+	public void setInActiveReason(String inActiveReason) {
+		this.inActiveReason = inActiveReason;
+	}
 
 	public static UserVo convertModelToVo(User user) {
 		if(user == null)
@@ -285,6 +296,7 @@ public class User implements Serializable {
 		userVo.setCreatedOn(user.getCreatedOn());
 		userVo.setProfilePictureUrl(user.getProfilePictureUrl());
 		userVo.setFcmToken(user.getFcmToken());
+		userVo.setInActiveReason(user.getInActiveReason());
 		return userVo;
 	}
 	
