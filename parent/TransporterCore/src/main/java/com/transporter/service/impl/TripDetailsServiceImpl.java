@@ -248,7 +248,8 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 						cancelByCustomer.toString());
 				transporterPushNotifications
 						.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean, "driver");
-			} else if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYDRIVER.getId()) {
+			} 
+			else if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYDRIVER.getId()) {
 				JSONObject cancelByDriver = new JSONObject();
 				try {
 					cancelByDriver.put("message", "trip has been cancelled by driver");
