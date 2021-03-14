@@ -236,7 +236,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				// RidingStatusEnum.OFFRIDING.getRidingStatusId());
 			}
 
-			if (deliveryStatusId == 3) {
+			if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYCUSTOMER.getId()) {
 				JSONObject cancelByCustomer = new JSONObject();
 				try {
 					cancelByCustomer.put("message", "trip has been cancelled by customer");
@@ -248,7 +248,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 						cancelByCustomer.toString());
 				transporterPushNotifications
 						.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean, "driver");
-			} else if (deliveryStatusId == 4) {
+			} else if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYDRIVER.getId()) {
 				JSONObject cancelByDriver = new JSONObject();
 				try {
 					cancelByDriver.put("message", "trip has been cancelled by driver");
