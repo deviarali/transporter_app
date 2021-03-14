@@ -17,4 +17,6 @@ public interface TripDetailsDao extends GenericDao {
 	public Map<Integer, Long> getTopDriversForWeek(int limit, Date startTime, Date endTime);
 
 	public Map<Integer, Long> getTopCustomerForWeek(Integer limit, Date startTime, Date endTime);
+
+	public int saveTripRatings(int tripId, String ratings, String userType);
 }

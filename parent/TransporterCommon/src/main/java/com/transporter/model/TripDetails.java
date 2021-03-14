@@ -142,6 +142,9 @@ public class TripDetails implements Serializable {
 	
 	@Column(name = "kms")
 	private double kms;
+	
+	@Column(name = "driver_ratings")
+	private String driverRatings;
 
 	public TripDetails() {
 	}
@@ -466,6 +469,15 @@ public class TripDetails implements Serializable {
 		tripDetailsVo.setCapacity(tripDetails.getCapacity());
 		tripDetailsVo.setKms(tripDetails.getKms());
 		return tripDetailsVo;
+	}
+	
+	
+	public String getDriverRatings() {
+		return driverRatings;
+	}
+	
+	public void setDriverRatings(String driverRatings) {
+		this.driverRatings = driverRatings;
 	}
 
 }

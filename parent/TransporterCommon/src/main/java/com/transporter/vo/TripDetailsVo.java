@@ -83,6 +83,7 @@ public class TripDetailsVo implements Serializable {
 	private Double cgst;
 	private Double sgst;
 	private Double rideFare;
+	private String driverRatings;
 	
 	public TripDetailsVo() {
 	}
@@ -429,5 +430,15 @@ public class TripDetailsVo implements Serializable {
 
 	public void setRideFare(Double rideFare) {
 		this.rideFare = rideFare;
+	}
+	
+
+	
+	public String getDriverRatings() {
+		return driverRatings;
+	}
+	
+	public void setDriverRatings(String driverRatings) {
+		this.driverRatings = driverRatings;
 	}
 }

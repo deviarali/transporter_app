@@ -18,11 +18,11 @@ import com.transporter.vo.TripDetailsVo;
 
 public interface TripDetailsService {
 
-	List<TripDetailsVo> getTripHistory(int id, int tripstatus, String fromDate, String toDate);
+	List<TripDetailsVo> getTripHistory(int id, int tripstatus, String fromDate, String toDate, String userType);
 	
 	List<TripDetailsVo> getTripPassengerHistory(int id, int tripstatus, String fromDate, String toDate);
 
-	TripDetails updateTripRatings(int tripId, String ratings);
+	TripDetails updateTripRatings(int tripId, String ratings, String userType);
 
 	String updateTripStatus(int tripId, int deliveryStatusId);
 

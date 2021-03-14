@@ -96,7 +96,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	private JavaMailSender mailSender;
 
 	@Override
-	public List<TripDetailsVo> getTripHistory(int id, int tripStatus, String fromDate, String toDate) {
+	public List<TripDetailsVo> getTripHistory(int id, int tripStatus, String fromDate, String toDate, String userType) {
 		String fromTripStart = null;
 		String toTripStart = null;
 		Gson gson = new Gson();
@@ -188,16 +188,18 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 								.setTripHours(String.valueOf(p.getHours()) + ":" + String.valueOf(p.getMinutes()));
 					}
 				}
-				Double cgstAmount = Double.valueOf(tripDetailsVo.getAmount()) * tripDetailsHistoryVo.getCgstPercentage()
-						/ 100;
-				Double sgstAmount = Double.valueOf(tripDetailsVo.getAmount()) * tripDetailsHistoryVo.getSgstPercentage()
-						/ 100;
-				Double rideFare = Double.valueOf(tripDetailsVo.getAmount()) - (cgstAmount + sgstAmount);
-				tripDetailsVo.setCgst(cgstAmount);
-				tripDetailsVo.setSgst(sgstAmount);
-				tripDetailsVo.setRideFare(rideFare);
-				tripDetailsHistoryVo.setCgst(10.00);
-				tripDetailsHistoryVo.setSgst(10.00);
+				if(null != tripDetailsHistoryVo.getSgstPercentage() && null != tripDetailsHistoryVo.getCgstPercentage()) {
+					Double cgstAmount = Double.valueOf(tripDetailsVo.getAmount()) * tripDetailsHistoryVo.getCgstPercentage()
+							/ 100;
+					Double sgstAmount = Double.valueOf(tripDetailsVo.getAmount()) * tripDetailsHistoryVo.getSgstPercentage()
+							/ 100;
+					Double rideFare = Double.valueOf(tripDetailsVo.getAmount()) - (cgstAmount + sgstAmount);
+					tripDetailsVo.setCgst(cgstAmount);
+					tripDetailsVo.setSgst(sgstAmount);
+					tripDetailsVo.setRideFare(rideFare);
+					tripDetailsHistoryVo.setCgst(10.00);
+					tripDetailsHistoryVo.setSgst(10.00);
+				}
 			}
 			tripDetailsVo.setTripDetailsHistory(tripDetailsHistoryVo);
 			tripDetailsVoList.add(tripDetailsVo);
@@ -207,15 +209,15 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Override
 	@Transactional
-	public TripDetails updateTripRatings(int tripId, String ratings) {
+	public TripDetails updateTripRatings(int tripId, String ratings, String userType) {
 
 		if (ratings.equals("0.00") || ratings.equals("0.0") || ratings.equals("0")) {
 			throw new BusinessException(ErrorCodes.INVALIDRATING.toString());
 		}
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
 		if (tripDetails != null) {
-			tripDetails.setRatings(ratings);
-			tripDetails = tripDetailsRepo.save(tripDetails);
+			//tripDetails.setRatings(ratings);
+			tripDetailsDao.saveTripRatings(tripId, ratings, userType);
 		}
 		return tripDetails;
 	}
