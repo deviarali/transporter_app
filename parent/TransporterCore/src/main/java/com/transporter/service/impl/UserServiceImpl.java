@@ -74,18 +74,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User updateUser(UserVo userVo) {
 		User user = new User();
-		user.setCreatedOn(new Date());
+		//user.setCreatedOn(new Date());
 		user.setFirstName(userVo.getFirstName());
 		user.setLastName(userVo.getLastName());
 		user.setEmailId(userVo.getEmailId());
 		user.setId(userVo.getId());
 		user.setMobileNumber(userVo.getMobileNumber());
-		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
+		/*user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
 		user.setStatus(0);
 		UserRole userRole = new UserRole();
 		userRole.setId(UserRoleEnum.CUSTOMER.getId());
-		user.setUserRole(userRole);
-		userDao.saveOrUpdate(user);
+		user.setUserRole(userRole);*/
+		userDao.updateUser(user);
 		return user;
 	}
 

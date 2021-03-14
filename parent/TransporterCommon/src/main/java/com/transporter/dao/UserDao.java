@@ -21,4 +21,6 @@ public interface UserDao extends GenericDao {
 
 	int deleteUser(int id, String reason);
 
+	int updateUser(User user);
+
 }

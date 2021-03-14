@@ -33,6 +33,7 @@ import com.transporter.vo.TripDetailsVo;
  *
  */
 
+
 @RestController
 public class TripDetailsController {
 

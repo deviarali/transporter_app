@@ -101,4 +101,17 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 		return query.executeUpdate();
 	}
 
+	@Override
+	public int updateUser(User user) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "UPDATE User usr SET usr.firstName = :firstName, usr.lastName = :lastName, usr.emailId = :emailId"
+				+ " WHERE usr.id = :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", user.getId());
+		query.setParameter("firstName", user.getFirstName());
+		query.setParameter("lastName", user.getLastName());
+		query.setParameter("emailId", user.getEmailId());
+		return query.executeUpdate();
+	}
+
 }
