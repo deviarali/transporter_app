@@ -209,7 +209,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Override
 	@Transactional
-	public TripDetails updateTripRatings(int tripId, String ratings, String userType) {
+	public TripDetails updateTripRatings(int tripId, String ratings, String userType, String feedback) {
 
 		if (ratings.equals("0.00") || ratings.equals("0.0") || ratings.equals("0")) {
 			throw new BusinessException(ErrorCodes.INVALIDRATING.toString());
@@ -217,7 +217,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
 		if (tripDetails != null) {
 			//tripDetails.setRatings(ratings);
-			tripDetailsDao.saveTripRatings(tripId, ratings, userType);
+			tripDetailsDao.saveTripRatings(tripId, ratings, userType, feedback);
 		}
 		return tripDetails;
 	}
