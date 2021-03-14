@@ -228,12 +228,10 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		String response = "success";
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
 		if (tripDetails != null) {
-
 			int updatedRows = tripDetailsRepo.updateTripStatus(tripDetails.getId(), deliveryStatusId);
-
-			if (deliveryStatusId == 3 || deliveryStatusId == 4) {
-				// driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(),
-				// RidingStatusEnum.OFFRIDING.getRidingStatusId());
+			if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYCUSTOMER.getId() || deliveryStatusId == DeliveryStatusEnum.CANCELEDBYDRIVER.getId()) {
+				 driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(),
+						 RidingStatusEnum.OFFRIDING.getRidingStatusId());
 			}
 
 			if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYCUSTOMER.getId()) {
