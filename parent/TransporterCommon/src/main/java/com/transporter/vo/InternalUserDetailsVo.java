@@ -29,6 +29,8 @@ public class InternalUserDetailsVo implements Serializable {
 
 	private UserVo user;
 
+	private int internalUserRole;
+	
 	public InternalUserDetailsVo() {
 	}
 
@@ -102,6 +104,14 @@ public class InternalUserDetailsVo implements Serializable {
 
 	public void setUser(UserVo user) {
 		this.user = user;
+	}
+	
+	public int getInternalUserRole() {
+		return internalUserRole;
+	}
+	
+	public void setInternalUserRole(int internalUserRole) {
+		this.internalUserRole = internalUserRole;
 	}
 	
 }

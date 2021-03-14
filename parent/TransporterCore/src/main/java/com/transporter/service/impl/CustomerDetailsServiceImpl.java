@@ -107,10 +107,16 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 	public CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo) {
 		User user = userService.updateUser(customerDetailsVo.getUser());
 
-		CustomerDetails customerDetails = new CustomerDetails();
+		/*CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setUser(user);
-		customerDetailsDao.saveOrUpdate(customerDetails);
-		return CustomerDetails.convertModelToVO(customerDetails);
+		customerDetails.setId(customerDetailsVo.getId());
+		customerDetails.setAddressCity(customerDetailsVo.getAddressCity());
+		customerDetails.setAddressState(customerDetailsVo.getAddressState());
+		customerDetails.setAddressStreet(customerDetailsVo.getAddressStreet());
+		customerDetails.setAddressZipcode(customerDetailsVo.getAddressZipcode());
+		customerDetails.setDateofbirth(customerDetailsVo.getDateofbirth());*/
+		customerDetailsDao.updateCustomer(customerDetailsVo);
+		return customerDetailsVo;
 	}
 
 	@Transactional

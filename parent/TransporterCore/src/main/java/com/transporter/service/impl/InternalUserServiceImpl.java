@@ -61,7 +61,7 @@ public class InternalUserServiceImpl implements InternalUserService {
 		internalUserDetails.setDateofbirth(internalUserDetailsVo.getDateofbirth());
 		internalUserDetails.setUser(user);
 		InternalUserRoleMaster internalUserroleMaster = new InternalUserRoleMaster();
-		internalUserroleMaster.setId(internalUserDetailsVo.getInternalUserRoleMaster().getId());
+		internalUserroleMaster.setId(internalUserDetailsVo.getInternalUserRole());
 		internalUserDetails.setInternalUserroleMaster(internalUserroleMaster);
 		internalUserDao.save(internalUserDetails);
 		if(internalUserDetails.getId() > 0) {
