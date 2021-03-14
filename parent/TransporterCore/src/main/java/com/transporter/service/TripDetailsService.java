@@ -22,7 +22,7 @@ public interface TripDetailsService {
 	
 	List<TripDetailsVo> getTripPassengerHistory(int id, int tripstatus, String fromDate, String toDate);
 
-	TripDetails updateTripRatings(int tripId, String ratings, String userType);
+	TripDetails updateTripRatings(int tripId, String ratings, String userType, String feedback);
 
 	String updateTripStatus(int tripId, int deliveryStatusId);
 

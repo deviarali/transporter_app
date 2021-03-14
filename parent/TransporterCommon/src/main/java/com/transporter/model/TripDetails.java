@@ -145,6 +145,12 @@ public class TripDetails implements Serializable {
 	
 	@Column(name = "driver_ratings")
 	private String driverRatings;
+	
+	@Column(name = "customer_feedback")
+	private String customerFeedback;
+	
+	@Column(name = "driver_feedback")
+	private String driverFeedback;
 
 	public TripDetails() {
 	}
@@ -468,9 +474,11 @@ public class TripDetails implements Serializable {
 		tripDetailsVo.setTripEndOtp(tripDetails.getTripEndOtp());
 		tripDetailsVo.setCapacity(tripDetails.getCapacity());
 		tripDetailsVo.setKms(tripDetails.getKms());
+		tripDetailsVo.setDriverRatings(tripDetails.getDriverRatings());
+		tripDetailsVo.setCustomerFeedback(tripDetails.getCustomerFeedback());
+		tripDetailsVo.setDriverFeedback(tripDetails.getDriverFeedback());
 		return tripDetailsVo;
 	}
-	
 	
 	public String getDriverRatings() {
 		return driverRatings;
@@ -478,6 +486,22 @@ public class TripDetails implements Serializable {
 	
 	public void setDriverRatings(String driverRatings) {
 		this.driverRatings = driverRatings;
+	}
+
+	public String getCustomerFeedback() {
+		return customerFeedback;
+	}
+
+	public void setCustomerFeedback(String customerFeedback) {
+		this.customerFeedback = customerFeedback;
+	}
+
+	public String getDriverFeedback() {
+		return driverFeedback;
+	}
+
+	public void setDriverFeedback(String driverFeedback) {
+		this.driverFeedback = driverFeedback;
 	}
 
 }
