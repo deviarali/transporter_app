@@ -15,7 +15,7 @@ public class TestController {
 	@Autowired
 	private TestService testService;
 	
-	@RequestMapping(name = "/", method = RequestMethod.GET)
+	/*@RequestMapping(name = "/", method = RequestMethod.GET)
 	public CommonResponse getString()
 	{
 		System.out.println("Dev");
@@ -23,5 +23,5 @@ public class TestController {
 		String message = testService.getMessage();
 		commonResponse = RestUtils.wrapObjectForSuccess(message);
 		return commonResponse;
-	}
+	}*/
 }

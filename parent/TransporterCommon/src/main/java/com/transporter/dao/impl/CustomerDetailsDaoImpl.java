@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.CustomerDetailsDao;
 import com.transporter.model.CustomerDetails;
+import com.transporter.vo.CustomerDetailsVo;
 
 @Repository
 public class CustomerDetailsDaoImpl extends GenericDaoImpl implements CustomerDetailsDao {
@@ -29,6 +30,21 @@ public class CustomerDetailsDaoImpl extends GenericDaoImpl implements CustomerDe
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("id", id);
 		return (CustomerDetails) query.uniqueResult();
+	}
+
+	
+	
+	@Override
+	public int updateCustomer(CustomerDetailsVo customerDetailsVo) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "UPDATE CustomerModel cm SET cm.addressStreet = :addressStreet, cm.addressCity = :addresCity"
+				+ " cm.addressState = :addressState WHERE cm.id= :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", customerDetailsVo.getId());
+		query.setParameter("addressStreet", customerDetailsVo.getAddressStreet());
+		query.setParameter("addressCity", customerDetailsVo.getAddressCity());
+		query.setParameter("addressState", customerDetailsVo.getAddressState());
+		return query.executeUpdate();
 	}
 
 }

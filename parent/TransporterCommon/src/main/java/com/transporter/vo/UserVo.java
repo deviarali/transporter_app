@@ -13,7 +13,7 @@ public class UserVo implements Serializable {
 
 	private int id;
 
-	private String createdBy;
+	private int createdBy;
 
 	private Date createdOn;
 
@@ -55,6 +55,8 @@ public class UserVo implements Serializable {
 	
 	private String fcmToken;
 
+	private String inActiveReason;
+
 	public UserVo() {
 	}
 
@@ -66,11 +68,11 @@ public class UserVo implements Serializable {
 		this.id = id;
 	}
 
-	public String getCreatedBy() {
+	public int getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -232,6 +234,14 @@ public class UserVo implements Serializable {
 
 	public void setInternalUserDetails(InternalUserDetailsVo internalUserDetails) {
 		this.internalUserDetails = internalUserDetails;
+	}
+	
+	public String getInActiveReason() {
+		return inActiveReason;
+	}
+	
+	public void setInActiveReason(String inActiveReason) {
+		this.inActiveReason = inActiveReason;
 	}
 
 }

@@ -90,4 +90,28 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 		return user;
 	}
 
+	@Override
+	public int deleteUser(int id, String reason) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "UPDATE User usr SET usr.status = :status, usr.inActiveReason = :reason WHERE usr.id = :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", id);
+		query.setParameter("status", 0);
+		query.setParameter("reason", reason);
+		return query.executeUpdate();
+	}
+
+	@Override
+	public int updateUser(User user) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "UPDATE User usr SET usr.firstName = :firstName, usr.lastName = :lastName, usr.emailId = :emailId"
+				+ " WHERE usr.id = :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", user.getId());
+		query.setParameter("firstName", user.getFirstName());
+		query.setParameter("lastName", user.getLastName());
+		query.setParameter("emailId", user.getEmailId());
+		return query.executeUpdate();
+	}
+
 }

@@ -131,4 +131,29 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		return tripCount;
 	}
 
+	
+	
+	
+	@Override
+	public int saveTripRatings(int tripId, String ratings, String userType, String feedback) {
+		Session session = sessionFactory.getCurrentSession();
+		StringBuilder builder = new StringBuilder("UPDATE TripDetails SET");
+		if(userType.equalsIgnoreCase("customer")) {
+			builder.append(" ratings = :ratings,");
+			builder.append(" customerFeedback = :feedback");
+		} else if (userType.equalsIgnoreCase("driver")) {
+			builder.append(" driverRatings = :ratings,");
+			builder.append(" driverFeedback = :feedback");
+		} else {
+			builder.append(" ratings = :ratings,");
+			builder.append(" customerFeedback = :feedback");
+		}
+		builder.append(" WHERE id = :tripId");
+		Query query = session.createQuery(builder.toString());
+		query.setParameter("ratings", ratings);
+		query.setParameter("tripId", tripId);
+		query.setParameter("feedback", feedback);
+		return query.executeUpdate();
+	}
+
 }

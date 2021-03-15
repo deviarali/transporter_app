@@ -33,6 +33,7 @@ import com.transporter.vo.TripDetailsVo;
  *
  */
 
+
 @RestController
 public class TripDetailsController {
 
@@ -48,7 +49,7 @@ public class TripDetailsController {
 			@RequestParam(name = "userType", required = true) String userType) {
 		CommonResponse response = null;
 
-		List<TripDetailsVo> tripHistoryList = tripDetailsService.getTripHistory(id, tripstatus, fromDate, toDate);
+		List<TripDetailsVo> tripHistoryList = tripDetailsService.getTripHistory(id, tripstatus, fromDate, toDate, userType);
 		if (tripHistoryList != null && tripHistoryList.size() > 0) {
 			response = RestUtils.wrapObjectForSuccess(tripHistoryList);
 		} else {
@@ -96,12 +97,13 @@ public class TripDetailsController {
 		return response;
 	}
 
-	@PutMapping(value = "/trip/{tripId}/ratings/{ratings:.+}")
+	@PutMapping(value = "/trip/{tripId}/ratings/{ratings}")
 	public CommonResponse updateTripRating(@PathVariable("tripId") int tripId,
-			@PathVariable("ratings") String ratings) {
+			@PathVariable("ratings") String ratings, @RequestParam(name = "userType") String userType,
+			@RequestParam(name = "feedback") String feedback) {
 		CommonResponse response = null;
 		try {
-			TripDetails updateTripRatings = tripDetailsService.updateTripRatings(tripId, ratings);
+			TripDetails updateTripRatings = tripDetailsService.updateTripRatings(tripId, ratings, userType, feedback);
 			if (updateTripRatings != null) {
 				response = RestUtils.wrapObjectForSuccess("Rating updated sucessfully");
 			} else {

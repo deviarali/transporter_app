@@ -31,4 +31,6 @@ public interface UserService {
 
 	int getTotalUsersCountForToday(int roleId);
 
+	public int deleteUser(int id, String reason);
+
 }

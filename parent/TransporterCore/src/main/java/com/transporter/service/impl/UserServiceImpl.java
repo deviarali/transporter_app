@@ -44,8 +44,11 @@ public class UserServiceImpl implements UserService {
 		user.setEmailId(userVo.getEmailId());
 		user.setMobileNumber(userVo.getMobileNumber());
 		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
-		user.setStatus(0);
+		user.setStatus(1);
 		user.setUserRole(UserRole.convertVoToModel(userVo.getUserRole()));
+		User createdBy = new User();
+		createdBy.setId(userVo.getCreatedBy());
+		user.setCreatedBy(createdBy);
 		userDao.save(user);
 		return user;
 	}
@@ -71,18 +74,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User updateUser(UserVo userVo) {
 		User user = new User();
-		user.setCreatedOn(new Date());
+		//user.setCreatedOn(new Date());
 		user.setFirstName(userVo.getFirstName());
 		user.setLastName(userVo.getLastName());
 		user.setEmailId(userVo.getEmailId());
 		user.setId(userVo.getId());
 		user.setMobileNumber(userVo.getMobileNumber());
-		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
+		/*user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
 		user.setStatus(0);
 		UserRole userRole = new UserRole();
 		userRole.setId(UserRoleEnum.CUSTOMER.getId());
-		user.setUserRole(userRole);
-		userDao.saveOrUpdate(user);
+		user.setUserRole(userRole);*/
+		userDao.updateUser(user);
 		return user;
 	}
 
@@ -148,5 +151,11 @@ public class UserServiceImpl implements UserService {
 		Date endTime = DateTimeUtils.getLastMinTimeDate(DateTimeUtils.getCurrentDate());
 		return userRepo.getTotalUsersCountForToday(roleId, startTime, endTime);
 
+	}
+
+	@Override
+	public int deleteUser(int id, String reason) {
+		int deleted = userDao.deleteUser(id, reason);
+		return deleted;
 	}
 }

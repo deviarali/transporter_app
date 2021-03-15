@@ -30,6 +30,7 @@ import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
 
 @Service
+@Transactional
 public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 
 	@Autowired
@@ -59,6 +60,8 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 		UserRoleVo userRoleVo = new UserRoleVo();
 		userRoleVo.setId(UserRoleEnum.CUSTOMER.getId());
 		userVo.setUserRole(userRoleVo);
+		if(userVo.getCreatedBy() == 0)
+			userVo.setCreatedBy(1);
 		User user = userService.registerUser(userVo);
 
 		CustomerDetails customerDetails = new CustomerDetails();
@@ -104,10 +107,16 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 	public CustomerDetailsVo updateCustomer(CustomerDetailsVo customerDetailsVo) {
 		User user = userService.updateUser(customerDetailsVo.getUser());
 
-		CustomerDetails customerDetails = new CustomerDetails();
+		/*CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setUser(user);
-		customerDetailsDao.saveOrUpdate(customerDetails);
-		return CustomerDetails.convertModelToVO(customerDetails);
+		customerDetails.setId(customerDetailsVo.getId());
+		customerDetails.setAddressCity(customerDetailsVo.getAddressCity());
+		customerDetails.setAddressState(customerDetailsVo.getAddressState());
+		customerDetails.setAddressStreet(customerDetailsVo.getAddressStreet());
+		customerDetails.setAddressZipcode(customerDetailsVo.getAddressZipcode());
+		customerDetails.setDateofbirth(customerDetailsVo.getDateofbirth());*/
+		customerDetailsDao.updateCustomer(customerDetailsVo);
+		return customerDetailsVo;
 	}
 
 	@Transactional
@@ -146,7 +155,7 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 	@Override
 	@Transactional
 	public CustomerDetailsVo getUserById(int id) {
-		CustomerDetails customerDetails = customerDetailsDao.findCustomerByUserId(id);
+		CustomerDetails customerDetails = customerDetailsRepo.findOne(id);
 		CustomerDetailsVo customerDetailsVo = null;
 		if (customerDetails != null) {
 			customerDetailsVo = CustomerDetails.convertModelToVO(customerDetails);
@@ -214,6 +223,29 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 			}
 		});
 		return customerDetails;
+	}
+
+	@Override
+	@Transactional
+	public List<CustomerDetailsVo> getAllCustomers(int status) {
+		List<CustomerDetails> customers = customerDetailsRepo.getAllCustomers(status);
+		List<CustomerDetailsVo> customerDetailsList = new ArrayList<>();
+		for(CustomerDetails customerDetails : customers) {
+			customerDetailsList.add(CustomerDetails.convertModelToVO(customerDetails));
+		}
+		return customerDetailsList;
+	}
+
+	@Override
+	@Transactional
+	public int deleteCustomer(int id, String reason) {
+		// TODO Auto-generated method stub
+		CustomerDetails customerDetails = customerDetailsRepo.findOne(id);
+		if(null == customerDetails) {
+			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
+		}
+		int deleted = userService.deleteUser(customerDetails.getUser().getId(), reason);
+		return deleted;
 	}
 
 }

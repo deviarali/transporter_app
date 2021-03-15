@@ -40,6 +40,7 @@ import com.transporter.vo.VehiclesByOrderResponse;
  */
 
 @Service
+@Transactional
 public class DriverServiceImpl implements DriverService {
 
 	@Autowired
@@ -84,7 +85,7 @@ public class DriverServiceImpl implements DriverService {
 		driverDetails.setDriverName(userVo.getFirstName());
 		driverDetails.setDriverVerificationStatus("pending");
 		driverDetails.setOnRoad(0);
-		driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
+		//driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
 		driverDetails.setUser(user);
 		driverDao.save(driverDetails);
 		if (driverDetails.getId() > 0) {
@@ -226,8 +227,8 @@ public class DriverServiceImpl implements DriverService {
 
 	@Override
 	@Transactional
-	public List<DriverDetailsVo> getAllDrivers() {
-		List<DriverDetails> driverDetailsList = driverDetailsRepo.findAll();
+	public List<DriverDetailsVo> getAllDrivers(int status) {
+		List<DriverDetails> driverDetailsList = driverDetailsRepo.getAllDrivers(status);
 		List<DriverDetailsVo> driverDetailsVos = new ArrayList<>();
 		if (Utils.isNullOrEmpty(driverDetailsList)) {
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
@@ -265,5 +266,26 @@ public class DriverServiceImpl implements DriverService {
 			}
 		});
 		return driverDetails;
+	}
+
+	@Override
+	@Transactional
+	public int deleteDriver(int id, String reason) {
+		DriverDetails driverDetails = driverDetailsRepo.findOne(id);
+		if(null == driverDetails) {
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
+		}
+		return userService.deleteUser(driverDetails.getUser().getId(), reason);
+	}
+
+	@Override
+	@Transactional
+	public List<DriverDetailsVo> getDriversForEmployee(int id) {
+		List<DriverDetails> driversList = driverDetailsRepo.getDriversForEmployee(id);
+		List<DriverDetailsVo> driverDetailsVoList = new ArrayList<>();
+		for(DriverDetails driverDetails : driversList) {
+			driverDetailsVoList.add(DriverDetails.convertModelToVo(driverDetails));
+		}
+		return driverDetailsVoList;
 	}
 }

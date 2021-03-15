@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +26,6 @@ import com.transporter.response.CommonResponse;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.CustomerDetailsVo;
-import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserVo;
 
 /**
@@ -163,6 +163,18 @@ public class CustomerDetailsController {
 		}
 		return response;
 	}
+	@GetMapping(value = "/customer/customers")
+	public CommonResponse getAllCustomers(@RequestParam(name = "status", required = false, defaultValue = "1") int status) {
+		CommonResponse response = null;
+		List<CustomerDetailsVo> customerDetails = customerDetailsService.getAllCustomers(status);
+		if (customerDetails == null || customerDetails.isEmpty() ) {
+			response = RestUtils.wrapObjectForFailure("customers not found", WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.WEB_RESPONSE_NO_RECORD_FOUND);
+		} else {
+			response = RestUtils.wrapObjectForSuccess(customerDetails);
+		}
+		return response;
+	}
 
 	/**
 	 * Below api to get customer by user id
@@ -227,6 +239,30 @@ public class CustomerDetailsController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("Internal error while fetching top customer for a week: " + e.getMessage());
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
+		return response;
+	}
+	
+	
+	@DeleteMapping("/customer/{id}")
+	public CommonResponse deleteCustomer(@PathVariable(name = "id", required = true) int id,
+										@RequestParam(name = "reason", required = true) String reason) {
+		CommonResponse response = null;
+		try {
+			int deleted = customerDetailsService.deleteCustomer(id, reason);
+			if(deleted == 1) {
+				response = RestUtils.wrapObjectForSuccess("success");
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						"Customer not deleted");
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error("Internal error while deleting customer: " + e.getMessage());
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
