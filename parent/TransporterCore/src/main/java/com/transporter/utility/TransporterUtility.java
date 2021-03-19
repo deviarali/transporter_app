@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.transporter.model.ExceptionMaster;
 import com.transporter.service.ExceptionService;
 
-
 /**
  * @author Devappa.Arali
  *
@@ -24,41 +23,42 @@ import com.transporter.service.ExceptionService;
 
 @Component
 public class TransporterUtility {
-	
+
 	@Value("${file.path}")
 	private String filePath;
-	
+
 	@Autowired
 	private ExceptionService exceptionService;
-	
-	private static final Logger LOGGER = LoggerFactory
-	        .getLogger(TransporterUtility.class);
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransporterUtility.class);
+
 	public String generateFilePathAndStore(MultipartFile multipart, String typeOfUser) {
 		String uniqueId = uuidString();
-		LOGGER.info("UploadFile "+ multipart.getOriginalFilename());
+		LOGGER.info("UploadFile " + multipart.getOriginalFilename());
 		Date date = new Date();
-		if(StringUtils.isBlank(typeOfUser)) {
+		if (StringUtils.isBlank(typeOfUser)) {
 			typeOfUser = "transporter";
 		}
-		String fileLocation = filePath  + typeOfUser + uniqueId + date.getTime();
-		File directory = new File(filePath);
+		String photoType = "profile";
+		String fileLocation = photoType + "/" + typeOfUser + uniqueId + date.getTime()
+				+ multipart.getOriginalFilename();
+		File directory = new File(filePath + photoType);
 		if (!directory.exists()) {
 			directory.mkdirs();
 		}
 		try {
-			multipart.transferTo(new File(fileLocation));
+			multipart.transferTo(new File(filePath + fileLocation));
 		} catch (IllegalStateException | IOException e) {
-			LOGGER.error("File not saved and exception is "+e.getMessage());
+			LOGGER.error("File not saved and exception is " + e.getMessage());
 			return null;
 		}
 		return fileLocation;
 	}
-	
+
 	private String uuidString() {
 		return UUID.randomUUID().toString();
 	}
-	
+
 	public ExceptionMaster getExceptionMasterByType(String exceptionType) {
 
 		return exceptionService.getExceptionMasterByType(exceptionType);
