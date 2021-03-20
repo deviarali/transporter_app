@@ -48,6 +48,8 @@ public interface DriverService {
 
 	List<DriverDetailsVo> getDriversForEmployee(int id);
 
+	List<DriverDetailsVo> getDriverForVehicleRegistrationByUserId(int userId);
+
 	
 
 }

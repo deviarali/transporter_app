@@ -56,7 +56,7 @@ public class DriverController {
 			String saved = driverService.registerDriver(driverDetailsVo);
 			if (!StringUtils.isBlank(saved)) {
 				response = RestUtils.wrapObjectForSuccess(saved);
-				LOGGER.info("Driver registered successfully");
+				LOGGER.info("Driver registered successfully");	
 			}
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
@@ -295,5 +295,12 @@ public class DriverController {
 		}
 		return response;
 	}
-
+	
+	@GetMapping("/drivers/registerVehicle/{userId}")
+	public CommonResponse getDriverForVehicleRegistrationByUserId(@PathVariable(name = "userId") int userId) {
+		CommonResponse response = null;
+		List<DriverDetailsVo> drivers = driverService.getDriverForVehicleRegistrationByUserId(userId);
+		response = RestUtils.wrapObjectForSuccess(drivers);
+		return response;
+	}
 }

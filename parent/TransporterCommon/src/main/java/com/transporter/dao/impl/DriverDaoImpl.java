@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.DriverDao;
 import com.transporter.model.DriverDetails;
+import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehiclesByOrderRequest;
 
 /**
@@ -144,5 +145,16 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 		query.setParameter("id", id);
 		query.setParameter("status",status);
 		query.executeUpdate();
+	}
+
+	@Override
+	public List<DriverDetails> getDriverForVehicleRegistrationByUserId(int userId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "From DriverDetails dd WHERE dd.createdBy = :userId AND dd.driverVerificationStatus != :status";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("userId", userId);
+		query.setParameter("status", "completed");
+		List<DriverDetails> list = query.list();
+		return list;
 	}
 }

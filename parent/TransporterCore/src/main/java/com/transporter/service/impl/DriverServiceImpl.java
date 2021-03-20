@@ -79,13 +79,14 @@ public class DriverServiceImpl implements DriverService {
 		UserRoleVo userRoleVo = new UserRoleVo();
 		userRoleVo.setId(UserRoleEnum.DRIVER.getId());
 		userVo.setUserRole(userRoleVo);
+		userVo.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
 		User user = userService.registerUser(userVo);
 		DriverDetails driverDetails = new DriverDetails();
 		driverDetails.setCreatedOn(new Date());
 		driverDetails.setDriverName(userVo.getFirstName());
 		driverDetails.setDriverVerificationStatus("pending");
 		driverDetails.setOnRoad(0);
-		//driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
+		driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
 		driverDetails.setUser(user);
 		driverDao.save(driverDetails);
 		if (driverDetails.getId() > 0) {
@@ -286,6 +287,17 @@ public class DriverServiceImpl implements DriverService {
 		for(DriverDetails driverDetails : driversList) {
 			driverDetailsVoList.add(DriverDetails.convertModelToVo(driverDetails));
 		}
+		return driverDetailsVoList;
+	}
+
+	@Override
+	public List<DriverDetailsVo> getDriverForVehicleRegistrationByUserId(int userId) {
+		List<DriverDetails> driverDetailsList = driverDao.getDriverForVehicleRegistrationByUserId(userId);
+		List<DriverDetailsVo> driverDetailsVoList = new ArrayList<>();
+		for(DriverDetails driverDetails : driverDetailsList) {
+			driverDetailsVoList.add(DriverDetails.convertModelToVo(driverDetails));
+		}
+		
 		return driverDetailsVoList;
 	}
 }
