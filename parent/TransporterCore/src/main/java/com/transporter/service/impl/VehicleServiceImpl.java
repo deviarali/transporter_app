@@ -33,6 +33,7 @@ import com.transporter.vo.VehiclesByOrderResponse;
  *
  */
 
+
 @Service
 public class VehicleServiceImpl implements VehicleService {
 

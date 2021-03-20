@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 		user.setLastName(userVo.getLastName());
 		user.setEmailId(userVo.getEmailId());
 		user.setMobileNumber(userVo.getMobileNumber());
-		user.setPassword(PasswordUtils.generateSecurePassword("devaraj"));
+		user.setPassword(PasswordUtils.generateSecurePassword("devus"));
 		user.setStatus(1);
 		user.setUserRole(UserRole.convertVoToModel(userVo.getUserRole()));
 		User createdBy = new User();
@@ -162,5 +162,15 @@ public class UserServiceImpl implements UserService {
 	public int deleteUser(int id, String reason) {
 		int deleted = userDao.deleteUser(id, reason);
 		return deleted;
+	}
+
+	@Override
+	public UserVo login(UserVo userVo) {
+		userVo.setPassword(PasswordUtils.generateSecurePassword(userVo.getPassword()));
+		User user = userDao.login(userVo);
+		if(null == user) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value() +userVo.getMobileNumber());
+		}
+		return User.convertModelToVo(user);
 	}
 }
