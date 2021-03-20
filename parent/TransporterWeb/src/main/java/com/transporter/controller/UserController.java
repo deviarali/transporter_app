@@ -7,8 +7,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +26,7 @@ import com.transporter.service.UserService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.UserVo;
 
+@CrossOrigin("*")
 @RestController
 public class UserController {
 
@@ -149,6 +152,15 @@ public class UserController {
 			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
 		}
+		return response;
+	}
+	
+	@PostMapping(path = "/login")
+	public CommonResponse login(@RequestBody UserVo user) {
+		CommonResponse response = null;
+		user = userService.login(user);
+		if(null != user)
+			response = RestUtils.wrapObjectForSuccess(user);
 		return response;
 	}
 

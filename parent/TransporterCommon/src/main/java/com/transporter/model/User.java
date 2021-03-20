@@ -278,7 +278,9 @@ public class User implements Serializable {
 			return null;
 		UserVo userVo = new UserVo();
 		userVo.setId(user.getId());
-		//userVo.setUserRole(UserRole.convertModelToVo(user.getUserRole()));
+		if(user.getUserRole().getId() == 3) {
+			userVo.setUserRole(UserRole.convertModelToVo(user.getUserRole()));
+		}
 		userVo.setFirstName(user.getFirstName());
 		userVo.setLastName(user.getLastName());
 		userVo.setEmailId(user.getEmailId());

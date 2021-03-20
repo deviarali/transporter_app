@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.google.gson.Gson;
 import com.transporter.dao.TripDetailsDao;
@@ -46,6 +47,7 @@ import com.transporter.utils.Utils;
 import com.transporter.vo.DeliveryStatusVo;
 import com.transporter.vo.DriverReachedVo;
 import com.transporter.vo.FetchSelectedVehiclesRequest;
+import com.transporter.vo.PropertiesVo;
 import com.transporter.vo.TripCancelledVo;
 import com.transporter.vo.TripDetailsConfirmResponse;
 import com.transporter.vo.TripDetailsHistoryVo;
@@ -94,6 +96,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Autowired
+	private PropertiesManager propertiesManager;
 
 	@Override
 	public List<TripDetailsVo> getTripHistory(int id, int tripStatus, String fromDate, String toDate, String userType) {
@@ -313,10 +318,18 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest = new FetchSelectedVehiclesRequest();
 		fetchSelectedVehiclesRequest.setLattitude(tripDetailsVo.getSourceLattitude());
 		fetchSelectedVehiclesRequest.setLongitude(tripDetailsVo.getSourceLongitude());
-		fetchSelectedVehiclesRequest.setSurroundingDistance(surroundingDistance);
+		//fetchSelectedVehiclesRequest.setSurroundingDistance(surroundingDistance);
 		fetchSelectedVehiclesRequest.setVehicleType(tripDetailsVo.getVehicleType());
-		List<VehicleDetails> vehicleDetailsList = vehicleService
-				.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest);
+		PropertiesVo properties = propertiesManager.getPropertiesByName("surrounding.area");
+		String[] property = properties.getPropertyValue().split(",");
+		List<VehicleDetails> vehicleDetailsList = null;
+		for(String surrondingArea : property) {
+			fetchSelectedVehiclesRequest.setSurroundingDistance(Double.valueOf(surrondingArea));
+			vehicleDetailsList = vehicleService
+					.fetchSelectedVehiclesToConfirmOrder(fetchSelectedVehiclesRequest);
+			if(!CollectionUtils.isEmpty(vehicleDetailsList))
+				break;
+		}
 		if (Utils.isNullOrEmpty(vehicleDetailsList)) {
 			throw new BusinessException(ErrorCodes.VEHICLENOTFOUND.name(), ErrorCodes.VEHICLENOTFOUND.value());
 		}
@@ -326,7 +339,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		CustomerDetails customerDetails = customerDetailsService.findCustomerById(tripDetailsVo.getCustomerId());
 
 		TripDetails tripDetails = gson.fromJson(gson.toJson(tripDetailsVo), TripDetails.class);
-		tripDetails.setCustomerDetails(customerDetails);
+		/*tripDetails.setCustomerDetails(customerDetails);
 		tripDetails.setDriverDetails(driverDetails);
 		DeliveryStatus deliveryStatus = new DeliveryStatus();
 		deliveryStatus.setId(TripStatusEnum.PENDING.getTripStatusId());
@@ -432,18 +445,18 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				customerBean, "customer");
 		if (Utils.isNullOrEmpty(cnResponse)) {
 			LOG.error("Notification error for customer, while booking");
-		}
+		}*/
 
 		//driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
 		tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
-		tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
+		/*tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
 		tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
 		tripDetailsConfirmResponse.setDriverMobileNumber(driverDetails.getUser().getMobileNumber());
 		tripDetailsConfirmResponse.setTripStartOtp(tripDetails.getTripStartOtp());
 		tripDetailsConfirmResponse.setVehicleName(vehicleDetailsList.get(0).getVehicleModel());
 		tripDetailsConfirmResponse.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
 		tripDetailsConfirmResponse.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
-		tripDetailsConfirmResponse.setTripId(tripDetails.getId());
+		tripDetailsConfirmResponse.setTripId(tripDetails.getId());*/
 
 		return tripDetailsConfirmResponse;
 	}

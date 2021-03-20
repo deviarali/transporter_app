@@ -33,4 +33,6 @@ public interface UserService {
 
 	public int deleteUser(int id, String reason);
 
+	public UserVo login(UserVo user);
+
 }
