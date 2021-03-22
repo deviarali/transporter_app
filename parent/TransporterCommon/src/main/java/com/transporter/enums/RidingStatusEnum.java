@@ -2,7 +2,7 @@ package com.transporter.enums;
 
 public enum RidingStatusEnum {
 	
-	OFFRIDING(0), ONRIDING(2);
+	OFFRIDING(0), ONRIDING(1);
 	
 	int ridingStatusId;
 	

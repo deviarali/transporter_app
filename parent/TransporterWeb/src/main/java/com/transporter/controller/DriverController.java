@@ -35,7 +35,6 @@ import com.transporter.vo.DriverDetailsVo;
  */
 
 
-
 @CrossOrigin(origins = "*")
 @RestController
 public class DriverController {

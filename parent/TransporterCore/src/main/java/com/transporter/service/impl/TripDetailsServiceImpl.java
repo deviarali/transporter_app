@@ -339,7 +339,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		CustomerDetails customerDetails = customerDetailsService.findCustomerById(tripDetailsVo.getCustomerId());
 
 		TripDetails tripDetails = gson.fromJson(gson.toJson(tripDetailsVo), TripDetails.class);
-		/*tripDetails.setCustomerDetails(customerDetails);
+		tripDetails.setCustomerDetails(customerDetails);
 		tripDetails.setDriverDetails(driverDetails);
 		DeliveryStatus deliveryStatus = new DeliveryStatus();
 		deliveryStatus.setId(TripStatusEnum.PENDING.getTripStatusId());
@@ -445,18 +445,18 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				customerBean, "customer");
 		if (Utils.isNullOrEmpty(cnResponse)) {
 			LOG.error("Notification error for customer, while booking");
-		}*/
+		}
 
-		//driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
+		driverService.updateRidingStatus(driverDetails.getId(), RidingStatusEnum.ONRIDING.getRidingStatusId());
 		tripDetailsConfirmResponse = new TripDetailsConfirmResponse();
-		/*tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
+		tripDetailsConfirmResponse.setDriverId(driverDetails.getId());
 		tripDetailsConfirmResponse.setDriverName(driverDetails.getUser().getFirstName());
 		tripDetailsConfirmResponse.setDriverMobileNumber(driverDetails.getUser().getMobileNumber());
 		tripDetailsConfirmResponse.setTripStartOtp(tripDetails.getTripStartOtp());
 		tripDetailsConfirmResponse.setVehicleName(vehicleDetailsList.get(0).getVehicleModel());
 		tripDetailsConfirmResponse.setVehicleNumber(vehicleDetailsList.get(0).getVehicleNum());
 		tripDetailsConfirmResponse.setVehicleImage(vehicleDetailsList.get(0).getVehicleType().getSelectedVehicleUrl());
-		tripDetailsConfirmResponse.setTripId(tripDetails.getId());*/
+		tripDetailsConfirmResponse.setTripId(tripDetails.getId());
 
 		return tripDetailsConfirmResponse;
 	}
