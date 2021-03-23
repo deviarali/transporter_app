@@ -36,8 +36,12 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 	@Override
 	@Transactional
 	public List<VehicleTypeVo> getAllVehicleTypes() {
-		List<VehicleTypeVo> displayVehicleList = vehicleTypeDao.getAllVehicleTypes();
-		return displayVehicleList;
+		List<VehicleType> displayVehicleList = vehicleTypeDao.getAllVehicleTypes();
+		List<VehicleTypeVo> vehicleTypeVoList = new ArrayList<>();
+		for(VehicleType vehicleType : displayVehicleList) {
+			vehicleTypeVoList.add(VehicleType.convertModelToVo(vehicleType));
+		}
+		return vehicleTypeVoList;
 	}
 
 	@Override

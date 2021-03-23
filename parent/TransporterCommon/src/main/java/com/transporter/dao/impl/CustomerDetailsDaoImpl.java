@@ -37,8 +37,8 @@ public class CustomerDetailsDaoImpl extends GenericDaoImpl implements CustomerDe
 	@Override
 	public int updateCustomer(CustomerDetailsVo customerDetailsVo) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "UPDATE CustomerModel cm SET cm.addressStreet = :addressStreet, cm.addressCity = :addresCity"
-				+ " cm.addressState = :addressState WHERE cm.id= :id";
+		String sqlQuery = "UPDATE CustomerDetails cd SET cd.addressStreet = :addressStreet, cd.addressCity = :addressCity,"
+				+ " cd.addressState = :addressState WHERE cd.id= :id";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("id", customerDetailsVo.getId());
 		query.setParameter("addressStreet", customerDetailsVo.getAddressStreet());

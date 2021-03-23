@@ -15,11 +15,11 @@ import com.transporter.vo.VehiclesByOrderRequest;
 public class VehicleTypeDaoImpl extends GenericDaoImpl implements VehicleTypeDao {
 
 	@Override
-	public List<VehicleTypeVo> getAllVehicleTypes() {
+	public List<VehicleType> getAllVehicleTypes() {
 		Session session = sessionFactory.getCurrentSession();
 		String sqlQuery = "FROM VehicleType vehicleType";
 		Query query = session.createQuery(sqlQuery);
-		List<VehicleTypeVo> displayVehicleList = query.list();
+		List<VehicleType> displayVehicleList = query.list();
 		return displayVehicleList;
 	}
 
