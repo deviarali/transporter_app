@@ -80,13 +80,15 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 			vehicleType.setCapacity(vehicleTypeVo.getCapacity());
 			vehicleType.setVehicleName(vehicleTypeVo.getVehicleName());
 			vehicleType.setPrice(vehicleTypeVo.getPrice());
-			vehicleType.setCreatedBy(vehicleTypeVo.getCreatedBy());
+			//vehicleType.setCreatedBy(vehicleTypeVo.getCreatedBy());
 			vehicleType.setHeight(vehicleTypeVo.getHeight());
 			vehicleType.setLength(vehicleTypeVo.getLength());
 			vehicleType.setSize(vehicleTypeVo.getSize());
 			vehicleType.setWidth(vehicleTypeVo.getWidth());
-			vehicleType.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getSelectedVehicle(),"vehicle"));
-			vehicleType.setUnselectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getUnSelectedVehicle(), "vehicle"));
+			vehicleType.setMinKm(vehicleTypeVo.getMinKm());
+			vehicleType.setPerKm(vehicleTypeVo.getPerKm());
+			//vehicleType.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getSelectedVehicle(),"vehicle"));
+			//vehicleType.setUnselectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getUnSelectedVehicle(), "vehicle"));
 			try {
 				vehicleTypeDao.save(vehicleType);
 				response = WebConstants.SUCCESS;

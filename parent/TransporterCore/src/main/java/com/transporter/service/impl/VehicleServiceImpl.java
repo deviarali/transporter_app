@@ -18,6 +18,7 @@ import com.transporter.model.VehicleDetails;
 import com.transporter.model.VehicleType;
 import com.transporter.repo.VehicleDetailsRepo;
 import com.transporter.response.LatitudeLongitudeResponse;
+import com.transporter.service.DriverService;
 import com.transporter.service.VehicleService;
 import com.transporter.service.VehicleTypeService;
 import com.transporter.utils.Utils;
@@ -48,6 +49,9 @@ public class VehicleServiceImpl implements VehicleService {
 	
 	@Value("${surrounding.area}")
 	private double surroundingDistance;
+	
+	@Autowired
+	private DriverService driverService;
 
 	@Override
 	@Transactional
@@ -63,6 +67,7 @@ public class VehicleServiceImpl implements VehicleService {
 		DriverDetailsVo driverDetailsVo = vehicleDetailsVo.getDriverDetails();
 		DriverDetails driverDetails = new DriverDetails();
 		driverDetails.setId(driverDetailsVo.getId());
+		driverService.updateVerifcationStatus(driverDetailsVo.getId(), "assigned");
 		vehicleDetails.setDriverDetails(driverDetails);
 		vehicleDetails.setVehicleColor(vehicleDetailsVo.getVehicleColor());
 		vehicleDetails.setVehicleModel(vehicleDetailsVo.getVehicleModel());

@@ -14,7 +14,7 @@ public class VehicleTypeVo {
 	
 	private Double price;
 
-	private String createdBy;
+	private UserVo createdBy;
 
 	private String selectedVehicleUrl;
 
@@ -74,11 +74,11 @@ public class VehicleTypeVo {
 		this.price = price;
 	}
 
-	public String getCreatedBy() {
+	public UserVo getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(UserVo createdBy) {
 		this.createdBy = createdBy;
 	}
 

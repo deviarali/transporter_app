@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.transporter.vo.VehicleTypeVo;
@@ -26,9 +29,11 @@ public class VehicleType {
 	@Column(name = "vehicle_name")
 	private String vehicleName;
 
-	@Column(name = "created_by")
-	private String createdBy;
+	@ManyToOne
+	@JoinColumn(name = "created_by")
+	private User createdBy;
 
+	
 	@Column(name = "selected_vehicle_url")
 	private String selectedVehicleUrl;
 
@@ -85,11 +90,11 @@ public class VehicleType {
 		this.vehicleName = vehicleName;
 	}
 
-	public String getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -165,7 +170,7 @@ public class VehicleType {
 		vehicleTypeVo.setCapacity(vehicleType.getCapacity());
 		vehicleTypeVo.setSize(vehicleType.getSize());
 		vehicleTypeVo.setVehicleName(vehicleType.getVehicleName());
-		vehicleTypeVo.setCreatedBy(vehicleType.getCreatedBy());
+		//vehicleTypeVo.setCreatedBy(User.convertModelToVo(vehicleType.getCreatedBy()));
 		vehicleTypeVo.setHeight(vehicleType.getHeight());
 		vehicleTypeVo.setLength(vehicleType.getLength());
 		vehicleTypeVo.setSelectedVehicleUrl(vehicleType.getSelectedVehicleUrl());
