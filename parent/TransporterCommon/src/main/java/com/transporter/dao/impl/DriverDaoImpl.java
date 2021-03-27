@@ -150,11 +150,22 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 	@Override
 	public List<DriverDetails> getDriverForVehicleRegistrationByUserId(int userId) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "From DriverDetails dd WHERE dd.createdBy = :userId AND dd.driverVerificationStatus != :status";
+		String sqlQuery = "From DriverDetails dd WHERE dd.createdBy = :userId AND dd.driverVerificationStatus != :status AND dd.driverVerificationStatus != :assigned"; 
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("userId", userId);
 		query.setParameter("status", "completed");
+		query.setParameter("assigned", "assigned");
 		List<DriverDetails> list = query.list();
 		return list;
+	}
+
+	@Override
+	public void updateVerifcationStatus(int id, String status) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "UPDATE DriverDetails dd SET dd.driverVerificationStatus = :status WHERE dd.id = :id";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("id", id);
+		query.setParameter("status", status);
+		query.executeUpdate();
 	}
 }

@@ -86,6 +86,10 @@ public class DriverServiceImpl implements DriverService {
 		driverDetails.setDriverName(userVo.getFirstName());
 		driverDetails.setDriverVerificationStatus("pending");
 		driverDetails.setOnRoad(0);
+		driverDetails.setAddressState(driverDetailsVo.getAddressState());
+		driverDetails.setAddressCity(driverDetailsVo.getAddressCity());
+		driverDetails.setAddressStreet(driverDetailsVo.getAddressStreet());
+		driverDetails.setAddressZipcode(driverDetailsVo.getAddressZipcode());
 		driverDetails.setCreatedBy(driverDetailsVo.getCreatedBy().getId());
 		driverDetails.setUser(user);
 		driverDao.save(driverDetails);
@@ -297,7 +301,14 @@ public class DriverServiceImpl implements DriverService {
 		for(DriverDetails driverDetails : driverDetailsList) {
 			driverDetailsVoList.add(DriverDetails.convertModelToVo(driverDetails));
 		}
+		if(driverDetailsVoList.isEmpty())
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
 		
 		return driverDetailsVoList;
+	}
+
+	@Override
+	public void updateVerifcationStatus(int id, String status) {
+		driverDao.updateVerifcationStatus(id, status);
 	}
 }
