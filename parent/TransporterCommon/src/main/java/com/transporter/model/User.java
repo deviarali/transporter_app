@@ -85,7 +85,7 @@ public class User implements Serializable {
 	//bi-directional many-to-one association to Userrole
 	@ManyToOne
 	@JoinColumn(name="user_role")
-	private UserRole userrole;
+	private UserRole userRole;
 
 	//bi-directional many-to-one association to Internaluserdetail
 	@OneToOne
@@ -234,11 +234,11 @@ public class User implements Serializable {
 
 	
 	public UserRole getUserRole() {
-		return userrole;
+		return userRole;
 	}
 
-	public void setUserRole(UserRole userrole) {
-		this.userrole = userrole;
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
 	}
 
 	public InternalUserDetails getInternalUserDetails() {

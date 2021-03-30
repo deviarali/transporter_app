@@ -1,5 +1,6 @@
 package com.transporter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.transporter.service.InternalUserService;
 import com.transporter.service.UserService;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.InternalUserDetailsVo;
+import com.transporter.vo.InternalUserRoleMasterVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
 
@@ -79,6 +81,17 @@ public class InternalUserServiceImpl implements InternalUserService {
 		}
 		List<DriverDetailsVo> driverDetailsList = driverService.getDriversForEmployee(id);
 		return driverDetailsList;
+	}
+
+	@Override
+	@Transactional
+	public List<InternalUserRoleMasterVo> getInternalUserRoles() {
+		List<InternalUserRoleMaster> internalUserRoles = internalUserDao.getInternalUserRoles();
+		List<InternalUserRoleMasterVo> internalUserRolesList = new ArrayList<InternalUserRoleMasterVo>();
+		for(InternalUserRoleMaster internalUserRoleMaster: internalUserRoles) {
+			internalUserRolesList.add(InternalUserRoleMaster.convertModelToVo(internalUserRoleMaster));
+		}
+		return internalUserRolesList;
 	}
 
 }

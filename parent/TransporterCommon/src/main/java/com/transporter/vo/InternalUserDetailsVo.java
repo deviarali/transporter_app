@@ -25,7 +25,7 @@ public class InternalUserDetailsVo implements Serializable {
 
 	private Date dateofbirth;
 
-	private InternalUserRoleMasterVo internalUserroleMaster;
+	private InternalUserRoleMasterVo internalUserRoleMaster;
 
 	private UserVo user;
 
@@ -91,11 +91,11 @@ public class InternalUserDetailsVo implements Serializable {
 	}
 
 	public InternalUserRoleMasterVo getInternalUserRoleMaster() {
-		return internalUserroleMaster;
+		return internalUserRoleMaster;
 	}
 
-	public void setInternalUserRoleMaster(InternalUserRoleMasterVo internalUserroleMaster) {
-		this.internalUserroleMaster = internalUserroleMaster;
+	public void setInternalUserRoleMaster(InternalUserRoleMasterVo internalUserRoleMaster) {
+		this.internalUserRoleMaster = internalUserRoleMaster;
 	}
 
 	public UserVo getUser() {
