@@ -46,25 +46,25 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 
 	@Override
 	@Transactional
-	public VehicleTypeVo updateDisplayVehicle(VehicleTypeVo displayVehicleVo) {
-		VehicleTypeVo displayVehicle = null;
-		if (displayVehicleVo != null) {
-			displayVehicle = new VehicleTypeVo();
-			displayVehicle.setId(displayVehicleVo.getId());
-			displayVehicle.setCapacity(displayVehicleVo.getCapacity());
-			displayVehicle.setVehicleName(displayVehicleVo.getVehicleName());
-			displayVehicle.setPrice(displayVehicleVo.getPrice());
-			displayVehicle.setCreatedBy(displayVehicleVo.getCreatedBy());
-			displayVehicle.setHeight(displayVehicleVo.getHeight());
-			displayVehicle.setLength(displayVehicleVo.getLength());
-			displayVehicle.setSelectedVehicleUrl(displayVehicleVo.getSelectedVehicleUrl());
-			displayVehicle.setSize(displayVehicleVo.getSize());
-			displayVehicle.setUnselectedVehicleUrl(displayVehicleVo.getUnselectedVehicleUrl());
-			displayVehicle.setWidth(displayVehicleVo.getWidth());
-			vehicleTypeDao.saveOrUpdate(displayVehicle);
+	public VehicleTypeVo updateDisplayVehicle(VehicleTypeVo vehicleTypeVo) {
+		VehicleType vehicleType = vehicleTypeRepo.findOne(vehicleTypeVo.getId());
+		if (vehicleType != null) {
+			vehicleType.setId(vehicleTypeVo.getId());
+			vehicleType.setCapacity(vehicleTypeVo.getCapacity());
+			vehicleType.setVehicleName(vehicleTypeVo.getVehicleName());
+			vehicleType.setPrice(vehicleTypeVo.getPrice());
+			vehicleType.setHeight(vehicleTypeVo.getHeight());
+			vehicleType.setLength(vehicleTypeVo.getLength());
+			vehicleType.setSize(vehicleTypeVo.getSize());
+			vehicleType.setWidth(vehicleTypeVo.getWidth());
+			vehicleType.setPerKm(vehicleTypeVo.getPerKm());
+			vehicleType.setMinKm(vehicleTypeVo.getMinKm());
+			vehicleTypeDao.saveOrUpdate(vehicleType);
+		} else {
+			throw new BusinessException(ErrorCodes.VEHICLEIDNOTFOUND.name(), ErrorCodes.VEHICLEIDNOTFOUND.value());
 		}
 
-		return displayVehicle;
+		return vehicleTypeVo;
 	}
 
 	@Override

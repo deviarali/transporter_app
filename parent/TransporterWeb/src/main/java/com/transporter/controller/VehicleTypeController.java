@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,10 +16,7 @@ import com.transporter.response.CommonResponse;
 import com.transporter.service.VehicleTypeService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
-import com.transporter.vo.FetchSelectedVehiclesResponse;
 import com.transporter.vo.VehicleTypeVo;
-import com.transporter.vo.VehiclesByOrderRequest;
-import com.transporter.vo.VehiclesByOrderResponse;
 
 
 @CrossOrigin("*")
@@ -66,7 +63,7 @@ public class VehicleTypeController {
 	}
 	
 	
-	@RequestMapping(value = "display/updateisplayVehicle",method = RequestMethod.PUT)
+	@RequestMapping(value = "vehicleType/update",method = RequestMethod.PUT)
 	public CommonResponse updateDisplayVehicle(@RequestBody VehicleTypeVo displayVehicleVo) {
 
 		CommonResponse response = null;
@@ -80,5 +77,4 @@ public class VehicleTypeController {
 		}
 		return response;
 	}
-
 }

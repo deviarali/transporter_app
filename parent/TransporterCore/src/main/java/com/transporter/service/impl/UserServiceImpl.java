@@ -1,6 +1,7 @@
 package com.transporter.service.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,5 +173,11 @@ public class UserServiceImpl implements UserService {
 			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value() +userVo.getMobileNumber());
 		}
 		return User.convertModelToVo(user);
+	}
+
+	@Override
+	public List<UserVo> getAllUsers() {
+		List<User> listOfUser = userDao.getAllUsers();
+		return null;
 	}
 }
