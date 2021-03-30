@@ -12,10 +12,10 @@ import com.transporter.model.User;
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
 
-	@Query("SELECT count(*) from User u where u.userrole.id=:roleId")
+	@Query("SELECT count(*) from User u where u.userRole.id=:roleId")
 	int getTotalUsersCountByRole(@Param(value = "roleId") int roleId);
 
-	@Query("SELECT count(*) from User u where u.userrole.id=:roleId and u.createdOn between :startTime and :endTime")
+	@Query("SELECT count(*) from User u where u.userRole.id=:roleId and u.createdOn between :startTime and :endTime")
 	int getTotalUsersCountForToday(@Param(value = "roleId") int roleId, @Param(value = "startTime") Date startTime,
 			@Param(value = "endTime") Date endTime);
 

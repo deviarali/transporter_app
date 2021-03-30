@@ -1,5 +1,7 @@
 package com.transporter.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 //import org.apache.commons.io.FileUtils;
@@ -163,5 +165,12 @@ public class UserController {
 			response = RestUtils.wrapObjectForSuccess(user);
 		return response;
 	}
-
+	
+	@GetMapping("user/users")
+	public CommonResponse getAllUsers() {
+		CommonResponse response = null;
+		List<UserVo> listOfUsers = userService.getAllUsers();
+		response = RestUtils.wrapObjectForSuccess(listOfUsers);
+		return response;
+	}
 }

@@ -1,5 +1,7 @@
 package com.transporter.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -112,6 +114,17 @@ public class UserDaoImpl extends GenericDaoImpl implements UserDao {
 		query.setParameter("lastName", user.getLastName());
 		query.setParameter("emailId", user.getEmailId());
 		return query.executeUpdate();
+	}
+
+	@Override
+	public List<User> getAllUsers() {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "From User usr WHERE usr.userRole.id = :roleId AND usr.status = :status";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("status", 1);
+		query.setParameter("roleId", 3);
+		List<User> listOfUsers = (List<User>) query.list();
+		return listOfUsers;
 	}
 
 }

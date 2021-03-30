@@ -1,5 +1,7 @@
 package com.transporter.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.model.User;
@@ -34,5 +36,7 @@ public interface UserService {
 	public int deleteUser(int id, String reason);
 
 	public UserVo login(UserVo user);
+
+	public List<UserVo> getAllUsers();
 
 }

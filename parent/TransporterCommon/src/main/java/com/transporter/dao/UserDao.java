@@ -1,5 +1,7 @@
 package com.transporter.dao;
 
+import java.util.List;
+
 import com.transporter.model.User;
 import com.transporter.vo.UserVo;
 
@@ -22,5 +24,7 @@ public interface UserDao extends GenericDao {
 	int deleteUser(int id, String reason);
 
 	int updateUser(User user);
+
+	List<User> getAllUsers();
 
 }
