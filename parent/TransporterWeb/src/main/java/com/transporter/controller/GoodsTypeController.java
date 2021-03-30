@@ -14,6 +14,7 @@ import com.transporter.utils.RestUtils;
 import com.transporter.vo.GoodsTypeVo;
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/")
 public class GoodsTypeController {
 
 	@Autowired

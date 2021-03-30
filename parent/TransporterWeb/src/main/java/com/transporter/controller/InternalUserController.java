@@ -20,6 +20,7 @@ import com.transporter.service.InternalUserService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.InternalUserDetailsVo;
+import com.transporter.vo.InternalUserRoleMasterVo;
 
 /**
  * @author Devappa.Arali
@@ -60,6 +61,14 @@ public class InternalUserController {
 		CommonResponse response = null;
 		List<DriverDetailsVo> driverDetailsList = internalUserService.getDriversForEmployee(id);
 		response = RestUtils.wrapObjectForSuccess(driverDetailsList);
+		return response;
+	}
+	
+	@GetMapping("internalUser/roles")
+	public CommonResponse getInternalUserRoles() {
+		CommonResponse response = null;
+		List<InternalUserRoleMasterVo> intenalUserRoles = internalUserService.getInternalUserRoles();
+		response = RestUtils.wrapObjectForSuccess(intenalUserRoles);
 		return response;
 	}
 }

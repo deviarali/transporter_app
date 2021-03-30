@@ -308,7 +308,8 @@ public class DriverServiceImpl implements DriverService {
 	}
 
 	@Override
-	public void updateVerifcationStatus(int id, String status) {
-		driverDao.updateVerifcationStatus(id, status);
+	@Transactional
+	public int updateVerifcationStatus(int id, String status) {
+		return driverDao.updateVerifcationStatus(id, status);
 	}
 }
