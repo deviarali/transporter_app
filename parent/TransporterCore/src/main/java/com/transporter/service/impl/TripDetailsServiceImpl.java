@@ -529,9 +529,11 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
 					bean, "customer");
 			this.updateTripStatus(tripId, DeliveryStatusEnum.COMPLETED.getId());
+			driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 0);
 			return "Success";
 		} else {
 			return "Failure";
+			
 		}
 
 	}
