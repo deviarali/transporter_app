@@ -160,12 +160,12 @@ public class DriverDaoImpl extends GenericDaoImpl implements DriverDao {
 	}
 
 	@Override
-	public void updateVerifcationStatus(int id, String status) {
+	public int updateVerifcationStatus(int id, String status) {
 		Session session = sessionFactory.getCurrentSession();
 		String sqlQuery = "UPDATE DriverDetails dd SET dd.driverVerificationStatus = :status WHERE dd.id = :id";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("id", id);
 		query.setParameter("status", status);
-		query.executeUpdate();
+		return query.executeUpdate();
 	}
 }

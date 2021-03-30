@@ -50,7 +50,7 @@ public interface DriverService {
 
 	List<DriverDetailsVo> getDriverForVehicleRegistrationByUserId(int userId);
 
-	void updateVerifcationStatus(int id, String status);
+	int updateVerifcationStatus(int id, String status);
 
 	
 

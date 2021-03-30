@@ -30,6 +30,6 @@ public interface DriverDao extends GenericDao {
 
 	List<DriverDetails> getDriverForVehicleRegistrationByUserId(int userId);
 
-	void updateVerifcationStatus(int id, String status);
+	int updateVerifcationStatus(int id, String status);
 
 }

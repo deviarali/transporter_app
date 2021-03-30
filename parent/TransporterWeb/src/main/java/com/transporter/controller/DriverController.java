@@ -302,4 +302,14 @@ public class DriverController {
 		response = RestUtils.wrapObjectForSuccess(drivers);
 		return response;
 	}
+	
+	
+	@PutMapping("/driver/updateverificationstatus")
+	public CommonResponse updateVerificationStatus(@RequestParam(name = "driverId") int driverId,
+			 @RequestParam(name = "status") String status) {
+		CommonResponse commonResponse = null;
+		int updated = driverService.updateVerifcationStatus(driverId, status);
+		commonResponse = RestUtils.wrapObjectForSuccess(updated);
+		return commonResponse;
+	}
 }
