@@ -18,6 +18,9 @@ public class GoodsType {
 
 	@Column(name = "goods_type")
 	private String goodsType;
+	
+	@Column(name = "status")
+	private String status;
 
 	public int getId() {
 		return id;
@@ -35,12 +38,21 @@ public class GoodsType {
 		this.goodsType = goodsType;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public static GoodsTypeVo convertModelToVo(GoodsType goodsType) {
 		if(null == goodsType)
 			return null;
 		GoodsTypeVo goodsTypeVo = new GoodsTypeVo();
 		goodsTypeVo.setId(goodsType.getId());
 		goodsTypeVo.setGoodsType(goodsType.getGoodsType());
+		goodsTypeVo.setStatus(goodsType.getStatus());
 		return goodsTypeVo;
 	}
 }

@@ -8,4 +8,6 @@ public interface GoodsTypeService {
 
 	List<GoodsTypeVo> getAllGoodsType();
 
+	int updateGoodsStatus(int id, String status);
+
 }
