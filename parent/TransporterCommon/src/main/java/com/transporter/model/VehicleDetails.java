@@ -213,6 +213,7 @@ public class VehicleDetails implements Serializable {
 		vehicleDetailsVo.setCurrentLattitude(vehicleDetails.getCurrentLattitude());
 		vehicleDetailsVo.setCurrentLongitude(vehicleDetails.getCurrentLongitude());
 		vehicleDetailsVo.setVehicleName(vehicleDetails.getVehicleName());
+		vehicleDetailsVo.setDriverName(vehicleDetails.getDriverDetails().getUser().getFirstName());
 		return vehicleDetailsVo;
 	}
 

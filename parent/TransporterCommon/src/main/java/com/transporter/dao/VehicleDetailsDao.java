@@ -22,5 +22,7 @@ public interface VehicleDetailsDao extends GenericDao {
 
 	List<VehicleDetails> fetchSelectedVehicles(
 			FetchSelectedVehiclesRequest fetchSelectedVehiclesRequest);	
+	
+	public List<VehicleDetails> getAllVehicles();
 
 }

@@ -37,10 +37,12 @@ public class VehicleDetailsVo implements Serializable {
 	private String verifiedBy;
 	
 	private Double currentLattitude;
-	
+
 	private Double currentLongitude;
 
 	private String vehicleName;
+
+	private String driverName;
 
 	public VehicleDetailsVo() {
 	}
@@ -160,12 +162,21 @@ public class VehicleDetailsVo implements Serializable {
 	public final void setVehicleTypeVo(VehicleTypeVo vehicleTypeVo) {
 		this.vehicleTypeVo = vehicleTypeVo;
 	}
+
 	public String getVehicleName() {
 		return vehicleName;
 	}
 
 	public void setVehicleName(String vehicleName) {
 		this.vehicleName = vehicleName;
+	}
+
+	public String getDriverName() {
+		return driverName;
+	}
+
+	public void setDriverName(String driverName) {
+		this.driverName = driverName;
 	}
 
 }
