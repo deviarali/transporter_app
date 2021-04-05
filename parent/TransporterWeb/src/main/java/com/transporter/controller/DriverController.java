@@ -31,6 +31,7 @@ import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DocumentsVo;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.TripDetailsVo;
 
 /**
  * @author Devappa.Arali
@@ -225,7 +226,7 @@ public class DriverController {
 		return response;
 	}
 
-	@GetMapping("/driver/getAllDrivers")
+	@GetMapping("/driver/getAllDrivers?")
 	public CommonResponse getAllDrivers(
 			@RequestParam(name = "status", required = false, defaultValue = "1") int status) {
 		CommonResponse commonResponse = null;
@@ -344,5 +345,14 @@ public class DriverController {
 			LOGGER.error("add Driver documents error, User id : " + userId + " exception is : " + e.getMessage());
 		}
 		return response;
+	}
+	
+	@GetMapping(value = "driver/{driverId}/lasttripdetails")
+	public CommonResponse getDriversLastTripDetails(@PathVariable(name = "driverId") int driverId) {
+		CommonResponse response = null;
+		List<TripDetailsVo> tripDetails = driverService.getDriversLastTripDetails(driverId);
+		response = RestUtils.wrapObjectForSuccess(tripDetails);
+		return response;
+		
 	}
 }

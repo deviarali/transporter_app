@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,7 @@ import com.transporter.utility.TransporterUtility;
 import com.transporter.utils.Utils;
 import com.transporter.vo.DocumentsVo;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.TripDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
 import com.transporter.vo.VehiclesByOrderRequest;
@@ -240,7 +242,8 @@ public class DriverServiceImpl implements DriverService {
 	@Override
 	@Transactional
 	public List<DriverDetailsVo> getAllDrivers(int status) {
-		List<DriverDetails> driverDetailsList = driverDetailsRepo.getAllDrivers(status);
+		PageRequest pageRequest = new PageRequest(1, 5);
+		List<DriverDetails> driverDetailsList = driverDetailsRepo.getAllDrivers(status, pageRequest);
 		List<DriverDetailsVo> driverDetailsVos = new ArrayList<>();
 		if (Utils.isNullOrEmpty(driverDetailsList)) {
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
@@ -335,5 +338,11 @@ public class DriverServiceImpl implements DriverService {
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<TripDetailsVo> getDriversLastTripDetails(int driverId) {
+		List<TripDetailsVo> tripDetails = tripDetailsService.getDriversLastTripDetails(driverId);	
+		return tripDetails;
 	}
 }

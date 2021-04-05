@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.transporter.model.DriverDetails;
 import com.transporter.vo.DocumentsVo;
 import com.transporter.vo.DriverDetailsVo;
+import com.transporter.vo.TripDetailsVo;
 import com.transporter.vo.VehiclesByOrderRequest;
 import com.transporter.vo.VehiclesByOrderResponse;
 
@@ -54,6 +55,8 @@ public interface DriverService {
 	List<DriverDetailsVo> getDriverForVehicleRegistrationByUserId(int userId);
 
 	int updateVerifcationStatus(int id, String status);
+
+	List<TripDetailsVo> getDriversLastTripDetails(int driverId);
 
 	
 

@@ -2,6 +2,7 @@ package com.transporter.repo;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +17,7 @@ public interface DriverDetailsRepo extends JpaRepository<DriverDetails, Integer>
 	void updateRidingStatus(@Param(value ="id") int id, @Param(value ="status")int status);
 
 	@Query("SELECT dd FROM DriverDetails dd WHERE dd.user.status = :status")
-	List<DriverDetails> getAllDrivers(@Param(value = "status") int status);
+	List<DriverDetails> getAllDrivers(@Param(value = "status") int status, Pageable pageable);
 
 	@Query("SELECT dd FROM DriverDetails dd WHERE dd.user.createdBy.id = :id")
 	List<DriverDetails> getDriversForEmployee(@Param(value = "id") int id);
