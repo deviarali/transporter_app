@@ -21,6 +21,8 @@ public interface DriverService {
 	String updateLattitudeAndLongitude(int id, String lattitude, String longitude);
 
 	String updateDriverDocuments(int userId, MultipartFile adharMultiPart, MultipartFile dlMultiPart);
+	
+	String addDriverDocuments(int userId, MultipartFile adharMultiPart, String docType);
 
 	DriverDetailsVo updateDriverOnRoadAndOffRoad(int driverId, DriverDetailsVo detailsVo);
 

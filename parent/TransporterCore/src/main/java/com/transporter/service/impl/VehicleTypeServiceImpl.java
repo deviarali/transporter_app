@@ -89,6 +89,8 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 			vehicleType.setPerKm(vehicleTypeVo.getPerKm());
 			//vehicleType.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getSelectedVehicle(),"vehicle"));
 			//vehicleType.setUnselectedVehicleUrl(transporterUtility.generateFilePathAndStore(vehicleTypeVo.getUnSelectedVehicle(), "vehicle"));
+			vehicleType.setSelectedVehicleUrl(transporterUtility.generateFilePathAndStore(null, vehicleTypeVo.getSelectedVehicle(),"vehicle", "vehicle"));
+			vehicleType.setUnselectedVehicleUrl(transporterUtility.generateFilePathAndStore(null, vehicleTypeVo.getUnSelectedVehicle(), "vehicle", "vehicle"));
 			try {
 				vehicleTypeDao.save(vehicleType);
 				response = WebConstants.SUCCESS;

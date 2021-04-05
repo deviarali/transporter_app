@@ -121,8 +121,10 @@ public class DriverServiceImpl implements DriverService {
 		if (null == userExists) {
 			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
 		}
-		String generateFilePathAndStoreForAdhar = transporterUtility.generateFilePathAndStore(adharMultiPart, "driver");
-		String generateFilePathAndStoreForDl = transporterUtility.generateFilePathAndStore(dlMultiPart, "driver");
+		String generateFilePathAndStoreForAdhar = transporterUtility.generateFilePathAndStore(userId, adharMultiPart,
+				"driver", null);
+		String generateFilePathAndStoreForDl = transporterUtility.generateFilePathAndStore(userId, dlMultiPart,
+				"driver", null);
 		if (!(StringUtils.isBlank(generateFilePathAndStoreForAdhar))
 				|| !(StringUtils.isBlank(generateFilePathAndStoreForDl))) {
 			int updated = driverDao.updateDriverDocuments(userId, generateFilePathAndStoreForAdhar,
@@ -277,7 +279,7 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public int deleteDriver(int id, String reason) {
 		DriverDetails driverDetails = driverDetailsRepo.findOne(id);
-		if(null == driverDetails) {
+		if (null == driverDetails) {
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
 		}
 		return userService.deleteUser(driverDetails.getUser().getId(), reason);
@@ -288,7 +290,7 @@ public class DriverServiceImpl implements DriverService {
 	public List<DriverDetailsVo> getDriversForEmployee(int id) {
 		List<DriverDetails> driversList = driverDetailsRepo.getDriversForEmployee(id);
 		List<DriverDetailsVo> driverDetailsVoList = new ArrayList<>();
-		for(DriverDetails driverDetails : driversList) {
+		for (DriverDetails driverDetails : driversList) {
 			driverDetailsVoList.add(DriverDetails.convertModelToVo(driverDetails));
 		}
 		return driverDetailsVoList;
@@ -298,12 +300,12 @@ public class DriverServiceImpl implements DriverService {
 	public List<DriverDetailsVo> getDriverForVehicleRegistrationByUserId(int userId) {
 		List<DriverDetails> driverDetailsList = driverDao.getDriverForVehicleRegistrationByUserId(userId);
 		List<DriverDetailsVo> driverDetailsVoList = new ArrayList<>();
-		for(DriverDetails driverDetails : driverDetailsList) {
+		for (DriverDetails driverDetails : driverDetailsList) {
 			driverDetailsVoList.add(DriverDetails.convertModelToVo(driverDetails));
 		}
-		if(driverDetailsVoList.isEmpty())
+		if (driverDetailsVoList.isEmpty())
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
-		
+
 		return driverDetailsVoList;
 	}
 
@@ -311,5 +313,25 @@ public class DriverServiceImpl implements DriverService {
 	@Transactional
 	public int updateVerifcationStatus(int id, String status) {
 		return driverDao.updateVerifcationStatus(id, status);
+	}
+
+	public String addDriverDocuments(int userId, MultipartFile adharMultiPart, String docType) {
+		User userExists = userService.findById(userId);
+		if (null == userExists) {
+			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
+		}
+
+		String generatedFilePath = transporterUtility.generateFilePathAndStore(userId, adharMultiPart, "driver",
+				docType);
+
+		if (!StringUtils.isBlank(generatedFilePath)) {
+			/*
+			 * // int updated = driverDao.updateDriverDocuments(userId, generatedFilePath,
+			 * generateFilePathAndStoreForDl); if ( != 0) { return "Documents Updated.."; }
+			 */
+			return generatedFilePath;
+		}
+
+		return null;
 	}
 }

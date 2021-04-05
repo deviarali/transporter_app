@@ -2,6 +2,8 @@ package com.transporter.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,6 @@ import com.transporter.vo.DriverDetailsVo;
  *
  */
 
-
 @CrossOrigin(origins = "*")
 @RestController
 public class DriverController {
@@ -55,7 +56,7 @@ public class DriverController {
 			String saved = driverService.registerDriver(driverDetailsVo);
 			if (!StringUtils.isBlank(saved)) {
 				response = RestUtils.wrapObjectForSuccess(saved);
-				LOGGER.info("Driver registered successfully");	
+				LOGGER.info("Driver registered successfully");
 			}
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
@@ -224,7 +225,8 @@ public class DriverController {
 	}
 
 	@GetMapping("/driver/getAllDrivers")
-	public CommonResponse getAllDrivers(@RequestParam(name = "status", required = false, defaultValue = "1") int status) {
+	public CommonResponse getAllDrivers(
+			@RequestParam(name = "status", required = false, defaultValue = "1") int status) {
 		CommonResponse commonResponse = null;
 		try {
 			List<DriverDetailsVo> driverDetailsVo = driverService.getAllDrivers(status);
@@ -271,18 +273,17 @@ public class DriverController {
 		}
 		return response;
 	}
-	
+
 	@DeleteMapping("/driver/{id}")
 	public CommonResponse deleteCustomer(@PathVariable(name = "id", required = true) int id,
-										@RequestParam(name = "reason", required = true) String reason) {
+			@RequestParam(name = "reason", required = true) String reason) {
 		CommonResponse response = null;
 		try {
 			int deleted = driverService.deleteDriver(id, reason);
-			if(deleted == 1) {
+			if (deleted == 1) {
 				response = RestUtils.wrapObjectForSuccess("success");
 			} else {
-				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
-						"Driver not deleted");
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR, "Driver not deleted");
 			}
 		} catch (BusinessException be) {
 			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
@@ -294,7 +295,7 @@ public class DriverController {
 		}
 		return response;
 	}
-	
+
 	@GetMapping("/drivers/registerVehicle/{userId}")
 	public CommonResponse getDriverForVehicleRegistrationByUserId(@PathVariable(name = "userId") int userId) {
 		CommonResponse response = null;
@@ -302,14 +303,37 @@ public class DriverController {
 		response = RestUtils.wrapObjectForSuccess(drivers);
 		return response;
 	}
-	
-	
+
 	@PutMapping("/driver/updateverificationstatus")
 	public CommonResponse updateVerificationStatus(@RequestParam(name = "driverId") int driverId,
-			 @RequestParam(name = "status") String status) {
+			@RequestParam(name = "status") String status) {
 		CommonResponse commonResponse = null;
 		int updated = driverService.updateVerifcationStatus(driverId, status);
 		commonResponse = RestUtils.wrapObjectForSuccess(updated);
 		return commonResponse;
+	}
+
+	@PostMapping(value = "/driver/documents/{userId}")
+	public CommonResponse addDriverDocuments(HttpServletRequest request, @PathVariable("userId") int userId,
+			@RequestParam(name = "file") MultipartFile docsMultiPart) {
+		String fileType = request.getParameter("fileType");
+
+		CommonResponse response = null;
+		try {
+			String updated = driverService.addDriverDocuments(userId, docsMultiPart, fileType);
+			if (!StringUtils.isBlank(updated)) {
+				response = RestUtils.wrapObjectForSuccess(updated);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.NOT_UPDATED);
+			}
+		} catch (BusinessException be) {
+			response = RestUtils.wrapObjectForFailure(null, be.getErrorCode(), be.getErrorMsg());
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+			LOGGER.error("add Driver documents error, User id : " + userId + " exception is : " + e.getMessage());
+		}
+		return response;
 	}
 }
