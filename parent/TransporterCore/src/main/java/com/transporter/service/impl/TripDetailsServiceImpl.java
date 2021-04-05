@@ -695,4 +695,17 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		return tripDetailsDao.getTopCustomerForWeek(limit, startTime, endTime);
 	}
 
+	@Override
+	public List<TripDetailsVo> getDriversLastTripDetails(int driverId) {
+		List<TripDetails> tripDetailsList = tripDetailsDao.getDriversLastTripDetails(driverId);
+		
+		List<TripDetailsVo> tripDetailsVos = new ArrayList<>();
+		tripDetailsList.forEach( data -> {
+			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
+			tripDetailsVo.setCustomerDetails(CustomerDetails.convertModelToVO(data.getCustomerDetails()));
+			tripDetailsVos.add(tripDetailsVo);
+		});
+		return tripDetailsVos;
+	}
+
 }

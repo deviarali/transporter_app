@@ -50,5 +50,7 @@ public interface TripDetailsService {
 
 	Map<Integer, Long> getTopCustomerForWeek(Integer count);
 
+	List<TripDetailsVo> getDriversLastTripDetails(int driverId);
+
 
 }

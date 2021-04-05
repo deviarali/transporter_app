@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.TripDetailsDao;
+import com.transporter.model.TripDetails;
 import com.transporter.utils.CalendarUtils;
 
 /**
@@ -154,6 +155,17 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		query.setParameter("tripId", tripId);
 		query.setParameter("feedback", feedback);
 		return query.executeUpdate();
+	}
+
+	@Override
+	public List<TripDetails> getDriversLastTripDetails(int driverId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "FROM TripDetails td WHERE td.driverDetails.id = :driverId ORDER BY td.id DESC";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("driverId", driverId);
+		query.setMaxResults(1);
+		List<TripDetails> tripDetails = (List<TripDetails>) query.list();
+		return tripDetails;
 	}
 
 }
