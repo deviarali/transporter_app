@@ -1,5 +1,6 @@
 package com.transporter.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
+import com.transporter.model.VehicleDetails;
 import com.transporter.response.CommonResponse;
 import com.transporter.service.VehicleService;
 import com.transporter.utils.RestUtils;
@@ -111,4 +113,27 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VehicleController.c
 		}
 		return response;
 	}
+
+	@RequestMapping(value = "/vehicles", method = RequestMethod.GET)
+	public CommonResponse getAllVehicles() {
+		CommonResponse response = null;
+
+		try {
+			List<VehicleDetails> vehicleDetailsVos = new ArrayList<VehicleDetails>();
+
+			List<VehicleDetailsVo> allVehicles = vehicleService.getAllVehicles();
+			if (!Utils.isNullOrEmpty(allVehicles)) {
+				response = RestUtils.wrapObjectForSuccess(allVehicles);
+			} else {
+				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+						WebConstants.VEHICLES_NOT_AVAILABLE);
+			}
+		} catch (Exception e) {
+			response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
+					WebConstants.INTERNAL_SERVER_ERROR_MESSAGE);
+		}
+		return response;
+
+	}
+
 }

@@ -37,6 +37,7 @@ public interface VehicleService {
 	LatitudeLongitudeResponse getDriverLocations(int driverId);
 	
 	
+	List<VehicleDetailsVo> getAllVehicles();
 	
 	
 }

@@ -180,4 +180,18 @@ public class VehicleServiceImpl implements VehicleService {
 		return  res;
 	}
 
+	@Override
+	@Transactional
+	public List<VehicleDetailsVo> getAllVehicles() {
+		
+		List<VehicleDetails> allVehicles = vehicleDetailsDao.getAllVehicles();
+		List<VehicleDetailsVo> vehicleDetailsVos = new ArrayList<VehicleDetailsVo>();
+		
+		for(VehicleDetails vehicleDetails: allVehicles ) {
+			
+			vehicleDetailsVos.add(VehicleDetails.convertModelToVo(vehicleDetails));
+		}
+		return vehicleDetailsVos;
+	}
+
 }

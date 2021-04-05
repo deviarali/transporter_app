@@ -120,4 +120,18 @@ public class VehicleDetailsDaoImpl extends GenericDaoImpl implements VehicleDeta
 		}
 		return vehicleDetailsLIst;
 	}
+
+	public List<VehicleDetails> getAllVehicles() {
+		List<VehicleDetails> vehicleDetails = new ArrayList<VehicleDetails>();
+
+		Session session = sessionFactory.getCurrentSession();
+		
+		String sqlQuery = "From VehicleDetails";
+		Query query = session.createQuery(sqlQuery);
+
+		vehicleDetails = (List<VehicleDetails>) query.list();
+
+		return vehicleDetails;
+
+	}
 }
