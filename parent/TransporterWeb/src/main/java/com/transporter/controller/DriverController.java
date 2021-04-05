@@ -29,6 +29,7 @@ import com.transporter.service.DriverService;
 import com.transporter.service.VehicleService;
 import com.transporter.utils.RestUtils;
 import com.transporter.utils.Utils;
+import com.transporter.vo.DocumentsVo;
 import com.transporter.vo.DriverDetailsVo;
 
 /**
@@ -313,6 +314,14 @@ public class DriverController {
 		return commonResponse;
 	}
 
+	/**
+	 * Upload driver kyc documents
+	 * @author navin
+	 * @param request
+	 * @param userId
+	 * @param docsMultiPart
+	 * @return
+	 */
 	@PostMapping(value = "/driver/documents/{userId}")
 	public CommonResponse addDriverDocuments(HttpServletRequest request, @PathVariable("userId") int userId,
 			@RequestParam(name = "file") MultipartFile docsMultiPart) {
@@ -320,9 +329,9 @@ public class DriverController {
 
 		CommonResponse response = null;
 		try {
-			String updated = driverService.addDriverDocuments(userId, docsMultiPart, fileType);
-			if (!StringUtils.isBlank(updated)) {
-				response = RestUtils.wrapObjectForSuccess(updated);
+			DocumentsVo addDriverDocuments = driverService.addDriverDocuments(userId, docsMultiPart, fileType);
+			if (addDriverDocuments != null) {
+				response = RestUtils.wrapObjectForSuccess(addDriverDocuments);
 			} else {
 				response = RestUtils.wrapObjectForFailure(null, WebConstants.WEB_RESPONSE_ERROR,
 						WebConstants.NOT_UPDATED);

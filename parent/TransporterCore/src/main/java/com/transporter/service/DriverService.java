@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.transporter.model.DriverDetails;
+import com.transporter.vo.DocumentsVo;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.VehiclesByOrderRequest;
 import com.transporter.vo.VehiclesByOrderResponse;
@@ -22,7 +23,7 @@ public interface DriverService {
 
 	String updateDriverDocuments(int userId, MultipartFile adharMultiPart, MultipartFile dlMultiPart);
 	
-	String addDriverDocuments(int userId, MultipartFile adharMultiPart, String docType);
+	DocumentsVo addDriverDocuments(int userId, MultipartFile adharMultiPart, String docType);
 
 	DriverDetailsVo updateDriverOnRoadAndOffRoad(int driverId, DriverDetailsVo detailsVo);
 

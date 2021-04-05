@@ -22,12 +22,14 @@ import com.transporter.model.User;
 import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
 import com.transporter.repo.DriverDetailsRepo;
+import com.transporter.service.DocumentsService;
 import com.transporter.service.DriverService;
 import com.transporter.service.TripDetailsService;
 import com.transporter.service.UserService;
 import com.transporter.service.VehicleService;
 import com.transporter.utility.TransporterUtility;
 import com.transporter.utils.Utils;
+import com.transporter.vo.DocumentsVo;
 import com.transporter.vo.DriverDetailsVo;
 import com.transporter.vo.UserRoleVo;
 import com.transporter.vo.UserVo;
@@ -63,6 +65,9 @@ public class DriverServiceImpl implements DriverService {
 
 	@Autowired
 	private TripDetailsService tripDetailsService;
+
+	@Autowired
+	private DocumentsService documentService;
 
 	@Value("${surrounding.area}")
 	private double surrounding;
@@ -315,7 +320,8 @@ public class DriverServiceImpl implements DriverService {
 		return driverDao.updateVerifcationStatus(id, status);
 	}
 
-	public String addDriverDocuments(int userId, MultipartFile adharMultiPart, String docType) {
+	@Override
+	public DocumentsVo addDriverDocuments(int userId, MultipartFile adharMultiPart, String docType) {
 		User userExists = userService.findById(userId);
 		if (null == userExists) {
 			throw new BusinessException(ErrorCodes.UNFOUND.name(), ErrorCodes.UNFOUND.value());
@@ -325,11 +331,7 @@ public class DriverServiceImpl implements DriverService {
 				docType);
 
 		if (!StringUtils.isBlank(generatedFilePath)) {
-			/*
-			 * // int updated = driverDao.updateDriverDocuments(userId, generatedFilePath,
-			 * generateFilePathAndStoreForDl); if ( != 0) { return "Documents Updated.."; }
-			 */
-			return generatedFilePath;
+			return documentService.addDocuments(userId, generatedFilePath, docType, findDriverById(userId));
 		}
 
 		return null;
