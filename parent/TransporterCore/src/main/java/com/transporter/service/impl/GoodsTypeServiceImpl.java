@@ -32,4 +32,11 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 		return goodsTypesVoList;
 	}
 
+	
+	
+	@Override
+	public int updateGoodsStatus(int id, String status) {
+		int updated = goodsTypeDao.updateGoodsStatus(id, status);
+		return updated;
+	}
 }

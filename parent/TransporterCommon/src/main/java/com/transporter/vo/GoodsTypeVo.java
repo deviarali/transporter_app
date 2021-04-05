@@ -8,6 +8,7 @@ package com.transporter.vo;
 public class GoodsTypeVo {
 	private int id;
 	private String goodsType;
+	private String status;
 	
 	public int getId() {
 		return id;
@@ -20,5 +21,11 @@ public class GoodsTypeVo {
 	}
 	public void setGoodsType(String goodsType) {
 		this.goodsType = goodsType;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

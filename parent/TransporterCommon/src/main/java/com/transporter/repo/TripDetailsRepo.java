@@ -15,18 +15,18 @@ import com.transporter.model.TripDetails;
 public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 
 	@Query(value = "SELECT * from tripdetails m WHERE m.customer_id =:id and m.trip_status =:tripstatus and cast(m.trip_starttime as date) BETWEEN :fromTripStart and :toTripStart ", nativeQuery = true)
-	List<TripDetails> getHistory(@Param(value = "id") int id, @Param(value = "tripstatus") int tripstatus,
+	List<TripDetails> getHistoryOfPassanger(@Param(value = "id") int id, @Param(value = "tripstatus") int tripstatus,
 			@Param(value = "fromTripStart") String fromTripStart, @Param(value = "toTripStart") String toTripStart);
 
 	@Query(value = "SELECT * from tripdetails m WHERE m.driver_id =:id and m.trip_status =:tripstatus and cast(m.trip_starttime as date) BETWEEN :fromTripStart and :toTripStart ", nativeQuery = true)
-	List<TripDetails> getHistoryOfPassenger(@Param(value = "id") int id, @Param(value = "tripstatus") int tripstatus,
+	List<TripDetails> getHistoryOfDriver(@Param(value = "id") int id, @Param(value = "tripstatus") int tripstatus,
 			@Param(value = "fromTripStart") String fromTripStart, @Param(value = "toTripStart") String toTripStart);
 
 	@Query("SELECT m from TripDetails m WHERE m.customerDetails.id =?1 and m.deliveryStatus.id=?2")
-	List<TripDetails> getHistoryByStatus(int id, int tripstatus);
+	List<TripDetails> getPassangerHistoryByStatus(int id, int tripstatus);
 
 	@Query("SELECT m from TripDetails m WHERE m.driverDetails.id =?1 and m.deliveryStatus.id=?2")
-	List<TripDetails> getHistoryByStatusOfPassenger(int id, int tripstatus);
+	List<TripDetails> getDriverHistoryByStatus(int id, int tripstatus);
 
 	/*
 	 * @Modifying
@@ -41,7 +41,7 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	Integer updateTripStatus(@Param(value = "id") int id, @Param(value = "tripStatus") int tripStatus);
 
 	@Query("From TripDetails td WHERE td.customerDetails.id= :id AND (td.deliveryStatus.id=3 OR td.deliveryStatus.id=4)")
-	List<TripDetails> getCancelledHistory(@Param(value = "id") int id);
+	List<TripDetails> getPassangerCancelledHistory(@Param(value = "id") int id);
 
 	@Query(value = "SELECT dd.sourceLattitude,dd.sourceLongitude from TripDetails dd where dd.driverDetails.id =?1")
 	TripDetails getdriverDeatils(int driverId);
@@ -61,4 +61,7 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 
 	@Query(value = "SELECT * from tripdetails m WHERE m.customer_id =:id", nativeQuery = true)
 	List<TripDetails> getTripHistoryByUserId(@Param(value = "id") int id);
+	
+	@Query("From TripDetails td WHERE td.driverDetails.id= :id AND (td.deliveryStatus.id=3 OR td.deliveryStatus.id=4)")
+	List<TripDetails> getDriverCancelledHistory(@Param(value = "id") int id);
 }

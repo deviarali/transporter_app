@@ -106,18 +106,32 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		String toTripStart = null;
 		Gson gson = new Gson();
 		List<TripDetails> tripDetailsList = null;
-		if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
-			fromTripStart = DateTimeUtils.convertToTimestamp(fromDate);
-			toTripStart = DateTimeUtils.convertToTimestamp(toDate);
-			tripDetailsList = tripDetailsRepo.getHistory(id, tripStatus, fromTripStart, toTripStart);
-		} else {
-			if (tripStatus == TripStatusEnum.CANCELLED.getTripStatusId()) {
-				tripDetailsList = tripDetailsRepo.getCancelledHistory(id);
+		if(userType.equalsIgnoreCase("customer")) {
+			if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
+				fromTripStart = DateTimeUtils.convertToTimestamp(fromDate);
+				toTripStart = DateTimeUtils.convertToTimestamp(toDate);
+				tripDetailsList = tripDetailsRepo.getHistoryOfPassanger(id, tripStatus, fromTripStart, toTripStart);
 			} else {
-				tripDetailsList = tripDetailsRepo.getHistoryByStatus(id, tripStatus);
+				if (tripStatus == TripStatusEnum.CANCELLED.getTripStatusId()) {
+					tripDetailsList = tripDetailsRepo.getPassangerCancelledHistory(id);
+				} else {
+					tripDetailsList = tripDetailsRepo.getPassangerHistoryByStatus(id, tripStatus);
+				}
+			}
+		} else if(userType.equalsIgnoreCase("driver")) {
+			if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
+				fromTripStart = DateTimeUtils.convertToTimestamp(fromDate);
+				toTripStart = DateTimeUtils.convertToTimestamp(toDate);
+				tripDetailsList = tripDetailsRepo.getHistoryOfDriver(id, tripStatus, fromTripStart, toTripStart);
+			} else {
+				if (tripStatus == TripStatusEnum.CANCELLED.getTripStatusId()) {
+					tripDetailsList = tripDetailsRepo.getDriverCancelledHistory(id);
+				} else {
+					tripDetailsList = tripDetailsRepo.getDriverHistoryByStatus(id, tripStatus);
+				}
 			}
 		}
-
+		
 		List<TripDetailsVo> tripDetailsVoList = new ArrayList<>();
 		tripDetailsList.forEach(data -> {
 			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
@@ -165,7 +179,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		String toTripStart = null;
 		Gson gson = new Gson();
 		List<TripDetails> tripDetailsList = null;
-		if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
+		/*if (!(StringUtils.isBlank(fromDate)) && !(StringUtils.isBlank(toDate))) {
 			fromTripStart = DateTimeUtils.convertToTimestamp(fromDate);
 			toTripStart = DateTimeUtils.convertToTimestamp(toDate);
 			tripDetailsList = tripDetailsRepo.getHistoryOfPassenger(id, tripStatus, fromTripStart, toTripStart);
@@ -174,7 +188,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				tripDetailsList = tripDetailsRepo.getCancelledHistory(id);
 			}
 			tripDetailsList = tripDetailsRepo.getHistoryByStatusOfPassenger(id, tripStatus);
-		}
+		}*/
 
 		List<TripDetailsVo> tripDetailsVoList = new ArrayList<>();
 		tripDetailsList.forEach(data -> {
