@@ -697,10 +697,21 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Override
 	public List<TripDetailsVo> getDriversLastTripDetails(int driverId) {
-		List<TripDetails> tripDetailsList = tripDetailsDao.getDriversLastTripDetails(driverId);
-		
+		List<TripDetails> tripDetailsList = tripDetailsDao.getDriversLastTripDetails(driverId);	
 		List<TripDetailsVo> tripDetailsVos = new ArrayList<>();
 		tripDetailsList.forEach( data -> {
+			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
+			tripDetailsVo.setCustomerDetails(CustomerDetails.convertModelToVO(data.getCustomerDetails()));
+			tripDetailsVos.add(tripDetailsVo);
+		});
+		return tripDetailsVos;
+	}
+
+	@Override
+	public List<TripDetailsVo> getCustomerLastTripDetails(int customerId) {
+		List<TripDetails> tripDetails = tripDetailsDao.getCustomerLastTripDetails(customerId);
+		List<TripDetailsVo> tripDetailsVos = new ArrayList<>();
+		tripDetails.forEach(data -> {
 			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
 			tripDetailsVo.setCustomerDetails(CustomerDetails.convertModelToVO(data.getCustomerDetails()));
 			tripDetailsVos.add(tripDetailsVo);

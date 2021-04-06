@@ -52,5 +52,7 @@ public interface TripDetailsService {
 
 	List<TripDetailsVo> getDriversLastTripDetails(int driverId);
 
+	List<TripDetailsVo> getCustomerLastTripDetails(int customerId);
+
 
 }
