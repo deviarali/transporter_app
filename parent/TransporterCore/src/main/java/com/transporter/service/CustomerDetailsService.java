@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.transporter.model.CustomerDetails;
 import com.transporter.vo.CustomerDetailsVo;
+import com.transporter.vo.TripDetailsVo;
 import com.transporter.vo.UserVo;
 
 public interface CustomerDetailsService {
@@ -31,5 +32,8 @@ public interface CustomerDetailsService {
 	public List<CustomerDetailsVo> getAllCustomers(int status);
 
 	public int deleteCustomer(int id, String reason);
+	
+
+	public List<TripDetailsVo> getCustomerLastTripDetails(int customerId);
 
 }

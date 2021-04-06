@@ -26,6 +26,7 @@ import com.transporter.response.CommonResponse;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.utils.RestUtils;
 import com.transporter.vo.CustomerDetailsVo;
+import com.transporter.vo.TripDetailsVo;
 import com.transporter.vo.UserVo;
 
 /**
@@ -268,4 +269,13 @@ public class CustomerDetailsController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/customer/{customerId}/lasttripdetails")
+	public CommonResponse getCustomerLastTripDetails(@PathVariable int customerId) {
+		CommonResponse response = null;
+		List<TripDetailsVo> trips = customerDetailsService.getCustomerLastTripDetails(customerId);
+		response = RestUtils.wrapObjectForSuccess(trips);
+		return response;
+	}
+	
 }

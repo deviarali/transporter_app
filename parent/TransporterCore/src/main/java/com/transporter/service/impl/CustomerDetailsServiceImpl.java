@@ -248,4 +248,11 @@ public class CustomerDetailsServiceImpl implements CustomerDetailsService {
 		return deleted;
 	}
 
+	@Override
+	@Transactional
+	public List<TripDetailsVo> getCustomerLastTripDetails(int customerId) {
+		List<TripDetailsVo> tripDetails = tripDetailService.getCustomerLastTripDetails(customerId);
+		return tripDetails;
+	}
+
 }
