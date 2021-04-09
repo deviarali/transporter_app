@@ -165,7 +165,7 @@ public class TripDetails implements Serializable {
 	private Date tripAccetRejectTime;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "trip_accept_reject_time")
+	@Column(name = "trip_cancelled_time")
 	private Date tripCancelledTime;
 
 	public TripDetails() {
