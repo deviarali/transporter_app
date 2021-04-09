@@ -84,10 +84,12 @@ public class TripDetailsVo implements Serializable {
 	private Double sgst;
 	private Double rideFare;
 	private String driverRatings;
-
 	private String customerFeedback;
-
 	private String driverFeedback;
+	private Date pickupLocationTime;
+	private Date reachedLocationTime;
+	private Date tripAccetRejectTime;
+	private Date tripCancelledTime;
 	
 	public TripDetailsVo() {
 	}
@@ -458,5 +460,37 @@ public class TripDetailsVo implements Serializable {
 
 	public void setDriverFeedback(String driverFeedback) {
 		this.driverFeedback = driverFeedback;
+	}
+
+	public Date getPickupLocationTime() {
+		return pickupLocationTime;
+	}
+
+	public void setPickupLocationTime(Date pickupLocationTime) {
+		this.pickupLocationTime = pickupLocationTime;
+	}
+
+	public Date getReachedLocationTime() {
+		return reachedLocationTime;
+	}
+
+	public void setReachedLocationTime(Date reachedLocationTime) {
+		this.reachedLocationTime = reachedLocationTime;
+	}
+
+	public Date getTripAccetRejectTime() {
+		return tripAccetRejectTime;
+	}
+
+	public void setTripAccetRejectTime(Date tripAccetRejectTime) {
+		this.tripAccetRejectTime = tripAccetRejectTime;
+	}
+
+	public Date getTripCancelledTime() {
+		return tripCancelledTime;
+	}
+
+	public void setTripCancelledTime(Date tripCancelledTime) {
+		this.tripCancelledTime = tripCancelledTime;
 	}
 }

@@ -205,10 +205,16 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		} else if(status == DeliveryStatusEnum.TRIPENDED.getId()) {
 			parameters.put("status", DeliveryStatusEnum.TRIPENDED.getId());
 			builder.append("td.tripEndtime = :time ");
+		} else if(status == DeliveryStatusEnum.CANCELLEDBYCUSTOMER.getId()) {
+			parameters.put("status", DeliveryStatusEnum.CANCELLEDBYCUSTOMER.getId());
+			builder.append("td.tripCancelledTime = :time ");
+		} else if(status == DeliveryStatusEnum.CANCELLEDBYDRIVER.getId()) {
+			parameters.put("status", DeliveryStatusEnum.CANCELLEDBYDRIVER.getId());
+			builder.append("td.tripCancelledTime = :time ");
 		}
 		builder.append(" WHERE td.id = :tripId");
 		parameters.put("tripId", tripId);
-		parameters.put("time", new Date().getTime());
+		parameters.put("time", new Date());
 		String sqlQuery = builder.toString();
 		Query query = session.createQuery(sqlQuery);
 		Set<String> parameterSet = parameters.keySet();

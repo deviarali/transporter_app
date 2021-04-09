@@ -163,6 +163,10 @@ public class TripDetails implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "trip_accept_reject_time")
 	private Date tripAccetRejectTime;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "trip_accept_reject_time")
+	private Date tripCancelledTime;
 
 	public TripDetails() {
 	}
@@ -489,6 +493,10 @@ public class TripDetails implements Serializable {
 		tripDetailsVo.setDriverRatings(tripDetails.getDriverRatings());
 		tripDetailsVo.setCustomerFeedback(tripDetails.getCustomerFeedback());
 		tripDetailsVo.setDriverFeedback(tripDetails.getDriverFeedback());
+		tripDetailsVo.setPickupLocationTime(tripDetails.getPickupLocationTime());
+		tripDetailsVo.setReachedLocationTime(tripDetails.getReachedLocationTime());
+		tripDetailsVo.setTripAccetRejectTime(tripDetails.getTripAccetRejectTime());
+		tripDetailsVo.setTripCancelledTime(tripDetails.getTripCancelledTime());
 		return tripDetailsVo;
 	}
 	
@@ -515,5 +523,37 @@ public class TripDetails implements Serializable {
 	public void setDriverFeedback(String driverFeedback) {
 		this.driverFeedback = driverFeedback;
 	}
+
+	public Date getPickupLocationTime() {
+		return pickupLocationTime;
+	}
+
+	public void setPickupLocationTime(Date pickupLocationTime) {
+		this.pickupLocationTime = pickupLocationTime;
+	}
+
+	public Date getReachedLocationTime() {
+		return reachedLocationTime;
+	}
+
+	public void setReachedLocationTime(Date reachedLocationTime) {
+		this.reachedLocationTime = reachedLocationTime;
+	}
+
+	public Date getTripAccetRejectTime() {
+		return tripAccetRejectTime;
+	}
+
+	public void setTripAccetRejectTime(Date tripAccetRejectTime) {
+		this.tripAccetRejectTime = tripAccetRejectTime;
+	}
+
+	public Date getTripCancelledTime() {
+		return tripCancelledTime;
+	}
+
+	public void setTripCancelledTime(Date tripCancelledTime) {
+		this.tripCancelledTime = tripCancelledTime;
+	} 
 
 }
