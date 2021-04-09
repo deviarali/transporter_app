@@ -84,16 +84,16 @@ public class TripDetails implements Serializable {
 	private String ratings;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "trip_endtime")
+	@Column(name = "trip_end_time")
 	private Date tripEndtime;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "trip_starttime")
+	@Column(name = "trip_start_time")
 	private Date tripStarttime;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "trip_time")
-	private Date tripTime;
+	@Column(name = "trip_created_time")
+	private Date tripCreatedTime;
 
 	@Column(name = "tripend_otp")
 	private String tripEndOtp;
@@ -151,6 +151,18 @@ public class TripDetails implements Serializable {
 	
 	@Column(name = "driver_feedback")
 	private String driverFeedback;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "pickup_location_time")
+	private Date pickupLocationTime;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "reached_location_time")
+	private Date reachedLocationTime;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "trip_accept_reject_time")
+	private Date tripAccetRejectTime;
 
 	public TripDetails() {
 	}
@@ -315,12 +327,12 @@ public class TripDetails implements Serializable {
 		this.tripStarttime = tripStarttime;
 	}
 
-	public Date getTripTime() {
-		return tripTime;
+	public Date getTripCreatedTime() {
+		return tripCreatedTime;
 	}
 
-	public void setTripTime(Date tripTime) {
-		this.tripTime = tripTime;
+	public void setTripCreatedTime(Date tripCreatedTime) {
+		this.tripCreatedTime = tripCreatedTime;
 	}
 
 	public String getTripEndOtp() {
@@ -458,7 +470,7 @@ public class TripDetails implements Serializable {
 		tripDetailsVo.setGoodsSize(tripDetails.getGoodsSize());
 		tripDetailsVo.setSourceLocation(tripDetails.getSourceLocation());
 		tripDetailsVo.setRatings(tripDetails.getRatings());
-		tripDetailsVo.setTripTime(tripDetails.getTripTime());
+		tripDetailsVo.setTripCreatedTime(tripDetails.getTripCreatedTime());
 		tripDetailsVo.setTripStarttime(tripDetails.getTripStarttime());
 		tripDetailsVo.setTripEndtime(tripDetails.getTripEndtime());
 		//tripDetailsVo.setDriverDetails(DriverDetails.convertModelToVo(tripDetails.getDriverDetails()));

@@ -26,4 +26,8 @@ public interface TripDetailsDao extends GenericDao {
 	public List<TripDetails> getDriversLastTripDetails(int driverId);
 
 	public List<TripDetails> getCustomerLastTripDetails(int customerId);
+
+	public int updateTripStatusWithTime(int tripId, int status);
+
+	public List<TripDetails> getPassangerHistoryByStatus(int id, int tripStatus, String requestorType);
 }

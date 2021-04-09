@@ -3,8 +3,10 @@ package com.transporter.dao.impl;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -13,6 +15,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.TripDetailsDao;
+import com.transporter.enums.DeliveryStatusEnum;
 import com.transporter.model.TripDetails;
 import com.transporter.utils.CalendarUtils;
 
@@ -175,6 +178,63 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 				+ "AND td.deliveryStatus.id != 4 AND td.deliveryStatus.id != 3 ORDER BY td.id DESC";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("customerId", customerId);
+		List<TripDetails> tripDetails = (List<TripDetails>) query.list();
+		return tripDetails;
+	}
+
+	@Override
+	public int updateTripStatusWithTime(int tripId, int status) {
+		Session session = sessionFactory.getCurrentSession();
+		StringBuilder builder = new StringBuilder("UPDATE TripDetails td SET td.deliveryStatus.id = :status, ");
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		if(status == DeliveryStatusEnum.TRIPACCEPTED.getId()) {
+			parameters.put("status", DeliveryStatusEnum.TRIPACCEPTED.getId());
+			builder.append("td.tripAccetRejectTime = :time ");
+		} else if(status == DeliveryStatusEnum.TRIPREJECTED.getId()) {
+			parameters.put("status", DeliveryStatusEnum.TRIPREJECTED.getId());
+			builder.append("td.tripAccetRejectTime = :time ");
+		} else if(status == DeliveryStatusEnum.DRIVERREACHEDPICKUPLOCATION.getId()) {
+			parameters.put("status", DeliveryStatusEnum.DRIVERREACHEDPICKUPLOCATION.getId());
+			builder.append("td.pickupLocationTime = :time ");
+		} else if(status == DeliveryStatusEnum.ONGOING.getId()) {
+			parameters.put("status", DeliveryStatusEnum.ONGOING.getId());
+			builder.append("td.tripStarttime = :time ");
+		} else if(status == DeliveryStatusEnum.DRIVERREACHEDDESTINATIONLOCATION.getId()) {
+			parameters.put("status", DeliveryStatusEnum.DRIVERREACHEDDESTINATIONLOCATION.getId());
+			builder.append("td.reachedLocationTime = :time ");
+		} else if(status == DeliveryStatusEnum.TRIPENDED.getId()) {
+			parameters.put("status", DeliveryStatusEnum.TRIPENDED.getId());
+			builder.append("td.tripEndtime = :time ");
+		}
+		builder.append(" WHERE td.id = :tripId");
+		parameters.put("tripId", tripId);
+		parameters.put("time", new Date().getTime());
+		String sqlQuery = builder.toString();
+		Query query = session.createQuery(sqlQuery);
+		Set<String> parameterSet = parameters.keySet();
+        for (String string : parameterSet) {
+            query.setParameter(string, parameters.get(string));
+        }
+		return query.executeUpdate();
+	}
+
+	@Override
+	public List<TripDetails> getPassangerHistoryByStatus(int id, int tripStatus, String requestorType) {
+		Session session = sessionFactory.getCurrentSession();
+		StringBuilder builder = new StringBuilder("FROM TripDetails td ");
+		if(requestorType.equalsIgnoreCase("customer")) {
+			if(tripStatus == 8) {
+				builder.append("WHERE td.customerDetails.id = :id AND (td.deliveryStatus.id = 6 OR td.deliveryStatus.id = 8) ");
+			}
+		} else if(requestorType.equalsIgnoreCase("driver")) {
+			if(tripStatus == 8) {
+				builder.append("WHERE td.driverDetails.id = :id AND (td.deliveryStatus.id = 6 OR td.deliveryStatus.id = 8) ");
+			}
+		}
+		String sqlQuery = builder.toString();
+		Query query = session.createQuery(sqlQuery);
+		
+		query.setParameter("id", id);
 		List<TripDetails> tripDetails = (List<TripDetails>) query.list();
 		return tripDetails;
 	}
