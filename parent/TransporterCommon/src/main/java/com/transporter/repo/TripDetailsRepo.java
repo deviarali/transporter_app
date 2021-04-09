@@ -40,7 +40,7 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	@Query("UPDATE TripDetails m set m.deliveryStatus.id = :tripStatus where m.id = :id")
 	Integer updateTripStatus(@Param(value = "id") int id, @Param(value = "tripStatus") int tripStatus);
 
-	@Query("From TripDetails td WHERE td.customerDetails.id= :id AND (td.deliveryStatus.id=3 OR td.deliveryStatus.id=4)")
+	@Query("From TripDetails td WHERE td.customerDetails.id= :id AND (td.deliveryStatus.id=10 OR td.deliveryStatus.id=11)")
 	List<TripDetails> getPassangerCancelledHistory(@Param(value = "id") int id);
 
 	@Query(value = "SELECT dd.sourceLattitude,dd.sourceLongitude from TripDetails dd where dd.driverDetails.id =?1")
@@ -62,6 +62,6 @@ public interface TripDetailsRepo extends JpaRepository<TripDetails, Integer> {
 	@Query(value = "SELECT * from tripdetails m WHERE m.customer_id =:id", nativeQuery = true)
 	List<TripDetails> getTripHistoryByUserId(@Param(value = "id") int id);
 	
-	@Query("From TripDetails td WHERE td.driverDetails.id= :id AND (td.deliveryStatus.id=3 OR td.deliveryStatus.id=4)")
+	@Query("From TripDetails td WHERE td.driverDetails.id= :id AND (td.deliveryStatus.id=10 OR td.deliveryStatus.id=11)")
 	List<TripDetails> getDriverCancelledHistory(@Param(value = "id") int id);
 }

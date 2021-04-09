@@ -51,7 +51,7 @@ public class TripDetailsVo implements Serializable {
 
 	private Date tripStarttime;
 
-	private Date tripTime;
+	private Date tripCreatedTime;
 
 	private String tripEndOtp;
 
@@ -252,12 +252,12 @@ public class TripDetailsVo implements Serializable {
 		this.tripStarttime = tripStarttime;
 	}
 
-	public Date getTripTime() {
-		return tripTime;
+	public Date getTripCreatedTime() {
+		return tripCreatedTime;
 	}
 
-	public void setTripTime(Date tripTime) {
-		this.tripTime = tripTime;
+	public void setTripCreatedTime(Date tripCreatedTime) {
+		this.tripCreatedTime = tripCreatedTime;
 	}
 
 	public String getTripEndOtp() {

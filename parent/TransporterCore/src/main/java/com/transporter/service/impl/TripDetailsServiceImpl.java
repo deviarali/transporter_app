@@ -112,10 +112,10 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				toTripStart = DateTimeUtils.convertToTimestamp(toDate);
 				tripDetailsList = tripDetailsRepo.getHistoryOfPassanger(id, tripStatus, fromTripStart, toTripStart);
 			} else {
-				if (tripStatus == TripStatusEnum.CANCELLED.getTripStatusId()) {
+				if (tripStatus == DeliveryStatusEnum.CANCELLED.getId()) {
 					tripDetailsList = tripDetailsRepo.getPassangerCancelledHistory(id);
 				} else {
-					tripDetailsList = tripDetailsRepo.getPassangerHistoryByStatus(id, tripStatus);
+					tripDetailsList = tripDetailsDao.getPassangerHistoryByStatus(id, tripStatus, "customer");
 				}
 			}
 		} else if(userType.equalsIgnoreCase("driver")) {
@@ -124,10 +124,10 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				toTripStart = DateTimeUtils.convertToTimestamp(toDate);
 				tripDetailsList = tripDetailsRepo.getHistoryOfDriver(id, tripStatus, fromTripStart, toTripStart);
 			} else {
-				if (tripStatus == TripStatusEnum.CANCELLED.getTripStatusId()) {
+				if (tripStatus == DeliveryStatusEnum.CANCELLED.getId()) {
 					tripDetailsList = tripDetailsRepo.getDriverCancelledHistory(id);
 				} else {
-					tripDetailsList = tripDetailsRepo.getDriverHistoryByStatus(id, tripStatus);
+					tripDetailsList = tripDetailsDao.getPassangerHistoryByStatus(id, tripStatus, "driver");
 				}
 			}
 		}
@@ -247,13 +247,13 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		String response = "success";
 		TripDetails tripDetails = tripDetailsRepo.findOne(tripId);
 		if (tripDetails != null) {
-			int updatedRows = tripDetailsRepo.updateTripStatus(tripDetails.getId(), deliveryStatusId);
-			if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYCUSTOMER.getId() || deliveryStatusId == DeliveryStatusEnum.CANCELEDBYDRIVER.getId()) {
+			int updatedRows = tripDetailsDao.updateTripStatusWithTime(tripDetails.getId(), deliveryStatusId);
+			if (deliveryStatusId == DeliveryStatusEnum.CANCELLEDBYCUSTOMER.getId() || deliveryStatusId == DeliveryStatusEnum.CANCELLEDBYDRIVER.getId()) {
 				 driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(),
 						 RidingStatusEnum.OFFRIDING.getRidingStatusId());
 			}
 
-			if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYCUSTOMER.getId()) {
+			if (deliveryStatusId == DeliveryStatusEnum.CANCELLEDBYCUSTOMER.getId()) {
 				JSONObject cancelByCustomer = new JSONObject();
 				try {
 					cancelByCustomer.put("message", "trip has been cancelled by customer");
@@ -266,7 +266,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 				transporterPushNotifications
 						.sendPushNotification(tripDetails.getDriverDetails().getUser().getFcmToken(), bean, "driver");
 			} 
-			else if (deliveryStatusId == DeliveryStatusEnum.CANCELEDBYDRIVER.getId()) {
+			else if (deliveryStatusId == DeliveryStatusEnum.CANCELLEDBYDRIVER.getId()) {
 				JSONObject cancelByDriver = new JSONObject();
 				try {
 					cancelByDriver.put("message", "trip has been cancelled by driver");
@@ -358,7 +358,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		DeliveryStatus deliveryStatus = new DeliveryStatus();
 		deliveryStatus.setId(TripStatusEnum.PENDING.getTripStatusId());
 		tripDetails.setDeliveryStatus(deliveryStatus);
-		tripDetails.setTripTime(new Date());
+		tripDetails.setTripCreatedTime(new Date());
 		tripDetails.setTripStartOtp(userService.generateOtp());
 		tripDetails.setTripEndOtp(userService.generateOtp());
 		TripDetailsHistoryVo historyVo = new TripDetailsHistoryVo();
@@ -497,7 +497,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			if (tripDetails == null) {
 				throw new BusinessException(ErrorCodes.INVALIDOTP.name(), ErrorCodes.INVALIDOTP.value());
 			}
-			this.updateTripStatus(tripId, DeliveryStatusEnum.ONGOING.getId());
+			this.updateTripStatusWithTime(tripId, DeliveryStatusEnum.ONGOING.getId());
 			JSONObject tripStartedToCustomer = new JSONObject();
 			try {
 				tripStartedToCustomer.put("message", "Trip started");
@@ -522,6 +522,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 					"Trip started", "Trip started", tripStartedToCustomer.toString());
 			transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
 					bean, "customer");
+			this.updateTripStatus(tripId, DeliveryStatusEnum.ONGOING.getId());
 			return "Success";
 		} else if (status.equals("end")) {
 			TripDetails tripDetails = tripDetailsRepo.validateEndOtp(tripId, otp);
@@ -542,7 +543,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 					"Goods Delivered", "Goods Delivered", goodsDeliveredToCustomer.toString());
 			transporterPushNotifications.sendPushNotification(tripDetails.getCustomerDetails().getUser().getFcmToken(),
 					bean, "customer");
-			this.updateTripStatus(tripId, DeliveryStatusEnum.COMPLETED.getId());
+			this.updateTripStatusWithTime(tripId, DeliveryStatusEnum.TRIPENDED.getId());
 			driverService.updateRidingStatus(tripDetails.getDriverDetails().getId(), 0);
 			return "Success";
 		} else {
@@ -594,6 +595,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 								"Driver has arrived in pickup location", driverReachedPickLocation.toString());
 						transporterPushNotifications.sendPushNotification(
 								tripDetails.getCustomerDetails().getUser().getFcmToken(), pickUpBean, "customer");
+						this.updateTripStatusWithTime(tripId, DeliveryStatusEnum.DRIVERREACHEDPICKUPLOCATION.getId());
 						break;
 					case "drop":
 						JSONObject driverReachedDropLocation = new JSONObject();
@@ -607,6 +609,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 								"Driver has reached destination", driverReachedDropLocation.toString());
 						transporterPushNotifications.sendPushNotification(
 								tripDetails.getCustomerDetails().getUser().getFcmToken(), bean, "customer");
+						this.updateTripStatusWithTime(tripId, DeliveryStatusEnum.DRIVERREACHEDDESTINATIONLOCATION.getId());
 						break;
 					default:
 						throw new BusinessException(ErrorCodes.IN_VALID_LOCATION_TYPE.name(),
@@ -717,6 +720,23 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			tripDetailsVos.add(tripDetailsVo);
 		});
 		return tripDetailsVos;
+	}
+
+	@Override
+	@Transactional
+	public int updateTripAcceptOrReject(int tripId, int status) {
+		if(status == 1)
+			status = DeliveryStatusEnum.TRIPACCEPTED.getId();
+		else
+			status = DeliveryStatusEnum.TRIPREJECTED.getId();
+		return updateTripStatusWithTime(tripId, status);
+	}
+	
+	
+	
+	private int updateTripStatusWithTime(int tripId, int status) {
+		int updated = tripDetailsDao.updateTripStatusWithTime(tripId, status);	
+		return updated;
 	}
 
 }

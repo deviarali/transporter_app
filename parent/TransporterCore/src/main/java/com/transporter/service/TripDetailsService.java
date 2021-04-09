@@ -54,5 +54,7 @@ public interface TripDetailsService {
 
 	List<TripDetailsVo> getCustomerLastTripDetails(int customerId);
 
+	int updateTripAcceptOrReject(int tripId, int status);
+
 
 }
