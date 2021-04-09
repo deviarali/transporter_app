@@ -231,10 +231,14 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		if(requestorType.equalsIgnoreCase("customer")) {
 			if(tripStatus == 8) {
 				builder.append("WHERE td.customerDetails.id = :id AND (td.deliveryStatus.id = 6 OR td.deliveryStatus.id = 8) ");
+			} else if(tripStatus == 4) {
+				builder.append("WHERE td.customerDetails.id = :id AND (td.deliveryStatus.id = 2 OR td.deliveryStatus.id = 3 OR td.deliveryStatus.id = 4 OR td.deliveryStatus.id = 5) ");
 			}
 		} else if(requestorType.equalsIgnoreCase("driver")) {
 			if(tripStatus == 8) {
 				builder.append("WHERE td.driverDetails.id = :id AND (td.deliveryStatus.id = 6 OR td.deliveryStatus.id = 8) ");
+			} else if(tripStatus == 4) {
+				builder.append("WHERE td.driverDetails.id = :id AND (td.deliveryStatus.id = 2 OR td.deliveryStatus.id = 3 OR td.deliveryStatus.id = 4 OR td.deliveryStatus.id = 5) ");
 			}
 		}
 		String sqlQuery = builder.toString();
