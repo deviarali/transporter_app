@@ -101,7 +101,7 @@ public class TripDetailsController {
 	@PutMapping(value = "/trip/{tripId}/ratings/{ratings}")
 	public CommonResponse updateTripRating(@PathVariable("tripId") int tripId,
 			@PathVariable("ratings") String ratings, @RequestParam(name = "userType") String userType,
-			@RequestParam(name = "feedback") String feedback) {
+			@RequestParam(name = "feedback", required = false) String feedback) {
 		CommonResponse response = null;
 		try {
 			TripDetails updateTripRatings = tripDetailsService.updateTripRatings(tripId, ratings, userType, feedback);

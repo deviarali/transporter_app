@@ -226,7 +226,7 @@ public class DriverController {
 		return response;
 	}
 
-	@GetMapping("/driver/getAllDrivers?")
+	@GetMapping("/driver/getAllDrivers")
 	public CommonResponse getAllDrivers(
 			@RequestParam(name = "status", required = false, defaultValue = "1") int status) {
 		CommonResponse commonResponse = null;

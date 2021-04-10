@@ -144,19 +144,24 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		StringBuilder builder = new StringBuilder("UPDATE TripDetails SET");
 		if(userType.equalsIgnoreCase("customer")) {
 			builder.append(" ratings = :ratings,");
-			builder.append(" customerFeedback = :feedback");
+			builder.append(" customerFeedback = :feedback,");
+			builder.append(" deliveryStatus.id = :status");
 		} else if (userType.equalsIgnoreCase("driver")) {
 			builder.append(" driverRatings = :ratings,");
 			builder.append(" driverFeedback = :feedback");
 		} else {
 			builder.append(" ratings = :ratings,");
-			builder.append(" customerFeedback = :feedback");
+			builder.append(" customerFeedback = :feedback,");
+			builder.append(" deliveryStatus.id = :status");
 		}
 		builder.append(" WHERE id = :tripId");
 		Query query = session.createQuery(builder.toString());
 		query.setParameter("ratings", ratings);
 		query.setParameter("tripId", tripId);
 		query.setParameter("feedback", feedback);
+		if(userType.equalsIgnoreCase("customer")) {
+			query.setParameter("status", DeliveryStatusEnum.TRIPCOMPLETED.getId());
+		}
 		return query.executeUpdate();
 	}
 
