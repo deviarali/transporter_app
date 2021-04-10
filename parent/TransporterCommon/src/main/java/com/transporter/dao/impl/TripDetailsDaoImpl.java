@@ -174,8 +174,9 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 	@Override
 	public List<TripDetails> getCustomerLastTripDetails(int customerId) {
 		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "FROM TripDetails td WHERE td.customerDetails.id = :customerId AND td.deliveryStatus.id != 5 "
-				+ "AND td.deliveryStatus.id != 4 AND td.deliveryStatus.id != 3 ORDER BY td.id DESC";
+		/*String sqlQuery = "FROM TripDetails td WHERE td.customerDetails.id = :customerId AND td.deliveryStatus.id != 5 "
+				+ "AND td.deliveryStatus.id != 4 AND td.deliveryStatus.id != 3 ORDER BY td.id DESC";*/
+		String sqlQuery = "FROM TripDetails td WHERE td.customerDetails.id = :customerId AND td.deliveryStatus.id IN(1, 2, 3, 4, 5, 6) ORDER BY td.id DESC ";
 		Query query = session.createQuery(sqlQuery);
 		query.setParameter("customerId", customerId);
 		List<TripDetails> tripDetails = (List<TripDetails>) query.list();
