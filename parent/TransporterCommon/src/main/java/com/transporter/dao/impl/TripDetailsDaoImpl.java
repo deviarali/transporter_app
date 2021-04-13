@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import com.transporter.dao.TripDetailsDao;
@@ -187,6 +188,18 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		List<TripDetails> tripDetails = (List<TripDetails>) query.list();
 		return tripDetails;
 	}
+	
+	@Override
+	public List<TripDetails> getTripDetailsByCustomer(int customerId,int status){
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "FROM TripDetails td WHERE td.customerDetails.id = :customerId AND td.deliveryStatus.id = :status";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("customerId", customerId);
+		query.setParameter("status", status);
+		  List<TripDetails> tripDetails = (List<TripDetails>) query.list();
+		  return tripDetails;
+	}
+	
 
 	@Override
 	public int updateTripStatusWithTime(int tripId, int status) {

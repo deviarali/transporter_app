@@ -26,7 +26,9 @@ public enum ErrorCodes
 	TRIPDETAILSNOTSAVED("Trip details are not saved"),
 	DRIVERNOTFOUND("Driver not found, please register driver"),
 	DRIVER_NOT_REACHED_LOCATION("driver not reached location"),
-	IN_VALID_LOCATION_TYPE("invalid location type");
+	IN_VALID_LOCATION_TYPE("invalid location type"),
+	NODATAFOUND("No data found");
+	
 	
 	private final String value;
 

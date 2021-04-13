@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mysql.jdbc.util.ResultSetUtil;
 import com.transporter.constants.WebConstants;
 import com.transporter.exceptions.BusinessException;
 import com.transporter.exceptions.ErrorCodes;
@@ -258,5 +259,16 @@ public class TripDetailsController {
 		int updated = tripDetailsService.updateTripAcceptOrReject(tripId, status);
 		response = RestUtils.wrapObjectForSuccess(updated);
 		return response;
+	}
+	
+
+	@GetMapping("/tripDetails/{customerId}/status/{statusId}")
+	public CommonResponse getTripDetailsForCustomer(@PathVariable int customerId,
+			@PathVariable int statusId) {
+		CommonResponse response = null;
+		List<TripDetailsVo> tripsByCustomer = tripDetailsService.getTripDetailsByCustomer(customerId,statusId);
+		response = RestUtils.wrapObjectForSuccess(tripsByCustomer);
+		return response;
+
 	}
 }

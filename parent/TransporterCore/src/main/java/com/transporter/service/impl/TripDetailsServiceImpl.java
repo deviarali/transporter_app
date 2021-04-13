@@ -721,6 +721,26 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		});
 		return tripDetailsVos;
 	}
+	
+	@Override
+	public List<TripDetailsVo> getTripDetailsByCustomer(int customerId,int status) {
+		CustomerDetails customerDetails = customerDetailsService.findCustomerById(customerId);
+		if (customerDetails == null) {
+			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
+		}
+		List<TripDetails> tripDetails = tripDetailsDao.getTripDetailsByCustomer(customerId,status);
+		if(CollectionUtils.isEmpty(tripDetails)) {
+			throw new BusinessException(ErrorCodes.NODATAFOUND.name(), ErrorCodes.NODATAFOUND.value());
+		}
+		List<TripDetailsVo> tripDetailsVos = new ArrayList<TripDetailsVo>();
+		tripDetails.forEach(data -> {
+			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
+			tripDetailsVo.setCustomerDetails(CustomerDetails.convertModelToVO(data.getCustomerDetails()));
+			tripDetailsVos.add(tripDetailsVo);
+
+		});
+		return tripDetailsVos;
+	}
 
 	@Override
 	@Transactional
@@ -738,5 +758,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		int updated = tripDetailsDao.updateTripStatusWithTime(tripId, status);	
 		return updated;
 	}
+
+	
 
 }
