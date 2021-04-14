@@ -264,11 +264,19 @@ public class TripDetailsController {
 
 	@GetMapping("/tripDetails/{customerId}/status/{statusId}")
 	public CommonResponse getTripDetailsForCustomer(@PathVariable int customerId,
-			@PathVariable int statusId) {
+			@PathVariable String statusId) {
 		CommonResponse response = null;
 		List<TripDetailsVo> tripsByCustomer = tripDetailsService.getTripDetailsByCustomer(customerId,statusId);
 		response = RestUtils.wrapObjectForSuccess(tripsByCustomer);
 		return response;
 
+	}
+	
+	@GetMapping(value = "driverTripDetails/{driverId}")
+	public CommonResponse getTripDetailsDriver(@PathVariable int driverId) {
+		CommonResponse response = null;
+		List<TripDetailsVo> tripsByDriver = tripDetailsService.getTripDetailsByDriverId(driverId);
+		response = RestUtils.wrapObjectForSuccess(tripsByDriver);
+		return response;
 	}
 }

@@ -190,14 +190,35 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 	}
 	
 	@Override
-	public List<TripDetails> getTripDetailsByCustomer(int customerId,int status){
+	public List<TripDetails> getTripDetailsByCustomer(int customerId,String status){
 		Session session = sessionFactory.getCurrentSession();
-		String sqlQuery = "FROM TripDetails td WHERE td.customerDetails.id = :customerId AND td.deliveryStatus.id = :status";
-		Query query = session.createQuery(sqlQuery);
-		query.setParameter("customerId", customerId);
-		query.setParameter("status", status);
-		  List<TripDetails> tripDetails = (List<TripDetails>) query.list();
+		
+		List<TripDetails> tripDetails =null;
+		if(status.equalsIgnoreCase("1")) {
+			String sqlQuery = "FROM TripDetails td WHERE td.customerDetails.id = :customerId AND td.deliveryStatus.id IN(6, 8)";
+			Query query = session.createQuery(sqlQuery);
+			query.setParameter("customerId", customerId);
+			 tripDetails = query.list();
+		}else if(status.equalsIgnoreCase("0")) {
+			
+			String sqlQuery = "FROM TripDetails td WHERE td.customerDetails.id = :customerId AND td.deliveryStatus.id IN(10, 11)";
+			Query query = session.createQuery(sqlQuery);
+			query.setParameter("customerId", customerId);
+	    	 tripDetails = (List<TripDetails>) query.list();
+		}
+		
 		  return tripDetails;
+	}
+	
+
+	@Override
+	public List<TripDetails> getTripDetailsByDriver(int driverId) {
+		Session session = sessionFactory.getCurrentSession();
+		String sqlQuery = "FROM TripDetails td WHERE td.driverDetails.id = :driverId";
+		Query query = session.createQuery(sqlQuery);
+		query.setParameter("driverId", driverId);
+		List<TripDetails> tripDetails = (List<TripDetails>) query.list();
+		return tripDetails;
 	}
 	
 
@@ -267,5 +288,6 @@ public class TripDetailsDaoImpl extends GenericDaoImpl implements TripDetailsDao
 		List<TripDetails> tripDetails = (List<TripDetails>) query.list();
 		return tripDetails;
 	}
+
 
 }

@@ -56,7 +56,9 @@ public interface TripDetailsService {
 
 	int updateTripAcceptOrReject(int tripId, int status);
 	
-	List<TripDetailsVo> getTripDetailsByCustomer(int customerId,int status);
+	List<TripDetailsVo> getTripDetailsByCustomer(int customerId,String status);
+	
+	List<TripDetailsVo> getTripDetailsByDriverId(int driverId);
 	
 	
 

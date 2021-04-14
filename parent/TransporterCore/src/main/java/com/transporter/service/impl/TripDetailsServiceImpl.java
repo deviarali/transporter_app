@@ -36,6 +36,7 @@ import com.transporter.model.DriverDetails;
 import com.transporter.model.TripDetails;
 import com.transporter.model.VehicleDetails;
 import com.transporter.notifications.TransporterPushNotifications;
+import com.transporter.repo.DriverDetailsRepo;
 import com.transporter.repo.TripDetailsRepo;
 import com.transporter.service.CustomerDetailsService;
 import com.transporter.service.DriverService;
@@ -66,6 +67,9 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 
 	@Autowired
 	TripDetailsRepo tripDetailsRepo;
+	
+	@Autowired
+	DriverDetailsRepo DriverDetailsRepo;
 
 	@Autowired
 	TripDetailsDao tripDetailsDao;
@@ -723,7 +727,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	}
 	
 	@Override
-	public List<TripDetailsVo> getTripDetailsByCustomer(int customerId,int status) {
+	public List<TripDetailsVo> getTripDetailsByCustomer(int customerId,String status) {
 		CustomerDetails customerDetails = customerDetailsService.findCustomerById(customerId);
 		if (customerDetails == null) {
 			throw new BusinessException(ErrorCodes.CNFOUND.name(), ErrorCodes.CNFOUND.value());
@@ -757,6 +761,26 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 	private int updateTripStatusWithTime(int tripId, int status) {
 		int updated = tripDetailsDao.updateTripStatusWithTime(tripId, status);	
 		return updated;
+	}
+
+	@Override
+	public List<TripDetailsVo> getTripDetailsByDriverId(int driverId) {
+		DriverDetails drivDetails = DriverDetailsRepo.findOne(driverId);
+		if (drivDetails == null) {
+			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
+		}
+		List<TripDetails> tripDetails = tripDetailsDao.getTripDetailsByDriver(driverId);
+		if (CollectionUtils.isEmpty(tripDetails)) {
+			throw new BusinessException(ErrorCodes.NODATAFOUND.name(), ErrorCodes.NODATAFOUND.value());
+		}
+		List<TripDetailsVo> tripDetailsVos = new ArrayList<TripDetailsVo>();
+		tripDetails.forEach(data -> {
+			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
+			tripDetailsVo.setCustomerDetails(CustomerDetails.convertModelToVO(data.getCustomerDetails()));
+			tripDetailsVos.add(tripDetailsVo);
+
+		});
+		return tripDetailsVos;
 	}
 
 	
