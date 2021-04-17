@@ -776,7 +776,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		List<TripDetailsVo> tripDetailsVos = new ArrayList<TripDetailsVo>();
 		tripDetails.forEach(data -> {
 			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
-			tripDetailsVo.setCustomerDetails(CustomerDetails.convertModelToVO(data.getCustomerDetails()));
+			tripDetailsVo.setDriverDetails(DriverDetails.convertModelToVo(data.getDriverDetails()));
 			tripDetailsVos.add(tripDetailsVo);
 
 		});

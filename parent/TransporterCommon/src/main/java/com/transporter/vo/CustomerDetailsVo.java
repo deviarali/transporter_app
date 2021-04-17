@@ -23,6 +23,8 @@ public class CustomerDetailsVo implements Serializable {
 	private UserVo user;
 	
 	private List<TripDetailsVo> tripDetailsVoList;
+	
+	private String locationFavouriateJson;
 
 	public CustomerDetailsVo() {
 	}
@@ -89,6 +91,14 @@ public class CustomerDetailsVo implements Serializable {
 
 	public void setTripDetailsVoList(List<TripDetailsVo> tripDetailsVoList) {
 		this.tripDetailsVoList = tripDetailsVoList;
+	}
+
+	public String getLocationFavouriateJson() {
+		return locationFavouriateJson;
+	}
+
+	public void setLocationFavouriateJson(String locationFavouriateJson) {
+		this.locationFavouriateJson = locationFavouriateJson;
 	}
 	
 }

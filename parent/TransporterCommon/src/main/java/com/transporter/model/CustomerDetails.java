@@ -53,6 +53,9 @@ public class CustomerDetails implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@Column(name="location_favouriate_json")
+	private String locationFavouriateJson;
 
 	public CustomerDetails() {
 	}
@@ -113,6 +116,13 @@ public class CustomerDetails implements Serializable {
 		this.user = user;
 	}
 
+	public String getLocationFavouriateJson() {
+		return locationFavouriateJson;
+	}
+
+	public void setLocationFavouriateJson(String locationFavouriateJson) {
+		this.locationFavouriateJson = locationFavouriateJson;
+	}
 
 	public static CustomerDetailsVo convertModelToVO(CustomerDetails customerDetails) {
 		if(customerDetails == null)
@@ -125,6 +135,7 @@ public class CustomerDetails implements Serializable {
 		customerDetailsVo.setAddressZipcode(customerDetails.getAddressZipcode());
 		customerDetailsVo.setDateofbirth(customerDetails.getDateofbirth());
 		customerDetailsVo.setUser(User.convertModelToVo(customerDetails.getUser()));
+		customerDetailsVo.setLocationFavouriateJson(customerDetails.getLocationFavouriateJson());
 		return customerDetailsVo;
 	}
 
