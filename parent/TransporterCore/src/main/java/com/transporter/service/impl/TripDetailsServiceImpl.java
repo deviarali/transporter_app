@@ -1,3 +1,4 @@
+
 package com.transporter.service.impl;
 
 import java.util.ArrayList;
@@ -375,7 +376,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		historyVo.setCgst(cgst);
 		historyVo.setSgst(sgst);
 		tripDetails.setTripHistoryJson(gson.toJson(historyVo));
-		Double amountToApp = Double.valueOf(tripDetails.getAmount())/vehicleDetailsList.get(0).getVehicleType().getAppPercentage();
+		Double amountToApp = (Double.valueOf(tripDetails.getAmount())*vehicleDetailsList.get(0).getVehicleType().getAppPercentage())/100;
 		Double amountToDriver = Double.valueOf(tripDetails.getAmount()) - amountToApp;
 		tripDetails.setAmountToApp(amountToApp.toString());
 		tripDetails.setAmountToDriver(amountToDriver.toString());
@@ -725,6 +726,7 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		tripDetails.forEach(data -> {
 			TripDetailsVo tripDetailsVo = TripDetails.convertEntityTOVo(data);
 			tripDetailsVo.setCustomerDetails(CustomerDetails.convertModelToVO(data.getCustomerDetails()));
+			tripDetailsVo.setDriverMobileNumber(data.getDriverDetails().getUser().getMobileNumber());
 			tripDetailsVos.add(tripDetailsVo);
 		});
 		return tripDetailsVos;

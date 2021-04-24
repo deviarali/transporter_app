@@ -90,6 +90,7 @@ public class TripDetailsVo implements Serializable {
 	private Date reachedLocationTime;
 	private Date tripAccetRejectTime;
 	private Date tripCancelledTime;
+	private String driverMobileNumber;
 	
 	public TripDetailsVo() {
 	}
@@ -492,5 +493,13 @@ public class TripDetailsVo implements Serializable {
 
 	public void setTripCancelledTime(Date tripCancelledTime) {
 		this.tripCancelledTime = tripCancelledTime;
+	}
+
+	public String getDriverMobileNumber() {
+		return driverMobileNumber;
+	}
+
+	public void setDriverMobileNumber(String driverMobileNumber) {
+		this.driverMobileNumber = driverMobileNumber;
 	}
 }
