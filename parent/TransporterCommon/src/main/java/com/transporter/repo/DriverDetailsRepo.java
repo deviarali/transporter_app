@@ -17,6 +17,9 @@ public interface DriverDetailsRepo extends JpaRepository<DriverDetails, Integer>
 	void updateRidingStatus(@Param(value ="id") int id, @Param(value ="status")int status);
 
 	@Query("SELECT dd FROM DriverDetails dd WHERE dd.user.status = :status")
+	List<DriverDetails> getAllDrivers(@Param(value = "status") int status);
+	
+	@Query("SELECT dd FROM DriverDetails dd WHERE dd.user.status = :status")
 	List<DriverDetails> getAllDrivers(@Param(value = "status") int status, Pageable pageable);
 
 	@Query("SELECT dd FROM DriverDetails dd WHERE dd.user.createdBy.id = :id")

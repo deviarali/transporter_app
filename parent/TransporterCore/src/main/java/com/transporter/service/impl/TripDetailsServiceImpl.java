@@ -412,6 +412,10 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 			driverJsonObject.put("goodsSize", tripDetailsVo.getGoodsSize());
 			driverJsonObject.put("amount", tripDetailsVo.getAmount());
 			driverJsonObject.put("cashMode", tripDetailsVo.getCashMode());
+			driverJsonObject.put("pickupPersonName", tripDetailsVo.getPickupPersonName());
+			driverJsonObject.put("pickupPersonMobile", tripDetailsVo.getPickupPersonMobile());
+			driverJsonObject.put("deliveryPersonName", tripDetailsVo.getDeliveryPersonName());
+			driverJsonObject.put("deliveryPersonMobile", tripDetailsVo.getDeliveryPersonMobile());
 
 		} catch (JSONException e) {
 			LOG.error("Exception while creating driver json object " + e.getMessage());

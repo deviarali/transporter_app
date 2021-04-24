@@ -242,8 +242,8 @@ public class DriverServiceImpl implements DriverService {
 	@Override
 	@Transactional
 	public List<DriverDetailsVo> getAllDrivers(int status) {
-		PageRequest pageRequest = new PageRequest(1, 5);
-		List<DriverDetails> driverDetailsList = driverDetailsRepo.getAllDrivers(status, pageRequest);
+		//PageRequest pageRequest = new PageRequest(1, 5);
+		List<DriverDetails> driverDetailsList = driverDetailsRepo.getAllDrivers(status);
 		List<DriverDetailsVo> driverDetailsVos = new ArrayList<>();
 		if (Utils.isNullOrEmpty(driverDetailsList)) {
 			throw new BusinessException(ErrorCodes.DRIVERNOTFOUND.name(), ErrorCodes.DRIVERNOTFOUND.value());
