@@ -19,4 +19,6 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 	int getTotalUsersCountForToday(@Param(value = "roleId") int roleId, @Param(value = "startTime") Date startTime,
 			@Param(value = "endTime") Date endTime);
 
+	User findByMobileNumber(String username);
+
 }

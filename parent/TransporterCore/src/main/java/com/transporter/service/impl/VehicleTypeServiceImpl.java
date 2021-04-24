@@ -122,6 +122,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
 				//response.setPrice(vehicleType.getPrice()*vehiclesByOrderRequest.getDistance());
 				if(vehiclesByOrderRequest.getDistance() > vehicleType.getMinKm()) {
 					double perKmPrice = (vehiclesByOrderRequest.getDistance() - vehicleType.getMinKm()) * vehicleType.getPerKm();
+					perKmPrice = perKmPrice + perKmPrice/100*vehicleType.getAppPercentage();
 					response.setPrice(Math.ceil(vehicleType.getPrice() + perKmPrice));
 				} else {
 					response.setPrice(Math.ceil(vehicleType.getPrice()));

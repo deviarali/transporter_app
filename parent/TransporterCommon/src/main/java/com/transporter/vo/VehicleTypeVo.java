@@ -33,6 +33,8 @@ public class VehicleTypeVo {
 	private Double perKm;
 	
 	private Double minKm;
+	
+	private Double appPercentage;
 
 	public int getId() {
 		return id;
@@ -152,6 +154,14 @@ public class VehicleTypeVo {
 
 	public void setMinKm(Double minKm) {
 		this.minKm = minKm;
+	}
+
+	public Double getAppPercentage() {
+		return appPercentage;
+	}
+
+	public void setAppPercentage(Double appPercentage) {
+		this.appPercentage = appPercentage;
 	}
 	
 }

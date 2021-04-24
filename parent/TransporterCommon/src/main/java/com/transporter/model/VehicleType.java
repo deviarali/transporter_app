@@ -57,6 +57,9 @@ public class VehicleType {
 	
 	@Column(name = "minkm")
 	private Double minKm;
+	
+	@Column(name = "app_percentage")
+	private Double appPercentage;
 
 	public int getId() {
 		return id;
@@ -162,6 +165,14 @@ public class VehicleType {
 		this.minKm = minKm;
 	}
 
+	public Double getAppPercentage() {
+		return appPercentage;
+	}
+
+	public void setAppPercentage(Double appPercentage) {
+		this.appPercentage = appPercentage;
+	}
+
 	public static VehicleTypeVo convertModelToVo(VehicleType vehicleType) {
 		if(vehicleType == null)
 			return null;
@@ -179,6 +190,7 @@ public class VehicleType {
 		vehicleTypeVo.setPrice(vehicleType.getPrice());
 		vehicleTypeVo.setPerKm(vehicleType.getPerKm());
 		vehicleTypeVo.setMinKm(vehicleType.getMinKm());
+		vehicleTypeVo.setAppPercentage(vehicleType.getAppPercentage());
 		return vehicleTypeVo;
 	}
 }

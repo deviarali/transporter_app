@@ -375,6 +375,10 @@ public class TripDetailsServiceImpl implements TripDetailsService {
 		historyVo.setCgst(cgst);
 		historyVo.setSgst(sgst);
 		tripDetails.setTripHistoryJson(gson.toJson(historyVo));
+		Double amountToApp = Double.valueOf(tripDetails.getAmount())/vehicleDetailsList.get(0).getVehicleType().getAppPercentage();
+		Double amountToDriver = Double.valueOf(tripDetails.getAmount()) - amountToApp;
+		tripDetails.setAmountToApp(amountToApp.toString());
+		tripDetails.setAmountToDriver(amountToDriver.toString());
 		tripDetails = tripDetailsRepo.save(tripDetails);
 		LOG.info("Booking confirmed for the customer : " + customerDetails.getUser().getMobileNumber());
 		if (tripDetails.getId() == 0) {
